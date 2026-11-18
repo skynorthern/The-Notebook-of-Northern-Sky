@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulasi Konsentrasi Zat — Northern Sky</title>
+<meta name="description" content="Zat yang menyebar seiring waktu, dan rumusnya bisa diutak-atik. Lima bentuk sumber dengan grafik 2D dan 3D.">
+<meta name="theme-color" content="#4A0F19">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='40 50 240 200'%3E%3Crect x='90' y='64' width='22' height='172' fill='%231B1517'/%3E%3Cpath class='' fill='%231B1517' d='M60 64 H142 V71 C130 71 115 73 112 86 H90 C87 73 72 71 60 71 Z'/%3E%3Cpath class='' fill='%231B1517' d='M60 236 H142 V229 C130 229 115 227 112 214 H90 C87 227 72 229 60 229 Z'/%3E%3Cpolygon fill='%231B1517' points='94 64 142 64 228 236 184 236'/%3E%3Cpath class='' fill='%237A1F2B' d='M178 64 H260 V71 C248 71 233 73 230 86 H208 C205 73 190 71 178 71 Z'/%3E%3Crect x='208' y='64' width='22' height='172' fill='%237A1F2B'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.32.0/plotly.min.js" onerror="document.write('<script src=https://cdn.plot.ly/plotly-2.32.0.min.js><\/script>')"></script>
+<script>window.Plotly||document.write('<script src=https://unpkg.com/plotly.js-dist-min@2.32.0/plotly.min.js><\/script>')</script>
+<script>document.documentElement.classList.add('js');</script>
+<style>
+:root{--cream:#FBF8F4;--paper:#FFFDFB;--ink:#1B1517;--dim:#6D6366;--line:#E9E1DC;--mar:#7A1F2B;--deep:#4A0F19;--tint:#F4E8EA;--rose:#F3C6CC;
+--li:#1B1517;--la:#7A1F2B;--serif:'Fraunces',Georgia,'Times New Roman',serif;--sans:'Inter',-apple-system,'Segoe UI',Roboto,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+--ease:cubic-bezier(.2,.8,.2,1);--pad:clamp(20px,3.6vw,48px)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:inherit;text-decoration:none}h1,h2,h3,h4,p,ol,ul{margin:0;padding:0}ul,ol{list-style:none}button{font-family:inherit}.lg{display:block}
+:focus-visible{outline:2px solid var(--mar);outline-offset:3px;border-radius:6px}
+section[id]{scroll-margin-top:72px}#coba{scroll-margin-top:136px}
+@keyframes rise{from{opacity:0;transform:translateY(34px)}}
+@keyframes flt{from{transform:translateY(0)}to{transform:translateY(-24px)}}
+@keyframes tw{0%,100%{opacity:var(--o,.6)}50%{opacity:.12}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(212,80,95,.5)}50%{box-shadow:0 0 0 7px rgba(212,80,95,0)}}
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}}
+html.js [data-r]{opacity:0}
+html.js [data-r].in{opacity:1;animation:rise .85s var(--ease) backwards;animation-delay:calc(var(--i,0)*100ms)}
+.hero-a{animation:rise .9s var(--ease) backwards;animation-delay:calc(var(--i,0)*110ms + 100ms)}
+
+/* ---------- navbar ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px var(--pad);color:#FBEFF0;transition:background .35s,color .35s,box-shadow .35s;--li:#FFF8F4;--la:var(--rose)}
+.nav.solid{background:rgba(251,248,244,.86);-webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);color:var(--ink);box-shadow:0 1px 0 var(--line);--li:#1B1517;--la:#7A1F2B}
+.brand{display:inline-flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:600;font-size:18px;letter-spacing:-.015em;justify-self:start}
+.brand .lg{width:30px}.brand em{font-style:italic;font-weight:500;color:var(--rose);transition:color .35s}.nav.solid .brand em{color:var(--mar)}
+.links{display:flex;gap:30px;font-size:14px}
+.links a{position:relative;padding:6px 0;opacity:.82;transition:opacity .2s}
+.links a:hover,.links a.on{opacity:1}
+.links a::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.links a:hover::after,.links a.on::after{transform:scaleX(1)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:999px;border:0;cursor:pointer;background:#FFF8F4;color:var(--mar);font-weight:600;font-size:14px;transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .25s,color .25s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 18px 34px -14px rgba(0,0,0,.55)}
+.nav .btn{justify-self:end;padding:9px 18px;font-size:13.5px}
+.nav.solid .btn{background:var(--mar);color:#fff}
+
+/* ---------- hero ---------- */
+.sky{position:relative;overflow:hidden;color:#FBEFF0;background:radial-gradient(120% 110% at 75% 20%,#7A1F2B 0%,#4A0F19 48%,#1D070C 100%);padding-bottom:84px}
+.st i{position:absolute;border-radius:50%;background:#fff;animation:tw 5s ease-in-out infinite;--o:.6}
+.au{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none}
+.a1{width:520px;height:240px;left:-80px;bottom:0;background:rgba(214,92,112,.34);transform:rotate(-14deg);animation:flt 9s ease-in-out infinite alternate}
+.a2{width:460px;height:200px;right:-40px;bottom:10%;background:rgba(255,170,150,.2);transform:rotate(10deg);animation:flt 11s ease-in-out infinite alternate-reverse}
+.hero{position:relative;max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1fr minmax(0,440px);gap:40px;align-items:center;padding:112px var(--pad) 0}
+.crumb{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:rgba(251,239,240,.7);margin-bottom:26px;transition:color .2s,transform .3s var(--ease)}
+.crumb:hover{color:#fff;transform:translateX(-3px)}
+.eb{display:inline-flex;align-items:center;gap:12px;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--rose)}
+.eb::before{content:'';width:28px;height:1.5px;background:var(--rose)}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(38px,5vw,72px);line-height:1;letter-spacing:-.035em;margin:18px 0 20px}
+.hero h1 em{font-style:italic;font-weight:500;color:var(--rose)}
+.lede{max-width:48ch;font-size:clamp(15px,1.1vw,16.5px);line-height:1.75;color:rgba(251,239,240,.8)}
+.glass{position:relative;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-radius:28px;padding:20px 22px 14px}
+.glass .gh{display:flex;justify-content:space-between;font-family:var(--serif);font-style:italic;font-size:14px;letter-spacing:.02em;color:rgba(251,239,240,.7)}
+.glass svg{display:block;width:100%;height:auto;margin-top:6px}
+
+/* ---------- pemilih rumus ---------- */
+.pickwrap{position:sticky;top:60px;z-index:40;max-width:1240px;margin:-46px auto 0;padding:0 var(--pad)}
+.pick{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:26px;padding:10px;box-shadow:0 30px 60px -34px rgba(74,15,25,.55)}
+.pick button{display:flex;align-items:center;gap:12px;text-align:left;padding:11px 16px;border:0;border-radius:18px;background:transparent;color:var(--ink);cursor:pointer;font-size:14px;font-weight:500;transition:background .3s,color .3s,transform .4s var(--ease)}
+.pick button b{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--mar);min-width:26px;transition:color .3s}
+.pick button:hover{background:var(--tint)}
+.pick button.active{background:var(--mar);color:#fff;box-shadow:0 14px 26px -14px rgba(74,15,25,.8)}
+.pick button.active b{color:var(--rose)}
+
+/* ---------- workspace ---------- */
+.wk{max-width:1240px;margin:0 auto;padding:clamp(44px,6vw,72px) var(--pad) 0}
+.wk-head{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(20px,3vw,44px);align-items:stretch;margin-bottom:18px}
+.label{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.big{font-family:var(--serif);font-weight:600;font-size:clamp(28px,3.6vw,50px);line-height:1.04;letter-spacing:-.03em}
+.big em{font-style:italic;font-weight:500;color:var(--mar)}
+#ftitle{margin-top:10px}
+.wk-head .t{display:flex;flex-direction:column;justify-content:center}
+.eqcard{background:var(--tint);border-radius:24px;padding:18px 22px;display:flex;flex-direction:column;justify-content:center;gap:8px;min-width:0}
+#eq{overflow-x:auto;overflow-y:hidden;color:var(--mar);font-size:1.12em}
+#eq .katex,#eq .katex *{color:var(--mar)!important}
+#eq .katex-display{margin:2px 0}
+.eqcap{font-size:12.5px;color:var(--dim);text-align:center}
+.fade{animation:fadein .5s var(--ease)}
+.wk-grid{display:grid;grid-template-columns:320px minmax(0,1fr);gap:18px;align-items:start}
+.ctrl{position:sticky;top:142px;background:var(--paper);border:1px solid var(--line);border-radius:26px;padding:20px}
+.seg{display:flex;gap:4px;background:#F2EBE6;padding:4px;border-radius:14px;margin-bottom:14px}
+.seg button{flex:1;border:0;background:transparent;color:var(--dim);font-weight:500;font-size:13.5px;padding:9px 0;border-radius:10px;cursor:pointer;transition:background .25s,color .25s}
+.seg button.active{background:var(--ink);color:#fff}
+.field{margin-bottom:18px}
+.field-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.field label{font-size:13.5px;font-weight:500}
+.field .sym{font-family:var(--serif);font-style:italic;color:var(--mar);margin-right:6px;font-size:16px}
+.field .val{font-family:var(--mono);font-size:12.5px;color:var(--mar);background:var(--tint);padding:2px 9px;border-radius:7px}
+.rl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--dim);margin-top:4px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;background:linear-gradient(90deg,#1B1517,#7A1F2B);outline:none;cursor:pointer;display:block}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid var(--mar);box-shadow:0 2px 6px rgba(0,0,0,.25);transition:transform .2s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--mar)}
+.play{display:inline-flex;align-items:center;gap:8px;margin-top:10px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);font-size:13px;font-weight:600;cursor:pointer;transition:background .25s,color .25s,border-color .25s}
+.play:hover{background:var(--ink);color:#fff}
+.play.on{background:var(--mar);border-color:var(--mar);color:#fff}
+.play svg{width:12px;height:12px}
+.read{margin-top:18px;padding:16px 18px;border-radius:18px;background:var(--mar);color:#FBEFF0}
+.read small{display:block;font-size:12px;letter-spacing:.06em;color:var(--rose)}
+.read b{display:block;font-family:var(--serif);font-weight:600;font-size:36px;line-height:1.1;letter-spacing:-.02em;margin-top:4px;font-variant-numeric:tabular-nums}
+#reset{margin-top:12px;width:100%;background:transparent;border:1.5px solid var(--line);color:var(--ink);font-size:13px;font-weight:600;padding:10px 0;border-radius:999px;cursor:pointer;transition:background .25s,color .25s,border-color .25s}
+#reset:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+.plotcard{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:26px;padding:14px 14px 10px}
+#plot{width:100%;height:560px}
+.hint{font-size:12.5px;color:var(--dim);text-align:center;padding:6px 10px 4px}
+.plotload{position:absolute;inset:14px 14px 44px;display:grid;place-items:center;align-content:center;gap:10px;color:var(--dim);text-align:center;padding:30px;pointer-events:none;transition:opacity .4s}
+.plotload.hide{opacity:0;visibility:hidden}
+.plotload i{width:26px;height:26px;border-radius:50%;border:3px solid var(--tint);border-top-color:var(--mar);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- penjelasan ---------- */
+.explain{max-width:1240px;margin:0 auto;padding:clamp(64px,8vw,104px) var(--pad) 0}
+.band{display:grid;grid-template-columns:150px 1fr 260px;gap:clamp(20px,3.4vw,52px);align-items:start;margin-bottom:clamp(28px,4vw,44px)}
+.band .label{padding-top:12px}.note{font-size:15px;line-height:1.75;color:var(--dim);padding-top:8px}
+.formula-block{display:none}.formula-block.active{display:block;animation:fadein .5s var(--ease)}
+.ex-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+.cx{grid-column:span 6;background:var(--paper);border:1px solid var(--line);border-radius:26px;padding:clamp(20px,2.2vw,28px)}
+.cx.s7{grid-column:span 7}.cx.s5{grid-column:span 5}.cx.s12{grid-column:span 12}
+.cx h3{font-family:var(--serif);font-weight:600;font-size:clamp(20px,1.8vw,25px);letter-spacing:-.02em;line-height:1.1;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.cx h3::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--mar);flex:none}
+.cx p{font-size:14.5px;line-height:1.78;color:#4A4144}.cx p+p{margin-top:10px}.cx b{color:var(--ink)}
+.cx.mar{background:var(--mar);border-color:var(--mar);color:#FBEFF0}
+.cx.mar h3{color:#fff}.cx.mar h3::before{background:var(--rose)}.cx.mar li,.cx.mar b{color:#FBEFF0}
+.cx.mar li{font-size:14.5px;line-height:1.7;padding:12px 0;border-top:1px solid rgba(255,255,255,.18)}.cx.mar li:first-child{border-top:0;padding-top:0}
+.symbol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0 22px}
+.symbol-item{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}
+.symbol-item .sym{font-family:var(--serif);font-style:italic;font-weight:600;font-size:16px;color:var(--mar);min-width:44px;flex-shrink:0}
+.symbol-item .desc{font-size:13.5px;line-height:1.55;color:var(--dim)}.symbol-item .desc b{color:var(--ink);font-weight:600}
+.kin p{font-size:14px;margin:0 0 6px}.kin p:last-child{margin:0}
+
+/* ---------- lanjut + footer ---------- */
+.next{max-width:1240px;margin:clamp(56px,7vw,92px) auto 0;padding:0 var(--pad)}
+.nx{position:relative;overflow:hidden;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;background:var(--mar);color:#FBF3F4;border-radius:clamp(28px,4vw,48px);padding:clamp(30px,4.5vw,60px);transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.nx::before{content:'';position:absolute;right:-8%;top:-40%;width:46%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.14),transparent 68%);animation:flt 7s ease-in-out infinite alternate;pointer-events:none}
+.nx:hover{transform:translateY(-5px);box-shadow:0 34px 60px -26px rgba(74,15,25,.8)}
+.nx small{font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--rose)}
+.nx h3{font-family:var(--serif);font-weight:600;font-size:clamp(30px,4.2vw,58px);line-height:1.02;letter-spacing:-.03em;margin:12px 0 10px}
+.nx h3 em{font-style:italic;font-weight:500;color:var(--rose)}
+.nx p{max-width:46ch;color:rgba(251,243,244,.82);font-size:15px}
+.nx .go{position:relative;width:64px;height:64px;border-radius:50%;border:1.5px solid #FBF3F4;display:grid;place-items:center;transition:background .3s,color .3s,transform .5s var(--ease)}
+.nx .go svg{width:24px;height:24px}
+.nx:hover .go{background:#FFF8F4;color:var(--mar);transform:translateX(5px)}
+.foot{position:relative;margin-top:clamp(48px,6vw,90px);background:var(--ink);color:#F4EEEA;padding:clamp(44px,5vw,72px) var(--pad) 0;overflow:hidden}
+.fgrid{display:grid;grid-template-columns:.8fr .9fr .9fr 1.5fr;gap:40px;max-width:1240px;margin:0 auto}
+.fgrid h4{margin:0 0 16px;font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,238,234,.5)}
+.fgrid li+li{margin-top:11px}.fgrid a{font-size:15px;transition:color .2s}.fgrid a:hover{color:#E9A9B2}
+.status{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid rgba(244,238,234,.25);border-radius:999px;font-size:13px;color:rgba(244,238,234,.8)}
+.status::before{content:'';width:7px;height:7px;border-radius:50%;background:#D4505F;animation:pulse 2s infinite}
+.fgrid p{margin-top:14px;font-size:15px;color:rgba(244,238,234,.62);max-width:30ch;line-height:1.7}
+/* ---------- footer CV interaktif ---------- */
+.fgrid .cvtog{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:12px;font-size:12.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#F4EEEA;padding:8px 14px 8px 16px;margin:-8px 0 -8px -16px;border:1px solid rgba(244,238,234,.3);border-radius:999px;transition:background .3s,border-color .3s,color .3s}
+.fgrid .cvtog:hover{background:rgba(244,238,234,.08);border-color:rgba(244,238,234,.6)}
+.fgrid .cvtog:focus-visible{outline:2px solid var(--rose);outline-offset:3px}
+.cvtog i{position:relative;width:12px;height:12px;display:block}
+.cvtog i::before,.cvtog i::after{content:'';position:absolute;left:0;right:0;top:5px;height:2px;background:currentColor;border-radius:2px;transition:transform .5s var(--ease)}
+.cvtog i::after{transform:rotate(90deg)}
+.cvcol.open .cvtog i::after{transform:rotate(0)}
+.cvcol.open .cvtog{background:#FFF8F4;color:var(--mar);border-color:#FFF8F4}
+.cvhint{font-style:normal;font-size:11.5px;letter-spacing:.04em;text-transform:none;font-weight:500;color:#E9A9B2;display:inline-flex;align-items:center;gap:6px}
+.cvhint::before{content:'';width:6px;height:6px;border-radius:50%;background:#D4505F;animation:pulse 2s infinite}
+.cvcol.open .cvhint{display:none}
+.cvpanel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .6s var(--ease)}
+.cvpanel>div{overflow:hidden;min-height:0}
+.cvcol.open .cvpanel{grid-template-rows:1fr}
+.cvcol .cvpanel>div>*{opacity:0;transition:opacity .4s .3s}
+.cvcol.open .cvpanel>div>*{opacity:1}
+.fgrid .cvname{display:inline-flex;align-items:baseline;gap:2px;margin-top:26px;font-family:var(--serif);font-weight:600;font-size:clamp(34px,3.4vw,46px);letter-spacing:-.03em;line-height:1;color:#FFF8F4;padding-bottom:6px;border-bottom:2px solid #C45767;transition:color .25s,border-color .25s}
+.cvname b{display:inline-block;font-weight:inherit;opacity:0;transform:translateY(.6em) rotate(4deg)}
+.cvcol.open .cvname b{animation:ltr .7s calc(var(--k)*55ms + 250ms) var(--ease) both}
+@keyframes ltr{from{opacity:0;transform:translateY(.6em) rotate(4deg)}to{opacity:1;transform:none}}
+.cvname .ar{margin-left:14px;font-family:var(--sans);font-size:.5em;transition:transform .4s var(--ease)}
+.fgrid .cvname:hover{color:#E9A9B2;border-color:#E9A9B2}.cvname:hover .ar{transform:translateX(6px)}
+.cvcol.open .cvname{animation:none}
+.fgrid .cvcol p{margin-top:16px}
+.fgrid .cvdl{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:9px 16px;border:1px solid rgba(244,238,234,.3);border-radius:999px;font-size:13.5px;font-weight:600;transition:background .25s,color .25s,border-color .25s}
+.fgrid .cvdl:hover{background:#FFF8F4;border-color:#FFF8F4;color:#1B1517}
+#pt{position:fixed;inset:0;z-index:300;background:#7A1F2B;pointer-events:none;clip-path:circle(0 at 50% 50%);visibility:hidden}
+@media (prefers-reduced-motion:reduce){.cvpanel{transition:none}.cvcol.open .cvname b{animation:none;opacity:1;transform:none}}
+.fbar{display:flex;justify-content:space-between;gap:16px;max-width:1240px;margin:48px auto 0;padding-top:22px;border-top:1px solid rgba(244,238,234,.14);font-size:14px;color:rgba(244,238,234,.55)}
+.fbar a:hover{color:#fff}
+.wm{font-family:var(--serif);font-weight:600;font-size:13vw;line-height:.84;letter-spacing:-.045em;white-space:nowrap;margin:clamp(24px,4vw,52px) 0 -.17em -.04em;color:#FFF8F4;user-select:none}
+.wm em{font-style:italic;font-weight:500;color:#C45767}
+
+@media (max-width:1020px){
+  .hero{grid-template-columns:1fr}.glass{max-width:460px}
+  .pick{display:flex;overflow-x:auto;scrollbar-width:none}.pick::-webkit-scrollbar{display:none}.pick button{flex:none;white-space:nowrap}
+  .wk-head{grid-template-columns:1fr}.wk-grid{grid-template-columns:1fr}.ctrl{position:static}#plot{height:460px}
+  .band{grid-template-columns:1fr}.band .label,.note{padding-top:0}
+  .cx,.cx.s7,.cx.s5{grid-column:span 12}
+  .fgrid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:760px){.nav{grid-template-columns:1fr auto}.links{display:none}.symbol-grid{grid-template-columns:1fr}.fgrid{grid-template-columns:1fr}.fbar{flex-direction:column}.nx{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}html.js [data-r]{opacity:1!important}}
+</style>
+</head>
+<body id="top">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="lg" viewBox="40 50 240 200"><rect x="90" y="64" width="22" height="172" fill="var(--li)"/><path class="" fill="var(--li)" d="M60 64 H142 V71 C130 71 115 73 112 86 H90 C87 73 72 71 60 71 Z"/><path class="" fill="var(--li)" d="M60 236 H142 V229 C130 229 115 227 112 214 H90 C87 227 72 229 60 229 Z"/><polygon fill="var(--li)" points="94 64 142 64 228 236 184 236"/><path class="" fill="var(--la)" d="M178 64 H260 V71 C248 71 233 73 230 86 H208 C205 73 190 71 178 71 Z"/><rect x="208" y="64" width="22" height="172" fill="var(--la)"/></symbol></svg>
+
+<header class="nav" id="nav">
+  <a class="brand" href="index.html" aria-label="Northern Sky, ke beranda"><svg class="lg " viewBox="40 50 240 200" aria-hidden="true"><use href="#lg"/></svg><span>Northern <em>Sky</em></span></a>
+  <nav class="links" aria-label="Navigasi utama"><a href="index.html">Beranda</a><a class="on" href="simulasi-konsentrasi.html" aria-current="page">Konsentrasi Zat</a><a href="graf-explorer.html">Graf Explorer</a><a href="cv.html">CV</a></nav>
+  <a class="btn" href="#coba">Coba sekarang</a>
+</header>
+
+<main>
+<!-- ================= HERO ================= -->
+<section class="sky">
+  <div class="st" aria-hidden="true"><i style="left:72.5%;top:15.8%;width:2px;height:2px;opacity:0.66;animation-delay:-3.3s"></i><i style="left:68.7%;top:38.8%;width:2px;height:2px;opacity:0.56;animation-delay:-0.5s"></i><i style="left:4.7%;top:10.9%;width:2px;height:2px;opacity:0.58;animation-delay:-1.5s"></i><i style="left:74.0%;top:39.2%;width:2px;height:2px;opacity:0.52;animation-delay:-5.4s"></i><i style="left:49.1%;top:52.0%;width:2px;height:2px;opacity:0.85;animation-delay:-5.9s"></i><i style="left:12.6%;top:47.9%;width:2px;height:2px;opacity:0.67;animation-delay:-3.7s"></i><i style="left:7.4%;top:21.2%;width:1px;height:1px;opacity:0.84;animation-delay:-4.5s"></i><i style="left:6.9%;top:41.1%;width:1px;height:1px;opacity:0.41;animation-delay:-0.3s"></i><i style="left:28.2%;top:53.1%;width:2px;height:2px;opacity:0.88;animation-delay:-0.6s"></i><i style="left:13.8%;top:45.0%;width:2px;height:2px;opacity:0.47;animation-delay:-4.4s"></i><i style="left:52.2%;top:94.7%;width:3px;height:3px;opacity:0.63;animation-delay:-5.5s"></i><i style="left:47.5%;top:35.7%;width:2px;height:2px;opacity:0.45;animation-delay:-0.2s"></i><i style="left:59.8%;top:7.5%;width:1px;height:1px;opacity:0.29;animation-delay:-1.9s"></i><i style="left:13.7%;top:7.2%;width:1px;height:1px;opacity:0.54;animation-delay:-2.2s"></i><i style="left:4.4%;top:93.6%;width:2px;height:2px;opacity:0.73;animation-delay:-0.8s"></i><i style="left:96.3%;top:34.2%;width:1px;height:1px;opacity:0.31;animation-delay:-2.8s"></i><i style="left:7.8%;top:85.7%;width:1px;height:1px;opacity:0.86;animation-delay:-0.2s"></i><i style="left:50.0%;top:1.5%;width:1px;height:1px;opacity:0.68;animation-delay:-2.3s"></i><i style="left:1.2%;top:7.2%;width:2px;height:2px;opacity:0.31;animation-delay:-0.7s"></i><i style="left:25.7%;top:41.6%;width:3px;height:3px;opacity:0.46;animation-delay:-5.6s"></i><i style="left:69.4%;top:45.8%;width:3px;height:3px;opacity:0.55;animation-delay:-3.2s"></i><i style="left:51.9%;top:51.5%;width:1px;height:1px;opacity:0.45;animation-delay:-0.5s"></i><i style="left:2.2%;top:95.7%;width:2px;height:2px;opacity:0.32;animation-delay:-4.7s"></i><i style="left:66.0%;top:48.6%;width:2px;height:2px;opacity:0.83;animation-delay:-2.2s"></i><i style="left:14.3%;top:61.2%;width:2px;height:2px;opacity:0.59;animation-delay:-4.5s"></i><i style="left:34.3%;top:93.0%;width:3px;height:3px;opacity:0.57;animation-delay:-1.4s"></i><i style="left:40.5%;top:25.1%;width:3px;height:3px;opacity:0.66;animation-delay:-4.8s"></i><i style="left:75.5%;top:20.0%;width:2px;height:2px;opacity:0.39;animation-delay:-1.3s"></i><i style="left:92.1%;top:21.0%;width:3px;height:3px;opacity:0.34;animation-delay:-2.1s"></i><i style="left:89.6%;top:4.1%;width:1px;height:1px;opacity:0.29;animation-delay:-5.9s"></i><i style="left:82.2%;top:11.3%;width:2px;height:2px;opacity:0.56;animation-delay:-5.6s"></i><i style="left:83.1%;top:38.3%;width:1px;height:1px;opacity:0.59;animation-delay:-4.0s"></i><i style="left:71.6%;top:84.2%;width:2px;height:2px;opacity:0.66;animation-delay:-1.9s"></i><i style="left:82.9%;top:27.8%;width:1px;height:1px;opacity:0.64;animation-delay:-4.1s"></i><i style="left:28.1%;top:35.4%;width:1px;height:1px;opacity:0.67;animation-delay:-3.4s"></i><i style="left:64.1%;top:40.5%;width:1px;height:1px;opacity:0.37;animation-delay:-4.6s"></i><i style="left:26.6%;top:77.9%;width:1px;height:1px;opacity:0.77;animation-delay:-5.9s"></i><i style="left:11.5%;top:10.9%;width:1px;height:1px;opacity:0.60;animation-delay:-3.8s"></i><i style="left:36.9%;top:7.8%;width:2px;height:2px;opacity:0.38;animation-delay:-4.9s"></i><i style="left:25.6%;top:71.4%;width:1px;height:1px;opacity:0.74;animation-delay:-3.2s"></i><i style="left:3.6%;top:22.6%;width:2px;height:2px;opacity:0.76;animation-delay:-3.2s"></i><i style="left:94.7%;top:50.0%;width:1px;height:1px;opacity:0.90;animation-delay:-1.0s"></i><i style="left:84.9%;top:70.0%;width:2px;height:2px;opacity:0.40;animation-delay:-2.5s"></i><i style="left:89.3%;top:38.8%;width:2px;height:2px;opacity:0.54;animation-delay:-1.2s"></i><i style="left:88.7%;top:0.7%;width:1px;height:1px;opacity:0.61;animation-delay:-3.9s"></i><i style="left:50.3%;top:81.9%;width:2px;height:2px;opacity:0.47;animation-delay:-2.0s"></i><i style="left:98.2%;top:9.9%;width:1px;height:1px;opacity:0.81;animation-delay:-4.8s"></i><i style="left:92.4%;top:12.3%;width:3px;height:3px;opacity:0.41;animation-delay:-2.3s"></i><i style="left:8.8%;top:31.0%;width:1px;height:1px;opacity:0.88;animation-delay:-5.6s"></i><i style="left:26.2%;top:71.8%;width:2px;height:2px;opacity:0.26;animation-delay:-3.0s"></i><i style="left:3.7%;top:34.2%;width:1px;height:1px;opacity:0.52;animation-delay:-1.7s"></i><i style="left:92.0%;top:21.8%;width:3px;height:3px;opacity:0.81;animation-delay:-2.6s"></i><i style="left:3.5%;top:53.3%;width:1px;height:1px;opacity:0.70;animation-delay:-5.5s"></i><i style="left:47.1%;top:100.0%;width:2px;height:2px;opacity:0.84;animation-delay:-3.1s"></i><i style="left:67.8%;top:44.0%;width:3px;height:3px;opacity:0.82;animation-delay:-3.5s"></i><i style="left:68.9%;top:75.8%;width:1px;height:1px;opacity:0.54;animation-delay:-3.4s"></i><i style="left:83.1%;top:56.2%;width:2px;height:2px;opacity:0.36;animation-delay:-3.1s"></i><i style="left:90.7%;top:25.7%;width:2px;height:2px;opacity:0.69;animation-delay:-5.7s"></i><i style="left:87.0%;top:60.9%;width:1px;height:1px;opacity:0.45;animation-delay:-0.8s"></i><i style="left:54.5%;top:27.3%;width:3px;height:3px;opacity:0.57;animation-delay:-2.5s"></i><i style="left:11.4%;top:0.5%;width:1px;height:1px;opacity:0.50;animation-delay:-3.2s"></i><i style="left:4.4%;top:91.7%;width:1px;height:1px;opacity:0.60;animation-delay:-5.9s"></i><i style="left:12.2%;top:9.3%;width:1px;height:1px;opacity:0.36;animation-delay:-5.6s"></i><i style="left:45.9%;top:92.1%;width:2px;height:2px;opacity:0.77;animation-delay:-2.4s"></i><i style="left:24.6%;top:49.3%;width:1px;height:1px;opacity:0.47;animation-delay:-5.4s"></i><i style="left:93.6%;top:92.0%;width:1px;height:1px;opacity:0.59;animation-delay:-0.7s"></i><i style="left:42.0%;top:2.9%;width:1px;height:1px;opacity:0.42;animation-delay:-4.2s"></i><i style="left:97.7%;top:3.6%;width:2px;height:2px;opacity:0.35;animation-delay:-0.1s"></i><i style="left:28.4%;top:72.4%;width:1px;height:1px;opacity:0.41;animation-delay:-3.0s"></i><i style="left:50.0%;top:58.2%;width:2px;height:2px;opacity:0.80;animation-delay:-3.7s"></i><i style="left:71.8%;top:70.1%;width:1px;height:1px;opacity:0.82;animation-delay:-0.1s"></i><i style="left:63.3%;top:82.5%;width:1px;height:1px;opacity:0.65;animation-delay:-3.2s"></i><i style="left:86.4%;top:53.4%;width:2px;height:2px;opacity:0.39;animation-delay:-1.3s"></i><i style="left:54.3%;top:58.7%;width:1px;height:1px;opacity:0.34;animation-delay:-5.5s"></i><i style="left:62.8%;top:34.8%;width:1px;height:1px;opacity:0.37;animation-delay:-3.6s"></i><i style="left:89.1%;top:19.5%;width:3px;height:3px;opacity:0.76;animation-delay:-1.2s"></i><i style="left:9.7%;top:88.9%;width:1px;height:1px;opacity:0.34;animation-delay:-0.5s"></i><i style="left:38.8%;top:43.5%;width:1px;height:1px;opacity:0.86;animation-delay:-3.3s"></i><i style="left:70.5%;top:20.1%;width:1px;height:1px;opacity:0.66;animation-delay:-4.8s"></i><i style="left:9.6%;top:57.0%;width:1px;height:1px;opacity:0.48;animation-delay:-4.9s"></i><i style="left:36.1%;top:70.5%;width:2px;height:2px;opacity:0.66;animation-delay:-2.1s"></i><i style="left:99.9%;top:83.3%;width:2px;height:2px;opacity:0.77;animation-delay:-2.9s"></i><i style="left:2.4%;top:76.2%;width:3px;height:3px;opacity:0.65;animation-delay:-5.4s"></i><i style="left:48.1%;top:19.0%;width:2px;height:2px;opacity:0.32;animation-delay:-1.0s"></i><i style="left:15.8%;top:28.3%;width:2px;height:2px;opacity:0.69;animation-delay:-3.5s"></i><i style="left:13.4%;top:68.1%;width:1px;height:1px;opacity:0.30;animation-delay:-0.6s"></i><i style="left:39.1%;top:42.6%;width:2px;height:2px;opacity:0.48;animation-delay:-1.3s"></i><i style="left:37.3%;top:63.4%;width:3px;height:3px;opacity:0.28;animation-delay:-1.2s"></i><i style="left:40.8%;top:36.0%;width:1px;height:1px;opacity:0.49;animation-delay:-5.5s"></i><i style="left:60.5%;top:9.5%;width:3px;height:3px;opacity:0.77;animation-delay:-1.9s"></i><i style="left:8.5%;top:84.2%;width:1px;height:1px;opacity:0.82;animation-delay:-5.5s"></i><i style="left:94.0%;top:57.0%;width:1px;height:1px;opacity:0.37;animation-delay:-3.5s"></i><i style="left:34.1%;top:76.2%;width:1px;height:1px;opacity:0.43;animation-delay:-0.7s"></i><i style="left:74.3%;top:16.0%;width:1px;height:1px;opacity:0.86;animation-delay:-0.8s"></i><i style="left:33.0%;top:53.9%;width:1px;height:1px;opacity:0.49;animation-delay:-2.6s"></i><i style="left:18.2%;top:20.7%;width:1px;height:1px;opacity:0.37;animation-delay:-4.8s"></i><i style="left:30.2%;top:10.1%;width:2px;height:2px;opacity:0.83;animation-delay:-5.9s"></i><i style="left:90.3%;top:5.0%;width:1px;height:1px;opacity:0.43;animation-delay:-5.8s"></i><i style="left:29.9%;top:21.6%;width:1px;height:1px;opacity:0.51;animation-delay:-1.1s"></i><i style="left:7.7%;top:51.5%;width:1px;height:1px;opacity:0.57;animation-delay:-1.3s"></i><i style="left:12.0%;top:39.5%;width:3px;height:3px;opacity:0.62;animation-delay:-0.7s"></i><i style="left:10.8%;top:23.7%;width:1px;height:1px;opacity:0.54;animation-delay:-3.0s"></i><i style="left:76.1%;top:64.8%;width:1px;height:1px;opacity:0.26;animation-delay:-1.6s"></i><i style="left:27.6%;top:34.1%;width:1px;height:1px;opacity:0.60;animation-delay:-2.5s"></i><i style="left:52.1%;top:84.6%;width:2px;height:2px;opacity:0.31;animation-delay:-2.7s"></i><i style="left:64.5%;top:54.9%;width:2px;height:2px;opacity:0.68;animation-delay:-5.7s"></i><i style="left:38.6%;top:93.9%;width:1px;height:1px;opacity:0.50;animation-delay:-5.8s"></i><i style="left:85.6%;top:54.2%;width:3px;height:3px;opacity:0.64;animation-delay:-2.6s"></i><i style="left:49.5%;top:28.4%;width:2px;height:2px;opacity:0.51;animation-delay:-1.9s"></i><i style="left:53.0%;top:48.3%;width:1px;height:1px;opacity:0.43;animation-delay:-5.6s"></i><i style="left:66.4%;top:74.8%;width:2px;height:2px;opacity:0.27;animation-delay:-4.6s"></i><i style="left:58.6%;top:63.3%;width:2px;height:2px;opacity:0.52;animation-delay:-4.1s"></i><i style="left:5.3%;top:31.5%;width:1px;height:1px;opacity:0.51;animation-delay:-3.5s"></i><i style="left:72.3%;top:31.9%;width:3px;height:3px;opacity:0.77;animation-delay:-1.3s"></i><i style="left:71.9%;top:25.1%;width:1px;height:1px;opacity:0.74;animation-delay:-0.3s"></i><i style="left:9.8%;top:81.0%;width:2px;height:2px;opacity:0.84;animation-delay:-0.9s"></i><i style="left:96.0%;top:24.5%;width:3px;height:3px;opacity:0.71;animation-delay:-0.3s"></i><i style="left:41.7%;top:11.8%;width:2px;height:2px;opacity:0.81;animation-delay:-2.1s"></i><i style="left:15.5%;top:36.3%;width:1px;height:1px;opacity:0.34;animation-delay:-2.5s"></i><i style="left:60.1%;top:64.0%;width:2px;height:2px;opacity:0.69;animation-delay:-2.2s"></i><i style="left:74.4%;top:81.5%;width:2px;height:2px;opacity:0.34;animation-delay:-1.7s"></i><i style="left:12.9%;top:48.1%;width:1px;height:1px;opacity:0.58;animation-delay:-1.9s"></i><i style="left:50.7%;top:84.7%;width:1px;height:1px;opacity:0.43;animation-delay:-3.7s"></i><i style="left:72.5%;top:69.9%;width:1px;height:1px;opacity:0.37;animation-delay:-1.7s"></i><i style="left:23.9%;top:95.2%;width:2px;height:2px;opacity:0.58;animation-delay:-3.9s"></i><i style="left:19.6%;top:68.3%;width:1px;height:1px;opacity:0.66;animation-delay:-0.1s"></i><i style="left:26.0%;top:2.7%;width:1px;height:1px;opacity:0.27;animation-delay:-1.3s"></i><i style="left:27.8%;top:75.6%;width:1px;height:1px;opacity:0.84;animation-delay:-1.0s"></i><i style="left:23.5%;top:98.1%;width:1px;height:1px;opacity:0.56;animation-delay:-2.1s"></i><i style="left:33.8%;top:49.4%;width:2px;height:2px;opacity:0.34;animation-delay:-5.2s"></i><i style="left:80.2%;top:44.7%;width:2px;height:2px;opacity:0.78;animation-delay:-5.0s"></i><i style="left:76.9%;top:44.4%;width:3px;height:3px;opacity:0.74;animation-delay:-2.3s"></i><i style="left:15.1%;top:15.3%;width:2px;height:2px;opacity:0.79;animation-delay:-3.6s"></i><i style="left:29.1%;top:75.9%;width:1px;height:1px;opacity:0.79;animation-delay:-1.1s"></i><i style="left:65.4%;top:58.1%;width:1px;height:1px;opacity:0.55;animation-delay:-1.9s"></i><i style="left:54.4%;top:43.2%;width:1px;height:1px;opacity:0.62;animation-delay:-4.9s"></i><i style="left:46.4%;top:82.3%;width:1px;height:1px;opacity:0.26;animation-delay:-1.9s"></i><i style="left:91.1%;top:60.4%;width:2px;height:2px;opacity:0.70;animation-delay:-3.0s"></i><i style="left:76.4%;top:32.8%;width:1px;height:1px;opacity:0.82;animation-delay:-1.3s"></i><i style="left:65.7%;top:32.7%;width:1px;height:1px;opacity:0.84;animation-delay:-1.9s"></i><i style="left:44.1%;top:59.5%;width:2px;height:2px;opacity:0.84;animation-delay:-4.1s"></i><i style="left:27.9%;top:53.0%;width:1px;height:1px;opacity:0.90;animation-delay:-2.7s"></i><i style="left:22.1%;top:96.8%;width:1px;height:1px;opacity:0.72;animation-delay:-3.1s"></i><i style="left:8.4%;top:82.9%;width:2px;height:2px;opacity:0.27;animation-delay:-4.1s"></i><i style="left:58.5%;top:79.6%;width:1px;height:1px;opacity:0.73;animation-delay:-2.2s"></i><i style="left:39.0%;top:15.5%;width:1px;height:1px;opacity:0.63;animation-delay:-1.1s"></i><i style="left:9.0%;top:45.4%;width:1px;height:1px;opacity:0.81;animation-delay:-4.9s"></i><i style="left:22.1%;top:5.8%;width:1px;height:1px;opacity:0.35;animation-delay:-1.8s"></i><i style="left:2.2%;top:84.2%;width:2px;height:2px;opacity:0.52;animation-delay:-3.5s"></i><i style="left:30.5%;top:54.5%;width:3px;height:3px;opacity:0.47;animation-delay:-1.6s"></i><i style="left:10.5%;top:31.4%;width:1px;height:1px;opacity:0.27;animation-delay:-3.9s"></i><i style="left:9.7%;top:81.6%;width:1px;height:1px;opacity:0.52;animation-delay:-4.3s"></i><i style="left:48.9%;top:90.8%;width:2px;height:2px;opacity:0.47;animation-delay:-2.8s"></i><i style="left:35.0%;top:80.7%;width:1px;height:1px;opacity:0.47;animation-delay:-0.8s"></i><i style="left:48.8%;top:80.5%;width:1px;height:1px;opacity:0.30;animation-delay:-3.7s"></i><i style="left:4.6%;top:75.7%;width:2px;height:2px;opacity:0.89;animation-delay:-2.1s"></i><i style="left:0.4%;top:37.8%;width:2px;height:2px;opacity:0.31;animation-delay:-2.8s"></i><i style="left:54.1%;top:2.4%;width:1px;height:1px;opacity:0.49;animation-delay:-0.1s"></i><i style="left:11.0%;top:92.4%;width:2px;height:2px;opacity:0.85;animation-delay:-1.5s"></i><i style="left:16.2%;top:63.5%;width:2px;height:2px;opacity:0.69;animation-delay:-1.9s"></i><i style="left:38.9%;top:52.9%;width:2px;height:2px;opacity:0.43;animation-delay:-5.3s"></i><i style="left:47.1%;top:73.1%;width:1px;height:1px;opacity:0.45;animation-delay:-0.9s"></i><i style="left:92.0%;top:91.2%;width:2px;height:2px;opacity:0.74;animation-delay:-0.1s"></i><i style="left:48.1%;top:80.0%;width:1px;height:1px;opacity:0.45;animation-delay:-1.2s"></i><i style="left:35.9%;top:58.8%;width:3px;height:3px;opacity:0.64;animation-delay:-2.8s"></i><i style="left:50.9%;top:44.2%;width:1px;height:1px;opacity:0.83;animation-delay:-2.4s"></i><i style="left:91.1%;top:93.7%;width:1px;height:1px;opacity:0.66;animation-delay:-5.7s"></i><i style="left:55.0%;top:85.3%;width:1px;height:1px;opacity:0.57;animation-delay:-2.4s"></i><i style="left:95.6%;top:66.0%;width:2px;height:2px;opacity:0.75;animation-delay:-0.6s"></i><i style="left:86.3%;top:39.9%;width:1px;height:1px;opacity:0.39;animation-delay:-0.8s"></i></div>
+  <div class="au a1"></div><div class="au a2"></div>
+  <div class="hero">
+    <div>
+      <a class="crumb hero-a" href="index.html" style="--i:0">← Kembali ke Northern Sky</a><br>
+      <p class="eb hero-a" style="--i:0">Eksperimen 01 · Difusi</p>
+      <h1 class="hero-a" style="--i:1">Simulasi<br><em>Konsentrasi Zat.</em></h1>
+      <p class="lede hero-a" style="--i:2">Zat yang menyebar seiring waktu, dan rumusnya ternyata bisa diutak-atik. Ada lima bentuk sumber. Pilih satu, geser slider-nya, lihat kurvanya berubah.</p>
+    </div>
+    <div class="glass hero-a" style="--i:2" aria-hidden="true">
+      <div class="gh"><span>c(x, t)</span><span id="hct">t = 0.40</span></div>
+      <svg id="hc" viewBox="0 0 440 190">
+        <defs><linearGradient id="hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F3C6CC" stop-opacity=".45"/><stop offset="1" stop-color="#F3C6CC" stop-opacity="0"/></linearGradient></defs>
+        <line x1="12" y1="166" x2="428" y2="166" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/>
+        <line x1="220" y1="14" x2="220" y2="166" stroke="rgba(255,255,255,.16)" stroke-dasharray="4 6"/>
+        <path id="hgh" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.6" stroke-dasharray="5 6"/>
+        <path id="har" fill="url(#hg)"/>
+        <path id="hln" fill="none" stroke="#FFF8F4" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle id="hdt" cx="220" cy="30" r="5" fill="#FFF8F4"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PEMILIH RUMUS ================= -->
+<div class="pickwrap hero-a" style="--i:3">
+  <div class="pick" id="formulaSwitch" role="tablist" aria-label="Pilih rumus">
+    <button data-formula="point" class="active" role="tab"><b>1</b>Sumber Titik</button>
+    <button data-formula="step" role="tab"><b>2</b>Fungsi Tangga</button>
+    <button data-formula="slab" role="tab"><b>3</b>Balok Terbatas</button>
+    <button data-formula="rod" role="tab"><b>4</b>Batang Berhingga</button>
+    <button data-formula="flux" role="tab"><b>5</b>Fluks J₀</button>
+  </div>
+</div>
+
+<!-- ================= WORKSPACE ================= -->
+<section class="wk" id="coba">
+  <div class="wk-head">
+    <div class="t"><p class="label">Rumus <span id="fnum">1</span> dari 5</p><h2 class="big" id="ftitle">Sumber titik</h2></div>
+    <div class="eqcard"><div id="eq"></div><p class="eqcap" id="eqcap"></p></div>
+  </div>
+
+  <div class="wk-grid">
+    <aside class="ctrl" aria-label="Kontrol">
+      <div class="seg">
+        <button id="btn2d" class="active">Tampilan 2D</button>
+        <button id="btn3d">Tampilan 3D</button>
+      </div>
+      <div class="seg" id="dragModeSwitch" style="display:none">
+        <button id="btnOrbit" class="active">Putar</button>
+        <button id="btnPan">Geser</button>
+      </div>
+
+      <div class="field" id="mField"><div class="field-top"><label for="mSlider"><span class="sym">m</span>massa zat</label><span class="val" id="mVal">1.00</span></div>
+        <input type="range" id="mSlider" min="0.1" max="20" step="0.1" value="1"><div class="rl"><span>0.1</span><span>20</span></div></div>
+      <div class="field" id="c0Field" style="display:none"><div class="field-top"><label for="c0Slider"><span class="sym">c₀</span>konsentrasi awal</label><span class="val" id="c0Val">1.00</span></div>
+        <input type="range" id="c0Slider" min="0.1" max="20" step="0.1" value="1"><div class="rl"><span>0.1</span><span>20</span></div></div>
+      <div class="field" id="C0Field" style="display:none"><div class="field-top"><label for="C0Slider"><span class="sym">C₀</span>konsentrasi dalam balok</label><span class="val" id="C0Val">1.00</span></div>
+        <input type="range" id="C0Slider" min="0.1" max="20" step="0.1" value="1"><div class="rl"><span>0.1</span><span>20</span></div></div>
+      <div class="field" id="lField" style="display:none"><div class="field-top"><label for="lSlider"><span class="sym">l</span>setengah lebar balok</label><span class="val" id="lVal">2.00</span></div>
+        <input type="range" id="lSlider" min="0.1" max="8" step="0.1" value="2"><div class="rl"><span>0.1</span><span>8</span></div></div>
+      <div class="field" id="c1Field" style="display:none"><div class="field-top"><label for="c1Slider"><span class="sym">c₁</span>konsentrasi di x=0</label><span class="val" id="c1Val">2.00</span></div>
+        <input type="range" id="c1Slider" min="0" max="20" step="0.1" value="2"><div class="rl"><span>0</span><span>20</span></div></div>
+      <div class="field" id="c2Field" style="display:none"><div class="field-top"><label for="c2Slider"><span class="sym">c₂</span>konsentrasi di x=h</label><span class="val" id="c2Val">8.00</span></div>
+        <input type="range" id="c2Slider" min="0" max="20" step="0.1" value="8"><div class="rl"><span>0</span><span>20</span></div></div>
+      <div class="field" id="hField" style="display:none"><div class="field-top"><label for="hSlider"><span class="sym">h</span>panjang batang</label><span class="val" id="hVal">5.00</span></div>
+        <input type="range" id="hSlider" min="1" max="15" step="0.5" value="5"><div class="rl"><span>1</span><span>15</span></div></div>
+      <div class="field" id="DField"><div class="field-top"><label for="DSlider"><span class="sym">D</span>koefisien difusi</label><span class="val" id="DVal">1.00</span></div>
+        <input type="range" id="DSlider" min="0.05" max="20" step="0.05" value="1"><div class="rl"><span>0.05</span><span>20</span></div></div>
+      <div class="field" id="tField"><div class="field-top"><label for="tSlider" id="tLabel"><span class="sym">t</span>waktu</label><span class="val" id="tVal">1.00</span></div>
+        <input type="range" id="tSlider" min="0.05" max="20" step="0.05" value="1"><div class="rl"><span>0.05</span><span>20</span></div>
+        <button class="play" id="play" type="button"><svg viewBox="0 0 12 12" fill="currentColor" id="playIc"><path d="M2 1l9 5-9 5z"/></svg><span id="playTx">Putar waktu</span></button></div>
+
+      <div class="read"><small id="readoutLabel">Puncak c(0,t)</small><b id="peakVal">—</b></div>
+      <button id="reset" type="button">Kembalikan nilai &amp; sumbu awal</button>
+    </aside>
+
+    <div class="plotcard"><div id="plot" role="img" aria-label="Grafik konsentrasi zat"></div><div class="plotload" id="plotload"><i></i><span>Memuat grafik…</span></div><p class="hint" id="toolHint"></p></div>
+  </div>
+</section>
+
+<!-- ================= PENJELASAN ================= -->
+<section class="explain" id="penjelasan">
+  <div class="band">
+    <p class="label" data-r>Penjelasan</p>
+    <h2 class="big" data-r style="--i:1">Rumus ini <em>ngomongin apa?</em></h2>
+    <p class="note" data-r style="--i:2">Penjelasannya ikut berganti sesuai rumus yang kamu pilih di atas.</p>
+  </div>
+
+  <div class="formula-block active" id="explain-point"><div class="ex-grid">
+    <article class="cx s7"><h3>Ceritanya</h3><p>Bayangkan sejumlah zat dilepaskan sekaligus di satu titik (anggap saja di posisi x = 0) pada saat t = 0. Rumus ini menjawab pertanyaan: <b>seberapa pekat zat itu di posisi x, pada waktu t setelah dilepaskan?</b> Ini adalah solusi baku dari persamaan difusi satu dimensi untuk sumber titik.</p></article>
+    <article class="cx s5"><h3>Interpretasinya</h3><p>Begitu zat baru dilepas, kurvanya tinggi dan sempit, terpusat di sumber. Seiring t membesar, kurva <b>merenggang</b>: makin lebar tapi makin pendek puncaknya. Luas di bawah kurva selalu sama (total massa m tidak hilang, cuma menyebar lebih rata).</p></article>
+    <article class="cx s7"><h3>Tiap simbol ngomong apa</h3><div class="symbol-grid">
+      <div class="symbol-item"><span class="sym">c(x,t)</span><span class="desc"><b>Konsentrasi</b>: seberapa pekat zatnya, di posisi x dan waktu t.</span></div>
+      <div class="symbol-item"><span class="sym">m</span><span class="desc"><b>Massa zat</b>: jumlah total zat yang dilepas sekali di awal, di titik sumber.</span></div>
+      <div class="symbol-item"><span class="sym">D</span><span class="desc"><b>Koefisien difusi</b>: seberapa cepat zat itu menyebar.</span></div>
+      <div class="symbol-item"><span class="sym">x</span><span class="desc"><b>Jarak</b> dari titik sumber.</span></div>
+      <div class="symbol-item"><span class="sym">t</span><span class="desc"><b>Waktu</b> yang sudah berlalu sejak zat dilepaskan.</span></div>
+      <div class="symbol-item"><span class="sym">e^(…)</span><span class="desc">Faktor <b>eksponensial</b> yang membentuk kurva lonceng (Gaussian).</span></div></div></article>
+    <article class="cx s5 mar"><h3>Contoh di dunia nyata</h3><ul><li><b>Setetes tinta</b> di tengah wadah air tenang.</li><li><b>Parfum</b> yang disemprot di satu sudut ruangan.</li><li><b>Polutan</b> yang dibuang ke sungai pada satu titik.</li></ul></article>
+  </div></div>
+
+  <div class="formula-block" id="explain-step"><div class="ex-grid">
+    <article class="cx s7"><h3>Ceritanya</h3><p>Kasus ini beda total dari sumber titik: bukan titik, tapi <b>tembok tak berhingga</b>. Bayangkan garis yang sangat panjang: separuh kirinya (x&lt;0) penuh zat dengan konsentrasi c₀, separuh kanannya (x&gt;0) kosong sama sekali, dengan batas tajam persis di x=0. Rumus ini menjawab: <b>bagaimana batas tajam itu melunak seiring waktu?</b></p></article>
+    <article class="cx s5"><h3>Interpretasinya</h3><p>Di x sangat negatif, c mendekati c₀ (masih penuh). Di x sangat positif, c mendekati 0 (masih kosong). Tepat di x=0, c selalu c₀/2, berapa pun t-nya, titik tengah itu "adil" selamanya. Seiring t membesar, transisi tajam di x=0 melebar jadi kurva-S yang makin landai.</p></article>
+    <article class="cx s7"><h3>Tiap simbol ngomong apa</h3><div class="symbol-grid">
+      <div class="symbol-item"><span class="sym">c(x,t)</span><span class="desc"><b>Konsentrasi</b> di posisi x, waktu t.</span></div>
+      <div class="symbol-item"><span class="sym">c₀</span><span class="desc"><b>Konsentrasi awal</b> di sisi kiri (sisi kanan mulai dari nol).</span></div>
+      <div class="symbol-item"><span class="sym">erf(…)</span><span class="desc">Fungsi <b>galat</b> (error function): bentuknya sigmoid, dari −1 sampai 1, inilah yang melunakkan batas tajam jadi landai.</span></div>
+      <div class="symbol-item"><span class="sym">D, t</span><span class="desc">Koefisien difusi dan waktu, seperti sebelumnya.</span></div></div></article>
+    <article class="cx s5 mar"><h3>Contoh di dunia nyata</h3><ul><li><b>Karburisasi baja</b>: batang berkadar karbon tinggi disambung dengan batang berkadar rendah, lalu karbon berdifusi melewati sambungan.</li><li><b>Dopan semikonduktor</b> dari sumber konstan di permukaan wafer yang berdifusi masuk ke dalam.</li></ul></article>
+  </div></div>
+
+  <div class="formula-block" id="explain-slab"><div class="ex-grid">
+    <article class="cx s7"><h3>Ceritanya</h3><p>Ini posisi tengah-tengah antara sumber titik dan tembok tak berhingga: sebuah <b>balok/lapisan dengan lebar terbatas</b>. Zat mengisi penuh (konsentrasi C₀) di rentang −l sampai +l, dan kosong di luar itu. Rumus ini menjawab: <b>bagaimana balok itu menyebar dari kedua tepinya sekaligus?</b></p></article>
+    <article class="cx s5"><h3>Interpretasinya</h3><p>Begitu t kecil, bentuknya masih mirip kotak (nyaris C₀ di dalam, nyaris 0 di luar, tepinya sedikit melengkung). Makin besar t, dua tepi itu makin melebur ke tengah sampai akhirnya seluruh kurva merata dan turun ke nol (massa totalnya terbatas, menyebar di garis tak hingga).</p></article>
+    <article class="cx s7"><h3>Tiap simbol ngomong apa</h3><div class="symbol-grid">
+      <div class="symbol-item"><span class="sym">C₀</span><span class="desc"><b>Konsentrasi awal</b> di dalam balok (dari −l sampai +l).</span></div>
+      <div class="symbol-item"><span class="sym">l</span><span class="desc"><b>Setengah lebar</b> balok awal: baloknya membentang dari −l ke +l.</span></div>
+      <div class="symbol-item"><span class="sym">erf suku 1</span><span class="desc">Suku pertama, "tanggung jawab" tepi kanan balok (di x=+l).</span></div>
+      <div class="symbol-item"><span class="sym">erf suku 2</span><span class="desc">Suku kedua, "tanggung jawab" tepi kiri balok (di x=−l).</span></div></div></article>
+    <article class="cx s5 mar"><h3>Contoh di dunia nyata</h3><ul><li><b>Strip dopan</b> selebar tertentu yang ditanam ke wafer silikon lalu dianil dari kedua tepinya sekaligus.</li><li><b>Tumpahan zat</b> yang awalnya membentuk genangan memanjang lalu menyebar ke dua arah.</li></ul></article>
+    <article class="cx s12 kin"><h3>Satu hal menarik</h3><p>Ketiga rumus pertama sebenarnya satu keluarga. Balok terbatas ini adalah "orang tua" dari dua yang lain:</p>
+      <p>— Kalau lebar balok (l) dibikin makin sempit sambil massa totalnya dijaga tetap, ini luruh jadi sumber titik (rumus 1).</p>
+      <p>— Kalau lebar balok dibikin makin lebar, tiap tepinya berperilaku sendiri-sendiri seperti tembok tak berhingga (rumus 2). Coba geser l jadi kecil atau besar sekali dan bandingkan sendiri.</p></article>
+  </div></div>
+
+  <div class="formula-block" id="explain-rod"><div class="ex-grid">
+    <article class="cx s7"><h3>Ceritanya</h3><p>Kalau tiga rumus sebelumnya membahas zat yang menyebar bebas di garis tak berhingga, yang ini beda total: sekarang zatnya terkurung di dalam <b>batang berhingga</b> sepanjang h (dari x=0 sampai x=h). Kedua ujung batang dijaga tetap konstan: ujung kiri selalu bernilai c₁, ujung kanan selalu c₂, sementara batangnya sendiri awalnya kosong (c=0 di mana-mana). Rumus ini menjawab: <b>bagaimana bagian dalam batang terisi seiring waktu, menuju profil akhirnya?</b></p></article>
+    <article class="cx s5"><h3>Interpretasinya</h3><p>Di t=0, seluruh suku deret saling meniadakan sehingga c(x,t)=0 di mana-mana (batang masih kosong) kecuali tepat di kedua ujung yang sudah dipaksa ke c₁ dan c₂. Seiring t membesar, suku deret itu meluruh (faktor eksponensialnya menuju nol), dan yang tersisa cuma garis lurus c₁+(c₂−c₁)x/h, bentuk akhir yang tidak berubah lagi.</p></article>
+    <article class="cx s7"><h3>Tiap simbol ngomong apa</h3><div class="symbol-grid">
+      <div class="symbol-item"><span class="sym">c₁, c₂</span><span class="desc">Konsentrasi yang dijaga <b>konstan</b> di ujung kiri (x=0) dan ujung kanan (x=h).</span></div>
+      <div class="symbol-item"><span class="sym">h</span><span class="desc"><b>Panjang batang</b>: jaraknya dari ujung ke ujung.</span></div>
+      <div class="symbol-item"><span class="sym">suku linear</span><span class="desc">c₁+(c₂−c₁)x/h, bagian <b>tunak (steady-state)</b>, garis lurus yang menghubungkan c₁ ke c₂.</span></div>
+      <div class="symbol-item"><span class="sym">suku deret</span><span class="desc">Bagian <b>transien</b>: meluruh seiring t membesar, menggambarkan proses "menuju" ke garis lurus tadi.</span></div></div></article>
+    <article class="cx s5 mar"><h3>Contoh di dunia nyata</h3><ul><li><b>Sel difusi (diffusion cell)</b>: membran dijepit di antara dua reservoir berkonsentrasi beda, lalu diamati bagaimana profil di dalam membran terbentuk seiring waktu.</li><li><b>Batang logam</b> yang kedua ujungnya direndam dalam larutan berkonsentrasi berbeda.</li></ul></article>
+  </div></div>
+
+  <div class="formula-block" id="explain-flux"><div class="ex-grid">
+    <article class="cx s7"><h3>Ceritanya</h3><p>Ini pasangan dari rumus 4. Kalau rumus 4 menjawab "seberapa pekat di posisi x", yang ini menjawab pertanyaan berbeda: <b>seberapa deras zat mengalir tepat di ujung kiri batang (x=0), dari waktu ke waktu?</b> Laju alir ini disebut fluks, dihitung lewat hukum Fick: J = D·∂c/∂x.</p></article>
+    <article class="cx s5"><h3>Interpretasinya</h3><p>Perhatikan bahwa grafik ini beda bentuk dari empat rumus lainnya: sumbu-x nya adalah <b>waktu (t)</b>, bukan posisi (x), karena J₀ sudah dievaluasi tepat di satu titik (x=0), nilainya cuma bergantung pada t. Di awal, fluksnya bisa jauh dari nilai akhirnya (karena batang masih menyesuaikan diri), lalu mendatar menuju nilai tunak D(c₂−c₁)/h begitu transiennya habis meluruh.</p></article>
+    <article class="cx s7"><h3>Tiap simbol ngomong apa</h3><div class="symbol-grid">
+      <div class="symbol-item"><span class="sym">J₀</span><span class="desc"><b>Fluks</b> di x=0: jumlah zat yang lewat per satuan luas per satuan waktu.</span></div>
+      <div class="symbol-item"><span class="sym">fluks tunak</span><span class="desc">D(c₂−c₁)/h, nilai <b>konstan</b> yang bertahan selamanya setelah transiennya habis.</span></div>
+      <div class="symbol-item"><span class="sym">fluks transien</span><span class="desc">Bagian yang <b>meluruh cepat</b>, cuma signifikan di waktu-waktu awal saat batang baru mulai terisi.</span></div></div></article>
+    <article class="cx s5 mar"><h3>Contoh di dunia nyata</h3><ul><li><b>Uji permeabilitas membran</b>: mengukur laju obat/gas yang menembus membran dari waktu ke waktu, sampai mencapai laju konstan.</li><li><b>Sensor gas</b> yang butuh waktu untuk mencapai pembacaan stabil setelah dipasang.</li></ul></article>
+  </div></div>
+</section>
+
+<!-- ================= LANJUT ================= -->
+<section class="next">
+  <a class="nx" href="graf-explorer.html" data-r>
+    <div><small>Eksperimen 02</small><h3>Lanjut ke <em>Graf Explorer.</em></h3><p>Gambar graf sembarang, lalu lihat apa yang bisa disimpulkan dari bentuknya.</p></div>
+    <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </a>
+</section>
+</main>
+
+<div id="pt" aria-hidden="true"></div>
+<footer class="foot">
+  <div class="fgrid">
+    <div><h4>Isi web</h4><ul><li><a href="index.html">Beranda</a></li><li><a href="index.html#tentang">Cerita</a></li><li><a href="index.html#eksperimen">Eksperimen</a></li></ul></div>
+    <div><h4>Eksperimen</h4><ul><li><a href="simulasi-konsentrasi.html">Simulasi Konsentrasi Zat</a></li><li><a href="graf-explorer.html">Graf Explorer</a></li></ul></div>
+    <div><h4>Status</h4><span class="status">Ongoing</span><p>Belum selesai dan memang begitu. Mampir lagi nanti.</p></div>
+    <div class="cvcol" id="cvcol"><h4><button class="cvtog" type="button" aria-expanded="false" aria-controls="cvpanel"><span>CV</span><i aria-hidden="true"></i><em class="cvhint">pencet dulu</em></button></h4><div class="cvpanel" id="cvpanel"><div><a class="cvname" href="cv.html" aria-label="Buka CV Normand"><b style="--k:0">N</b><b style="--k:1">o</b><b style="--k:2">r</b><b style="--k:3">m</b><b style="--k:4">a</b><b style="--k:5">n</b><b style="--k:6">d</b><span class="ar" aria-hidden="true">→</span></a><p>Klik namanya buat baca cerita saya.</p></div></div></div>
+  </div>
+  <div class="fbar"><span>© 2026 Northern Sky. Dibuat Normand, masih jalan terus.</span><a href="#top">Kembali ke atas ↑</a></div>
+  <div class="wm" aria-hidden="true">northern <em>sky</em></div>
+</footer>
+
+<script>
+(function(){
+
+  /* ---------- footer CV: pencet -> Normand -> cv.html ---------- */
+  (function(){
+    var col=document.getElementById('cvcol');if(!col)return;
+    var tog=col.querySelector('.cvtog'),name=col.querySelector('.cvname');
+    var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    tog.addEventListener('click',function(){
+      var o=col.classList.toggle('open');tog.setAttribute('aria-expanded',o?'true':'false');
+      if(o)setTimeout(function(){var r=name.getBoundingClientRect();if(r.bottom>innerHeight-10)window.scrollBy({top:r.bottom-innerHeight+40,behavior:'smooth'})},650);
+    });
+    var pt=document.getElementById('pt');
+    name.addEventListener('click',function(e){
+      var h=name.getAttribute('href');
+      if(rm||!pt||!pt.animate||e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;
+      e.preventDefault();
+      var x=e.clientX||innerWidth/2,y=e.clientY||innerHeight/2;
+      pt.style.visibility='visible';
+      var a=pt.animate([{clipPath:'circle(0px at '+x+'px '+y+'px)'},{clipPath:'circle(150% at '+x+'px '+y+'px)'}],{duration:650,easing:'cubic-bezier(.65,0,.35,1)',fill:'forwards'});
+      try{sessionStorage.setItem('ns-pt','1')}catch(_){}
+      var go=function(){location.href=h};a.onfinish=go;setTimeout(go,900);
+    });
+    window.addEventListener('pageshow',function(e){
+      if(e.persisted&&pt){pt.getAnimations().forEach(function(a){a.cancel()});pt.style.visibility='hidden'}
+    });
+  })();
+
+  /* ---------- navbar + reveal ---------- */
+  var nav=document.getElementById('nav'),sky=document.querySelector('.sky');
+  function navState(){nav.classList.toggle('solid',window.scrollY>40)}
+  var tk=false;window.addEventListener('scroll',function(){if(tk)return;tk=true;requestAnimationFrame(function(){navState();tk=false})},{passive:true});navState();
+  var els=[].slice.call(document.querySelectorAll('[data-r]'));
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+    els.forEach(function(el){io.observe(el)});
+  }else{els.forEach(function(el){el.classList.add('in')})}
+
+  /* ---------- kurva hias di hero ---------- */
+  (function(){
+    var svg=document.getElementById('hc');if(!svg)return;
+    var X0=12,X1=428,B=166,T=16,XM=7,YM=1.4,ln=document.getElementById('hln'),ar=document.getElementById('har'),gh=document.getElementById('hgh'),dt=document.getElementById('hdt'),lb=document.getElementById('hct');
+    function px(x){return X0+(x+XM)/(2*XM)*(X1-X0)}
+    function py(c){return B-Math.min(c,YM)/YM*(B-T)}
+    function c(x,t){return Math.exp(-x*x/(4*t))/Math.sqrt(4*Math.PI*t)}
+    function path(t){var d='',n=120;for(var i=0;i<=n;i++){var x=-XM+2*XM*i/n;d+=(i?'L':'M')+px(x).toFixed(1)+' '+py(c(x,t)).toFixed(1)}return d}
+    gh.setAttribute('d',path(.1));
+    function draw(t){var d=path(t),p=py(c(0,t));ln.setAttribute('d',d);ar.setAttribute('d',d+'L'+px(XM)+' '+B+'L'+px(-XM)+' '+B+'Z');dt.setAttribute('cy',p);lb.textContent='t = '+t.toFixed(2)}
+    var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches,t0=null,vis=true;
+    if('IntersectionObserver' in window)new IntersectionObserver(function(es){vis=es[0].isIntersecting}).observe(svg);
+    function loop(ts){if(vis){if(t0===null)t0=ts;draw(.14+1.4*(.5-.5*Math.cos((ts-t0)/1000*.5)))}requestAnimationFrame(loop)}
+    draw(.4);if(!rm)requestAnimationFrame(loop);
+  })();
+
+  /* ---------- rumus (KaTeX) ---------- */
+  var EQ={
+    point:"c(x,t)=\\dfrac{m}{\\sqrt{4\\pi D t}}\\,e^{-x^2/4Dt}",
+    step:"c(x,t)=\\dfrac{c_0}{2}\\left(1-\\operatorname{erf}\\left(\\dfrac{x}{\\sqrt{4Dt}}\\right)\\right)",
+    slab:"c(x,t)=\\dfrac{C_0}{2}\\left(\\operatorname{erf}\\left(\\dfrac{l-x}{\\sqrt{4Dt}}\\right)+\\operatorname{erf}\\left(\\dfrac{l+x}{\\sqrt{4Dt}}\\right)\\right)",
+    rod:"c(x,t)=c_1+\\dfrac{c_2-c_1}{h}x+\\displaystyle\\sum_{n=1}^{\\infty}\\dfrac{2}{n\\pi}\\big[(-1)^n c_2 - c_1\\big]\\sin\\!\\left(\\dfrac{n\\pi x}{h}\\right)e^{-(n\\pi/h)^2 Dt}",
+    flux:"J_0=D\\dfrac{\\partial c}{\\partial x}\\bigg|_{x=0}=\\underbrace{\\dfrac{D}{h}(c_2-c_1)}_{\\text{tunak}}+\\underbrace{\\dfrac{2D}{h}\\displaystyle\\sum_{n=1}^{\\infty}\\big[(-1)^n c_2 - c_1\\big]e^{-n^2\\pi^2 Dt/h^2}}_{\\text{transien}}"
+  };
+  var CAP={
+    point:'solusi fundamental persamaan difusi 1D dari sumber titik bermassa m di x = 0',
+    step:'solusi difusi 1D untuk kondisi awal fungsi tangga (step function)',
+    slab:'solusi difusi 1D untuk kondisi awal balok (slab) selebar 2l',
+    rod:'solusi difusi 1D pada batang berhingga dengan kedua ujung dijaga konstan di c₁ dan c₂',
+    flux:'fluks di x=0: bagian tunak (konstan) ditambah bagian transien (meluruh, cuma berarti di waktu-waktu awal)'
+  };
+  var TITLE={point:'Sumber titik',step:'Fungsi tangga',slab:'Balok terbatas',rod:'Batang berhingga',flux:'Fluks J₀ di ujung batang'};
+  var NUM={point:1,step:2,slab:3,rod:4,flux:5};
+  function renderEq(f){
+    var el=document.getElementById('eq');
+    if(window.katex){katex.render(EQ[f],el,{throwOnError:false,displayMode:true})}else{el.textContent=EQ[f]}
+    document.getElementById('eqcap').textContent=CAP[f];
+    document.getElementById('ftitle').textContent=TITLE[f];
+    document.getElementById('fnum').textContent=NUM[f];
+    var card=el.parentNode;card.classList.remove('fade');void card.offsetWidth;card.classList.add('fade');
+  }
+
+  /* ---------- fungsi difusi ---------- */
+  function erf(x){var s=x>=0?1:-1;x=Math.abs(x);var a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;var t=1/(1+p*x);var y=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);return s*y}
+  function cPoint(x,t,m,D){return(m/Math.sqrt(4*Math.PI*D*t))*Math.exp(-(x*x)/(4*D*t))}
+  function cStep(x,t,c0,D){return(c0/2)*(1-erf(x/Math.sqrt(4*D*t)))}
+  function cSlab(x,t,C0,l,D){var d=Math.sqrt(4*D*t);return(C0/2)*(erf((l-x)/d)+erf((l+x)/d))}
+  var ROD_TERMS=80;
+  function cRod(x,t,c1,c2,h,D){var s=c1+(c2-c1)/h*x;for(var n=1;n<=ROD_TERMS;n++){s+=(2/(n*Math.PI))*(Math.pow(-1,n)*c2-c1)*Math.sin(n*Math.PI*x/h)*Math.exp(-Math.pow(n*Math.PI/h,2)*D*t)}return s}
+  function fluxJ0(t,c1,c2,h,D){var s=D/h*(c2-c1);for(var n=1;n<=ROD_TERMS;n++){s+=(2*D/h)*(Math.pow(-1,n)*c2-c1)*Math.exp(-Math.pow(n*Math.PI/h,2)*D*t)}return s}
+
+  var formula='point',mode='2d',camera3dSet=false,XMAX=10,N=300,rev=0;
+  var $=function(id){return document.getElementById(id)};
+  var S={m:$('mSlider'),c0:$('c0Slider'),C0:$('C0Slider'),l:$('lSlider'),c1:$('c1Slider'),c2:$('c2Slider'),h:$('hSlider'),D:$('DSlider'),t:$('tSlider')};
+  var V={m:$('mVal'),c0:$('c0Val'),C0:$('C0Val'),l:$('lVal'),c1:$('c1Val'),c2:$('c2Val'),h:$('hVal'),D:$('DVal'),t:$('tVal')};
+  var F={m:$('mField'),c0:$('c0Field'),C0:$('C0Field'),l:$('lField'),c1:$('c1Field'),c2:$('c2Field'),h:$('hField')};
+  var tField=$('tField'),peakVal=$('peakVal'),readoutLabel=$('readoutLabel'),toolHint=$('toolHint');
+  var btn2d=$('btn2d'),btn3d=$('btn3d'),dragModeSwitch=$('dragModeSwitch'),btnOrbit=$('btnOrbit'),btnPan=$('btnPan'),seg2d3d=btn2d.parentNode;
+  var HAS=(typeof Plotly!=='undefined'),pl=$('plotload');
+  function plotReady(){pl.classList.add('hide')}
+  if(!HAS){setTimeout(function(){if(typeof Plotly==='undefined'){pl.querySelector('i').style.display='none';pl.querySelector('span').innerHTML='Grafiknya belum bisa dimuat.<br>Cek koneksi internet, lalu muat ulang halaman ini.'}},4000)}
+  window.addEventListener('load',function(){if(!HAS&&typeof Plotly!=='undefined'){HAS=true;redraw()}});
+
+  function vals(){var o={};for(var k in S)o[k]=parseFloat(S[k].value);return o}
+  function computeC(x,t,v){
+    if(formula==='point')return cPoint(x,t,v.m,v.D);
+    if(formula==='step')return cStep(x,t,v.c0,v.D);
+    if(formula==='slab')return cSlab(x,t,v.C0,v.l,v.D);
+    return cRod(x,t,v.c1,v.c2,v.h,v.D);
+  }
+  function xDomain(v){return formula==='rod'?[0,v.h]:[-XMAX,XMAX]}
+  function yRange(v,is3d){
+    if(formula==='point')return[0,Math.max(.5,1.12*cPoint(0,is3d?.05:.25,v.m,v.D))];
+    if(formula==='step')return[0,Math.max(1,v.c0*1.08)];
+    if(formula==='slab')return[0,Math.max(1,v.C0*1.08)];
+    var lo=Math.min(0,v.c1,v.c2),hi=Math.max(v.c1,v.c2),pad=Math.max(.5,(hi-lo)*.15);return[lo-pad,hi+pad];
+  }
+  function linspace(a,b,n){var o=new Array(n);for(var i=0;i<n;i++)o[i]=a+(b-a)*i/(n-1);return o}
+  function fmt(n){return n.toFixed(2)}
+
+  var AX={gridcolor:'#EDE4DE',zerolinecolor:'#D5C9C2',color:'#6D6366',linecolor:'#D5C9C2'};
+  function baseLayout(rev,extra){return Object.assign({uirevision:rev,paper_bgcolor:'rgba(0,0,0,0)',plot_bgcolor:'rgba(0,0,0,0)',font:{family:'Inter, sans-serif',color:'#6D6366',size:12},margin:{l:56,r:24,t:16,b:50},showlegend:false},extra)}
+  function plotConfig(){
+    var is3=(mode==='3d'&&formula!=='flux');
+    return{responsive:true,scrollZoom:false,displaylogo:false,displayModeBar:true,
+      modeBarButtons:is3?[['orbitRotation','pan3d','resetCameraDefault3d']]:[['pan2d','autoScale2d','resetScale2d']]};
+  }
+  function ax(extra){return Object.assign({},AX,extra)}
+  function draw(data,layout){if(!HAS)return;Plotly.react('plot',data,layout,plotConfig());plotReady()}
+  function ghost(v){
+    var d=xDomain(v),g={type:'scatter',mode:'lines',line:{color:'#B9AEA9',width:2,dash:'dot'},hoverinfo:'skip'};
+    if(formula==='step')return Object.assign(g,{x:[d[0],0,0,d[1]],y:[v.c0,v.c0,0,0]});
+    if(formula==='slab')return Object.assign(g,{x:[d[0],-v.l,-v.l,v.l,v.l,d[1]],y:[0,0,v.C0,v.C0,0,0]});
+    if(formula==='rod')return Object.assign(g,{x:[0,v.h],y:[v.c1,v.c2]});
+    if(formula==='flux'){var ss=v.D/v.h*(v.c2-v.c1);return Object.assign(g,{x:[0,20],y:[ss,ss]})}
+    return null;
+  }
+  function draw2D(){
+    var v=vals(),g=ghost(v),line={color:'#7A1F2B',width:3,shape:'spline'},fill={fill:'tozeroy',fillcolor:'rgba(122,31,43,0.10)'};
+    if(formula==='flux'){
+      var ts=linspace(.05,20,N),ys=ts.map(function(tt){return fluxJ0(tt,v.c1,v.c2,v.h,v.D)});
+      draw([g,Object.assign({x:ts,y:ys,type:'scatter',mode:'lines',line:line,hovertemplate:'t=%{x:.2f}<br>J0=%{y:.4f}<extra></extra>'},fill)],
+        baseLayout('ns-2d-flux-'+rev,{dragmode:'pan',xaxis:ax({title:'t',range:[0,20]}),yaxis:ax({title:'J0(t)'})}));
+      peakVal.textContent=fmt(v.D/v.h*(v.c2-v.c1));return;
+    }
+    var d=xDomain(v),xs=linspace(d[0],d[1],N),ys2=xs.map(function(x){return computeC(x,v.t,v)});
+    var main=Object.assign({x:xs,y:ys2,type:'scatter',mode:'lines',line:line,hovertemplate:'x=%{x:.2f}<br>c=%{y:.4f}<extra></extra>'},fill);
+    draw(g?[g,main]:[main],baseLayout('ns-2d-'+formula+'-'+rev,{dragmode:'pan',xaxis:ax({title:'x',range:d}),yaxis:ax({title:'c(x, t)',range:yRange(v,false)})}));
+    peakVal.textContent=fmt(computeC(formula==='rod'?v.h/2:0,v.t,v));
+  }
+  function sliceData(v){
+    var d=xDomain(v),tS=Math.min(Math.max(v.t,.05),10),xs=linspace(d[0],d[1],150);
+    return{x:xs,y:xs.map(function(){return tS}),z:xs.map(function(x){return computeC(x,tS,v)})};
+  }
+  function draw3D(){
+    var v=vals(),d=xDomain(v),xs=linspace(d[0],d[1],90),ts=linspace(.05,10,90);
+    var z=ts.map(function(tt){return xs.map(function(x){return computeC(x,tt,v)})}),yr=yRange(v,true);
+    var surf={x:xs,y:ts,z:z,type:'surface',colorscale:[[0,'#1B1517'],[.3,'#5B1320'],[.6,'#B83A4B'],[1,'#F3C6CC']],cmin:yr[0],cmax:yr[1],showscale:true,
+      colorbar:{title:{text:'c',font:{color:'#6D6366',size:12}},outlinewidth:0,thickness:14,len:.7,tickfont:{color:'#6D6366',size:10}},contours:{z:{show:false}}};
+    var sd=sliceData(v);
+    var slice={x:sd.x,y:sd.y,z:sd.z,type:'scatter3d',mode:'lines',line:{color:'#FFF8F4',width:7},hoverinfo:'skip'};
+    var sa=function(t,r){return{title:t,range:r,color:'#6D6366',gridcolor:'#E4DAD4',backgroundcolor:'rgba(0,0,0,0)'}};
+    var scene={xaxis:sa('x',d),yaxis:sa('t',[0,10]),zaxis:sa('c',yr),aspectmode:'manual',aspectratio:{x:1,y:1,z:.6},dragmode:btnPan.classList.contains('active')?'pan':'orbit'};
+    if(!camera3dSet){scene.camera={eye:{x:1.6,y:-1.7,z:.9}};camera3dSet=true}
+    draw([surf,slice],baseLayout('ns-3d-'+formula+'-'+rev,{scene:scene,margin:{l:0,r:0,t:0,b:0}}));
+    peakVal.textContent=fmt(computeC(formula==='rod'?v.h/2:0,v.t,v));
+  }
+  function drawSliceOnly(){
+    var v=vals(),sd=sliceData(v);
+    if(HAS)Plotly.restyle('plot',{x:[sd.x],y:[sd.y],z:[sd.z]},[1]);
+    peakVal.textContent=fmt(computeC(formula==='rod'?v.h/2:0,v.t,v));
+  }
+  function redraw(){(mode==='2d'||formula==='flux')?draw2D():draw3D()}
+  function syncLabels(){for(var k in S)V[k].textContent=fmt(parseFloat(S[k].value))}
+  for(var k in S)S[k].addEventListener('input',function(){stopPlay();syncLabels();redraw()});
+
+  /* ---------- putar waktu ---------- */
+  var playing=false,raf=0,last=0,acc=0,playBtn=$('play');
+  function setPlayUI(){
+    playBtn.classList.toggle('on',playing);
+    $('playTx').textContent=playing?'Berhenti':'Putar waktu';
+    $('playIc').innerHTML=playing?'<path d="M2 1h3v10H2zM7 1h3v10H7z"/>':'<path d="M2 1l9 5-9 5z"/>';
+  }
+  function stopPlay(){if(!playing)return;playing=false;cancelAnimationFrame(raf);S.t.step='0.05';syncLabels();setPlayUI()}
+  function tick(ts){
+    if(!playing)return;
+    var dt=Math.min(.05,(ts-last)/1000);last=ts;acc+=dt;
+    if(acc>=.033){
+      var max=(mode==='3d')?10:20,t=parseFloat(S.t.value)+acc*(mode==='3d'?.7:.9);acc=0;
+      if(t>max)t=.05;
+      S.t.value=t;syncLabels();
+      (mode==='3d')?drawSliceOnly():draw2D();
+    }
+    raf=requestAnimationFrame(tick);
+  }
+  playBtn.addEventListener('click',function(){
+    if(playing){stopPlay();return}
+    playing=true;S.t.step='any';last=performance.now();acc=0;setPlayUI();raf=requestAnimationFrame(tick);
+  });
+
+  /* ---------- 2D / 3D ---------- */
+  btn2d.addEventListener('click',function(){
+    mode='2d';btn2d.classList.add('active');btn3d.classList.remove('active');dragModeSwitch.style.display='none';
+    $('tLabel').innerHTML='<span class="sym">t</span>waktu';redraw();
+  });
+  btn3d.addEventListener('click',function(){
+    mode='3d';btn3d.classList.add('active');btn2d.classList.remove('active');dragModeSwitch.style.display='flex';
+    $('tLabel').innerHTML='<span class="sym">t</span>garis potongan waktu';redraw();
+  });
+  btnOrbit.addEventListener('click',function(){btnOrbit.classList.add('active');btnPan.classList.remove('active');if(HAS)Plotly.relayout('plot',{'scene.dragmode':'orbit'})});
+  btnPan.addEventListener('click',function(){btnPan.classList.add('active');btnOrbit.classList.remove('active');if(HAS)Plotly.relayout('plot',{'scene.dragmode':'pan'})});
+
+  var DEF={point:{m:1,D:1,t:1},step:{c0:1,D:1,t:1},slab:{C0:1,l:2,D:1,t:1},rod:{c1:2,c2:8,h:5,D:1,t:1},flux:{c1:2,c2:8,h:5,D:1,t:1}};
+  var RL={point:'Puncak c(0,t)',step:'Nilai di tengah c(0,t)',slab:'Puncak c(0,t)',rod:'Nilai di tengah c(h/2,t)',flux:'Fluks tunak D(c₂−c₁)/h'};
+  var HINT={
+    point:'geser slider di panel kiri, atau coba tampilan 3D. Puncaknya makin rendah dan melebar seiring t',
+    step:'garis putus-putus = kondisi awal. Perhatikan c(0,t) selalu c₀/2',
+    slab:'garis putus-putus = kondisi awal. Geser l kecil/besar sekali untuk lihat kemiripannya dengan rumus 1 & 2',
+    rod:'garis putus-putus = keadaan akhir. Geser t dari kecil ke besar, lihat batang terisi menuju garis lurus itu',
+    flux:'sumbu-x grafik ini waktu (t), bukan posisi. Garis putus-putus = nilai tunak yang dituju'
+  };
+  function applyDefaults(f){var d=DEF[f];for(var k in d)S[k].value=d[k];syncLabels()}
+
+  function setFormula(f){
+    stopPlay();formula=f;
+    [].forEach.call(document.querySelectorAll('#formulaSwitch button'),function(b){var on=b.dataset.formula===f;b.classList.toggle('active',on);b.setAttribute('aria-selected',on)});
+    [].forEach.call(document.querySelectorAll('.formula-block'),function(el){el.classList.remove('active')});
+    $('explain-'+f).classList.add('active');
+    F.m.style.display=f==='point'?'':'none';F.c0.style.display=f==='step'?'':'none';
+    F.C0.style.display=f==='slab'?'':'none';F.l.style.display=f==='slab'?'':'none';
+    var rod=(f==='rod'||f==='flux');F.c1.style.display=rod?'':'none';F.c2.style.display=rod?'':'none';F.h.style.display=rod?'':'none';
+    var flux=f==='flux';tField.style.display=flux?'none':'';seg2d3d.style.display=flux?'none':'';
+    if(flux){dragModeSwitch.style.display='none';mode='2d'}
+    else if(mode==='3d'){dragModeSwitch.style.display='flex'}
+    readoutLabel.textContent=RL[f];toolHint.textContent=HINT[f];camera3dSet=false;
+    renderEq(f);redraw();
+  }
+  $('formulaSwitch').addEventListener('click',function(ev){var b=ev.target.closest('button[data-formula]');if(b)setFormula(b.dataset.formula)});
+  $('reset').addEventListener('click',function(){stopPlay();applyDefaults(formula);rev++;camera3dSet=false;redraw()});
+
+  document.addEventListener('DOMContentLoaded',function(){renderEq(formula)});
+  if(document.readyState!=='loading')renderEq(formula);
+  toolHint.textContent=HINT.point;syncLabels();redraw();
+})();
+</script>
+</body>
+</html>
