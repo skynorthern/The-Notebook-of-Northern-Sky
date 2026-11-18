@@ -100,8 +100,6 @@ html.intro-on #intro .rule{transform:scaleX(0)}
 .cons .rg{fill:none;stroke:var(--rose);stroke-width:1.5;transform-box:fill-box;transform-origin:center;animation:ripple 3.6s ease-out infinite}
 .cons .ln{stroke:var(--rose);stroke-opacity:.5;stroke-width:1.5;stroke-dasharray:3 7;fill:none}
 .cons .grp{transition:transform .25s ease-out}
-.scroll{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:rgba(251,239,240,.6);display:flex;flex-direction:column;align-items:center;gap:10px}
-.scroll::after{content:'';width:1.5px;height:34px;background:linear-gradient(var(--rose),transparent);transform-origin:top;animation:drip 1.8s ease-in-out infinite alternate}
 
 /* ---------- label | judul | catatan ---------- */
 .band{display:grid;grid-template-columns:150px 1fr 260px;gap:clamp(20px,3.4vw,52px);align-items:start;max-width:1240px;margin:0 auto}
@@ -146,12 +144,41 @@ a.xcard:hover .go{background:var(--mar);border-color:var(--mar);color:#fff;trans
 
 /* ---------- footer ---------- */
 .foot{position:relative;margin-top:clamp(40px,6vw,90px);background:var(--ink);color:#F4EEEA;padding:clamp(48px,6vw,80px) var(--pad) 0;overflow:hidden}
-.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.fgrid{display:grid;grid-template-columns:.8fr .9fr .9fr 1.5fr;gap:40px}
 .fgrid h4{margin:0 0 18px;font-size:12.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,238,234,.5)}
 .fgrid li+li{margin-top:12px}.fgrid a{font-size:15px;transition:color .2s}.fgrid a:hover{color:#E9A9B2}
 .status{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid rgba(244,238,234,.25);border-radius:999px;font-size:13px;color:rgba(244,238,234,.8)}
 .status::before{content:'';width:7px;height:7px;border-radius:50%;background:#D4505F;animation:pulse 2s infinite}
 .fgrid p{margin-top:14px;font-size:15px;color:rgba(244,238,234,.62);max-width:30ch;line-height:1.7}
+/* ---------- footer CV interaktif ---------- */
+.fgrid .cvtog{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:12px;font-size:12.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#F4EEEA;padding:8px 14px 8px 16px;margin:-8px 0 -8px -16px;border:1px solid rgba(244,238,234,.3);border-radius:999px;transition:background .3s,border-color .3s,color .3s}
+.fgrid .cvtog:hover{background:rgba(244,238,234,.08);border-color:rgba(244,238,234,.6)}
+.fgrid .cvtog:focus-visible{outline:2px solid var(--rose);outline-offset:3px}
+.cvtog i{position:relative;width:12px;height:12px;display:block}
+.cvtog i::before,.cvtog i::after{content:'';position:absolute;left:0;right:0;top:5px;height:2px;background:currentColor;border-radius:2px;transition:transform .5s var(--ease)}
+.cvtog i::after{transform:rotate(90deg)}
+.cvcol.open .cvtog i::after{transform:rotate(0)}
+.cvcol.open .cvtog{background:#FFF8F4;color:var(--mar);border-color:#FFF8F4}
+.cvhint{font-style:normal;font-size:11.5px;letter-spacing:.04em;text-transform:none;font-weight:500;color:#E9A9B2;display:inline-flex;align-items:center;gap:6px}
+.cvhint::before{content:'';width:6px;height:6px;border-radius:50%;background:#D4505F;animation:pulse 2s infinite}
+.cvcol.open .cvhint{display:none}
+.cvpanel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .6s var(--ease)}
+.cvpanel>div{overflow:hidden;min-height:0}
+.cvcol.open .cvpanel{grid-template-rows:1fr}
+.cvcol .cvpanel>div>*{opacity:0;transition:opacity .4s .3s}
+.cvcol.open .cvpanel>div>*{opacity:1}
+.fgrid .cvname{display:inline-flex;align-items:baseline;gap:2px;margin-top:26px;font-family:var(--serif);font-weight:600;font-size:clamp(34px,3.4vw,46px);letter-spacing:-.03em;line-height:1;color:#FFF8F4;padding-bottom:6px;border-bottom:2px solid #C45767;transition:color .25s,border-color .25s}
+.cvname b{display:inline-block;font-weight:inherit;opacity:0;transform:translateY(.6em) rotate(4deg)}
+.cvcol.open .cvname b{animation:ltr .7s calc(var(--k)*55ms + 250ms) var(--ease) both}
+@keyframes ltr{from{opacity:0;transform:translateY(.6em) rotate(4deg)}to{opacity:1;transform:none}}
+.cvname .ar{margin-left:14px;font-family:var(--sans);font-size:.5em;transition:transform .4s var(--ease)}
+.fgrid .cvname:hover{color:#E9A9B2;border-color:#E9A9B2}.cvname:hover .ar{transform:translateX(6px)}
+.cvcol.open .cvname{animation:none}
+.fgrid .cvcol p{margin-top:16px}
+.fgrid .cvdl{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:9px 16px;border:1px solid rgba(244,238,234,.3);border-radius:999px;font-size:13.5px;font-weight:600;transition:background .25s,color .25s,border-color .25s}
+.fgrid .cvdl:hover{background:#FFF8F4;border-color:#FFF8F4;color:#1B1517}
+#pt{position:fixed;inset:0;z-index:300;background:#7A1F2B;pointer-events:none;clip-path:circle(0 at 50% 50%);visibility:hidden}
+@media (prefers-reduced-motion:reduce){.cvpanel{transition:none}.cvcol.open .cvname b{animation:none;opacity:1;transform:none}}
 .fbar{display:flex;justify-content:space-between;gap:16px;margin-top:52px;padding-top:24px;border-top:1px solid rgba(244,238,234,.14);font-size:14px;color:rgba(244,238,234,.55)}
 .fbar a:hover{color:#fff}
 .wm{font-family:var(--serif);font-weight:600;font-size:13vw;line-height:.84;letter-spacing:-.045em;white-space:nowrap;margin:clamp(24px,4vw,56px) 0 -.17em -.04em;color:#FFF8F4;user-select:none}
@@ -163,7 +190,7 @@ a.xcard:hover .go{background:var(--mar);border-color:var(--mar);color:#fff;trans
   .cards{grid-template-columns:1fr}.xcard{min-height:0}
   .proses{grid-template-columns:1fr}.proses-h{position:static}.fgrid{grid-template-columns:1fr 1fr}
 }
-@media (max-width:760px){.nav{grid-template-columns:1fr auto}.links{display:none}.fgrid{grid-template-columns:1fr}.fbar{flex-direction:column}.scroll{display:none}}
+@media (max-width:760px){.nav{grid-template-columns:1fr auto}.links{display:none}.fgrid{grid-template-columns:1fr}.fbar{flex-direction:column}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}html.js [data-r],html.js .hero-a{opacity:1!important}}
 </style>
 </head>
@@ -186,7 +213,7 @@ a.xcard:hover .go{background:var(--mar);border-color:var(--mar);color:#fff;trans
 
 <header class="nav" id="nav">
   <a class="brand" href="#top" aria-label="Northern Sky, ke atas"><svg class="lg " viewBox="40 50 240 200" aria-hidden="true"><use href="#lg"/></svg><span>Northern <em>Sky</em></span></a>
-  <nav class="links" aria-label="Navigasi utama"><a href="#tentang">Cerita</a><a href="#eksperimen">Eksperimen</a><a href="#proses">Caranya</a></nav>
+  <nav class="links" aria-label="Navigasi utama"><a href="#tentang">Cerita</a><a href="#eksperimen">Eksperimen</a><a href="#proses">Caranya</a><a href="cv.html">CV</a></nav>
   <a class="btn" href="#eksperimen">Lihat hasilnya</a>
 </header>
 
@@ -215,7 +242,6 @@ a.xcard:hover .go{background:var(--mar);border-color:var(--mar);color:#fff;trans
       </g>
     </svg>
   </div>
-  <div class="scroll" aria-hidden="true">Gulir</div>
 </section>
 
 <!-- ================= TENTANG ================= -->
@@ -266,11 +292,13 @@ a.xcard:hover .go{background:var(--mar);border-color:var(--mar);color:#fff;trans
 </section>
 </main>
 
+<div id="pt" aria-hidden="true"></div>
 <footer class="foot">
   <div class="fgrid">
     <div><h4>Isi web</h4><ul><li><a href="#top">Atas</a></li><li><a href="#tentang">Cerita</a></li><li><a href="#eksperimen">Eksperimen</a></li><li><a href="#proses">Caranya</a></li></ul></div>
     <div><h4>Eksperimen</h4><ul><li><a href="simulasi-konsentrasi.html">Simulasi Konsentrasi Zat</a></li><li><a href="graf-explorer.html">Graf Explorer</a></li></ul></div>
     <div><h4>Status</h4><span class="status">Ongoing</span><p>Belum selesai dan memang begitu. Mampir lagi nanti.</p></div>
+    <div class="cvcol" id="cvcol"><h4><button class="cvtog" type="button" aria-expanded="false" aria-controls="cvpanel"><span>CV</span><i aria-hidden="true"></i><em class="cvhint">pencet dulu</em></button></h4><div class="cvpanel" id="cvpanel"><div><a class="cvname" href="cv.html" aria-label="Buka CV Normand"><b style="--k:0">N</b><b style="--k:1">o</b><b style="--k:2">r</b><b style="--k:3">m</b><b style="--k:4">a</b><b style="--k:5">n</b><b style="--k:6">d</b><span class="ar" aria-hidden="true">→</span></a><p>Klik namanya buat baca cerita saya.</p></div></div></div>
   </div>
   <div class="fbar"><span>© 2026 Northern Sky. Dibuat Normand, masih jalan terus.</span><a href="#top">Kembali ke atas ↑</a></div>
   <div class="wm" aria-hidden="true">northern <em>sky</em></div>
@@ -282,7 +310,7 @@ a.xcard:hover .go{background:var(--mar);border-color:var(--mar);color:#fff;trans
 
   /* navbar: transparan di atas langit, solid setelah lewat hero */
   var nav=document.getElementById('nav'),sky=document.querySelector('.sky');
-  function navState(){nav.classList.toggle('solid',window.scrollY>sky.offsetHeight-80)}
+  function navState(){nav.classList.toggle('solid',window.scrollY>40)}
 
   /* reveal saat masuk layar */
   var els=[].slice.call(document.querySelectorAll('[data-r]'));
@@ -311,6 +339,32 @@ a.xcard:hover .go{background:var(--mar);border-color:var(--mar);color:#fff;trans
     });
     sky.addEventListener('pointerleave',function(){grp.style.transform=''});
   }
+
+
+  /* ---------- footer CV: pencet -> Normand -> cv.html ---------- */
+  (function(){
+    var col=document.getElementById('cvcol');if(!col)return;
+    var tog=col.querySelector('.cvtog'),name=col.querySelector('.cvname');
+    var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    tog.addEventListener('click',function(){
+      var o=col.classList.toggle('open');tog.setAttribute('aria-expanded',o?'true':'false');
+      if(o)setTimeout(function(){var r=name.getBoundingClientRect();if(r.bottom>innerHeight-10)window.scrollBy({top:r.bottom-innerHeight+40,behavior:'smooth'})},650);
+    });
+    var pt=document.getElementById('pt');
+    name.addEventListener('click',function(e){
+      var h=name.getAttribute('href');
+      if(rm||!pt||!pt.animate||e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;
+      e.preventDefault();
+      var x=e.clientX||innerWidth/2,y=e.clientY||innerHeight/2;
+      pt.style.visibility='visible';
+      var a=pt.animate([{clipPath:'circle(0px at '+x+'px '+y+'px)'},{clipPath:'circle(150% at '+x+'px '+y+'px)'}],{duration:650,easing:'cubic-bezier(.65,0,.35,1)',fill:'forwards'});
+      try{sessionStorage.setItem('ns-pt','1')}catch(_){}
+      var go=function(){location.href=h};a.onfinish=go;setTimeout(go,900);
+    });
+    window.addEventListener('pageshow',function(e){
+      if(e.persisted&&pt){pt.getAnimations().forEach(function(a){a.cancel()});pt.style.visibility='hidden'}
+    });
+  })();
 
   /* ---------- intro: N hitam -> T merah tumbuh di sisi kanan -> Northern Sky ---------- */
   (function(){
