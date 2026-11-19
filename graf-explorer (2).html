@@ -1,0 +1,2167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graf Explorer | Northern Sky</title>
+<meta name="description" content="Graf Explorer: gambar graf sembarang lalu lihat sifatnya otomatis. Derajat, keterhubungan, jenis khusus, isomorfisme, dan amalgamasi.">
+<meta name="theme-color" content="#4A0F19">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='40 50 240 200'%3E%3Crect x='90' y='64' width='22' height='172' fill='%231B1517'/%3E%3Cpath class='' fill='%231B1517' d='M60 64 H142 V71 C130 71 115 73 112 86 H90 C87 73 72 71 60 71 Z'/%3E%3Cpath class='' fill='%231B1517' d='M60 236 H142 V229 C130 229 115 227 112 214 H90 C87 227 72 229 60 229 Z'/%3E%3Cpolygon fill='%231B1517' points='94 64 142 64 228 236 184 236'/%3E%3Cpath class='' fill='%237A1F2B' d='M178 64 H260 V71 C248 71 233 73 230 86 H208 C205 73 190 71 178 71 Z'/%3E%3Crect x='208' y='64' width='22' height='172' fill='%237A1F2B'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script>document.documentElement.classList.add('js');</script>
+<style>:root{--cream:#FBF8F4;--paper:#FFFDFB;--ink:#1B1517;--dim:#6D6366;--line:#E9E1DC;--mar:#7A1F2B;--deep:#4A0F19;--tint:#F4E8EA;--rose:#F3C6CC;
+--li:#1B1517;--la:#7A1F2B;--serif:'Fraunces',Georgia,'Times New Roman',serif;--sans:'Inter',-apple-system,'Segoe UI',Roboto,sans-serif;
+--ease:cubic-bezier(.2,.8,.2,1);--pad:clamp(20px,3.6vw,48px)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+html.intro-on,html.intro-on body{overflow:hidden}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:inherit;text-decoration:none}h1,h2,h3,p,ol,ul{margin:0;padding:0}ul,ol{list-style:none}.lg{display:block}
+:focus-visible{outline:2px solid var(--rose);outline-offset:3px;border-radius:6px}
+section[id]{scroll-margin-top:70px}
+@keyframes rise{from{opacity:0;transform:translateY(40px)}}
+@keyframes flt{from{transform:translateY(0)}to{transform:translateY(-24px)}}
+@keyframes drip{from{transform:scaleY(.25)}to{transform:scaleY(1)}}
+@keyframes tw{0%,100%{opacity:var(--o,.6)}50%{opacity:.12}}
+@keyframes ripple{from{opacity:.5;transform:scale(.7)}to{opacity:0;transform:scale(1.9)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(212,80,95,.5)}50%{box-shadow:0 0 0 7px rgba(212,80,95,0)}}
+html.js [data-r]{opacity:0}
+html.js [data-r].in{opacity:1;animation:rise .9s var(--ease) backwards;animation-delay:calc(var(--i,0)*110ms)}
+html.js .hero-a{opacity:0}
+html.ready .hero-a{opacity:1;animation:rise .95s var(--ease) backwards;animation-delay:calc(var(--i,0)*120ms + 150ms)}
+
+/* ---------- navbar ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px var(--pad);color:#FBEFF0;transition:background .35s,color .35s,box-shadow .35s;--li:#FFF8F4;--la:var(--rose)}
+.nav.solid{background:rgba(251,248,244,.86);-webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);color:var(--ink);box-shadow:0 1px 0 var(--line);--li:#1B1517;--la:#7A1F2B}
+.brand{display:inline-flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:600;font-size:18px;letter-spacing:-.015em;justify-self:start}
+.brand .lg{width:30px}.brand em{font-style:italic;font-weight:500;color:var(--rose);transition:color .35s}.nav.solid .brand em{color:var(--mar)}
+.links{display:flex;gap:30px;font-size:14px;opacity:.82}
+.links a{position:relative;padding:6px 0}
+.links a::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.links a:hover::after{transform:scaleX(1)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:999px;background:#FFF8F4;color:var(--mar);font-weight:600;font-size:14px;transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .25s,color .25s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 18px 34px -14px rgba(0,0,0,.55)}
+.nav .btn{justify-self:end;padding:9px 18px;font-size:13.5px}
+.nav.solid .btn{background:var(--mar);color:#fff}
+
+.sky{position:relative;min-height:min(100svh,820px);overflow:hidden;color:#FBEFF0;background:radial-gradient(120% 90% at 72% 28%,#7A1F2B 0%,#4A0F19 46%,#1D070C 100%);display:flex;align-items:center}
+.st i{position:absolute;border-radius:50%;background:#fff;animation:tw 5s ease-in-out infinite;--o:.6}
+.au{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none}
+.a1{width:620px;height:300px;left:-80px;bottom:6%;background:rgba(214,92,112,.36);transform:rotate(-14deg);animation:flt 9s ease-in-out infinite alternate}
+.a2{width:560px;height:240px;right:-40px;bottom:14%;background:rgba(255,170,150,.2);transform:rotate(10deg);animation:flt 11s ease-in-out infinite alternate-reverse}
+/* ---------- label | judul | catatan ---------- */
+.band{display:grid;grid-template-columns:150px 1fr 260px;gap:clamp(20px,3.4vw,52px);align-items:start;max-width:1240px;margin:0 auto}
+.label{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);padding-top:14px}
+.big{font-family:var(--serif);font-weight:600;font-size:clamp(30px,3.9vw,56px);line-height:1.04;letter-spacing:-.03em}
+.big em{font-style:italic;font-weight:500;color:var(--mar)}
+.note{font-size:15px;line-height:1.75;color:var(--dim);padding-top:10px}
+.about{padding:clamp(64px,8vw,110px) var(--pad)}
+
+/* ---------- footer ---------- */
+.foot{position:relative;margin-top:clamp(40px,6vw,90px);background:var(--ink);color:#F4EEEA;padding:clamp(48px,6vw,80px) var(--pad) 0;overflow:hidden}
+.fgrid{display:grid;grid-template-columns:.8fr .9fr .9fr 1.5fr;gap:40px}
+.fgrid h4{margin:0 0 18px;font-size:12.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,238,234,.5)}
+.fgrid li+li{margin-top:12px}.fgrid a{font-size:15px;transition:color .2s}.fgrid a:hover{color:#E9A9B2}
+.status{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid rgba(244,238,234,.25);border-radius:999px;font-size:13px;color:rgba(244,238,234,.8)}
+.status::before{content:'';width:7px;height:7px;border-radius:50%;background:#D4505F;animation:pulse 2s infinite}
+.fgrid p{margin-top:14px;font-size:15px;color:rgba(244,238,234,.62);max-width:30ch;line-height:1.7}
+/* ---------- footer CV interaktif ---------- */
+.fgrid .cvtog{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:12px;font-size:12.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#F4EEEA;padding:8px 14px 8px 16px;margin:-8px 0 -8px -16px;border:1px solid rgba(244,238,234,.3);border-radius:999px;transition:background .3s,border-color .3s,color .3s}
+.fgrid .cvtog:hover{background:rgba(244,238,234,.08);border-color:rgba(244,238,234,.6)}
+.fgrid .cvtog:focus-visible{outline:2px solid var(--rose);outline-offset:3px}
+.cvtog i{position:relative;width:12px;height:12px;display:block}
+.cvtog i::before,.cvtog i::after{content:'';position:absolute;left:0;right:0;top:5px;height:2px;background:currentColor;border-radius:2px;transition:transform .5s var(--ease)}
+.cvtog i::after{transform:rotate(90deg)}
+.cvcol.open .cvtog i::after{transform:rotate(0)}
+.cvcol.open .cvtog{background:#FFF8F4;color:var(--mar);border-color:#FFF8F4}
+.cvhint{font-style:normal;font-size:11.5px;letter-spacing:.04em;text-transform:none;font-weight:500;color:#E9A9B2;display:inline-flex;align-items:center;gap:6px}
+.cvhint::before{content:'';width:6px;height:6px;border-radius:50%;background:#D4505F;animation:pulse 2s infinite}
+.cvcol.open .cvhint{display:none}
+.cvpanel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .6s var(--ease)}
+.cvpanel>div{overflow:hidden;min-height:0}
+.cvcol.open .cvpanel{grid-template-rows:1fr}
+.cvcol .cvpanel>div>*{opacity:0;transition:opacity .4s .3s}
+.cvcol.open .cvpanel>div>*{opacity:1}
+.fgrid .cvname{display:inline-flex;align-items:baseline;gap:2px;margin-top:26px;font-family:var(--serif);font-weight:600;font-size:clamp(34px,3.4vw,46px);letter-spacing:-.03em;line-height:1;color:#FFF8F4;padding-bottom:6px;border-bottom:2px solid #C45767;transition:color .25s,border-color .25s}
+.cvname b{display:inline-block;font-weight:inherit;opacity:0;transform:translateY(.6em) rotate(4deg)}
+.cvcol.open .cvname b{animation:ltr .7s calc(var(--k)*55ms + 250ms) var(--ease) both}
+@keyframes ltr{from{opacity:0;transform:translateY(.6em) rotate(4deg)}to{opacity:1;transform:none}}
+.cvname .ar{margin-left:14px;font-family:var(--sans);font-size:.5em;transition:transform .4s var(--ease)}
+.fgrid .cvname:hover{color:#E9A9B2;border-color:#E9A9B2}.cvname:hover .ar{transform:translateX(6px)}
+.cvcol.open .cvname{animation:none}
+.fgrid .cvcol p{margin-top:16px}
+.fgrid .cvdl{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:9px 16px;border:1px solid rgba(244,238,234,.3);border-radius:999px;font-size:13.5px;font-weight:600;transition:background .25s,color .25s,border-color .25s}
+.fgrid .cvdl:hover{background:#FFF8F4;border-color:#FFF8F4;color:#1B1517}
+#pt{position:fixed;inset:0;z-index:300;background:#7A1F2B;pointer-events:none;clip-path:circle(0 at 50% 50%);visibility:hidden}
+@media (prefers-reduced-motion:reduce){.cvpanel{transition:none}.cvcol.open .cvname b{animation:none;opacity:1;transform:none}}
+.fbar{display:flex;justify-content:space-between;gap:16px;margin-top:52px;padding-top:24px;border-top:1px solid rgba(244,238,234,.14);font-size:14px;color:rgba(244,238,234,.55)}
+.fbar a:hover{color:#fff}
+.wm{font-family:var(--serif);font-weight:600;font-size:13vw;line-height:.84;letter-spacing:-.045em;white-space:nowrap;margin:clamp(24px,4vw,56px) 0 -.17em -.04em;color:#FFF8F4;user-select:none}
+.wm em{font-style:italic;font-weight:500;color:#C45767}
+
+
+/* ---------- footer CV interaktif ---------- */
+.fgrid .cvtog{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:12px;font-size:12.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#F4EEEA;padding:8px 14px 8px 16px;margin:-8px 0 -8px -16px;border:1px solid rgba(244,238,234,.3);border-radius:999px;transition:background .3s,border-color .3s,color .3s}
+.fgrid .cvtog:hover{background:rgba(244,238,234,.08);border-color:rgba(244,238,234,.6)}
+.fgrid .cvtog:focus-visible{outline:2px solid var(--rose);outline-offset:3px}
+.cvtog i{position:relative;width:12px;height:12px;display:block}
+.cvtog i::before,.cvtog i::after{content:'';position:absolute;left:0;right:0;top:5px;height:2px;background:currentColor;border-radius:2px;transition:transform .5s var(--ease)}
+.cvtog i::after{transform:rotate(90deg)}
+.cvcol.open .cvtog i::after{transform:rotate(0)}
+.cvcol.open .cvtog{background:#FFF8F4;color:var(--mar);border-color:#FFF8F4}
+.cvhint{font-style:normal;font-size:11.5px;letter-spacing:.04em;text-transform:none;font-weight:500;color:#E9A9B2;display:inline-flex;align-items:center;gap:6px}
+.cvhint::before{content:'';width:6px;height:6px;border-radius:50%;background:#D4505F;animation:pulse 2s infinite}
+.cvcol.open .cvhint{display:none}
+.cvpanel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .6s var(--ease)}
+.cvpanel>div{overflow:hidden;min-height:0}
+.cvcol.open .cvpanel{grid-template-rows:1fr}
+.cvcol .cvpanel>div>*{opacity:0;transition:opacity .4s .3s}
+.cvcol.open .cvpanel>div>*{opacity:1}
+.fgrid .cvname{display:inline-flex;align-items:baseline;gap:2px;margin-top:26px;font-family:var(--serif);font-weight:600;font-size:clamp(34px,3.4vw,46px);letter-spacing:-.03em;line-height:1;color:#FFF8F4;padding-bottom:6px;border-bottom:2px solid #C45767;transition:color .25s,border-color .25s}
+.cvname b{display:inline-block;font-weight:inherit;opacity:0;transform:translateY(.6em) rotate(4deg)}
+.cvcol.open .cvname b{animation:ltr .7s calc(var(--k)*55ms + 250ms) var(--ease) both}
+@keyframes ltr{from{opacity:0;transform:translateY(.6em) rotate(4deg)}to{opacity:1;transform:none}}
+.cvname .ar{margin-left:14px;font-family:var(--sans);font-size:.5em;transition:transform .4s var(--ease)}
+.fgrid .cvname:hover{color:#E9A9B2;border-color:#E9A9B2}.cvname:hover .ar{transform:translateX(6px)}
+.cvcol.open .cvname{animation:none}
+.fgrid .cvcol p{margin-top:16px}
+.fgrid .cvdl{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:9px 16px;border:1px solid rgba(244,238,234,.3);border-radius:999px;font-size:13.5px;font-weight:600;transition:background .25s,color .25s,border-color .25s}
+.fgrid .cvdl:hover{background:#FFF8F4;border-color:#FFF8F4;color:#1B1517}
+#pt{position:fixed;inset:0;z-index:300;background:#7A1F2B;pointer-events:none;clip-path:circle(0 at 50% 50%);visibility:hidden}
+@media (prefers-reduced-motion:reduce){.cvpanel{transition:none}.cvcol.open .cvname b{animation:none;opacity:1;transform:none}}
+
+:root{--edge:max(var(--pad),calc((100% - 1144px)/2))}
+.nav{padding-left:var(--edge);padding-right:var(--edge)}
+.foot{padding-left:var(--edge);padding-right:var(--edge)}
+.fgrid,.fbar{max-width:none}
+:root{--panel:#FFFDFB;--panel-line:#E9E1DC;--ink-dim:#6D6366;--red:#7A1F2B;--red-soft:rgba(122,31,43,.09);--black:#1B1517;--mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;--slab:'Fraunces',Georgia,serif}
+.sky{min-height:0}
+.hero{position:relative;width:100%;max-width:1240px;margin:0 auto;padding:120px 0 72px;display:grid;grid-template-columns:1fr minmax(0,470px);gap:30px;align-items:center}
+.hero{width:min(1144px,calc(100% - 2*var(--pad)));padding-left:0;padding-right:0}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(40px,6vw,84px);line-height:.98;letter-spacing:-.04em;margin:18px 0 18px}
+.hero h1 em{font-style:italic;font-weight:500;color:var(--rose)}
+.eb{display:inline-flex;align-items:center;gap:12px;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--rose)}
+.eb::before{content:'';width:28px;height:1.5px;background:var(--rose)}
+.lede{max-width:56ch;font-size:15.5px;line-height:1.78;color:rgba(251,239,240,.82)}
+.cta{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap}
+.btn.ghost{background:transparent;color:#FBEFF0;border:1px solid rgba(251,239,240,.4)}.btn.ghost:hover{background:rgba(255,255,255,.1)}
+html.js .hero-a{opacity:0}html.go .hero-a{opacity:1;animation:rise .95s var(--ease) backwards;animation-delay:calc(var(--i,0)*120ms + 150ms)}
+.sec{padding:clamp(52px,6vw,88px) var(--pad) 0}
+.wrap{max-width:1144px;margin:clamp(24px,3vw,40px) auto 0}
+.band{grid-template-columns:130px 1fr 300px;max-width:1144px}
+.note #modeHint{display:block}
+
+/* mode switch */
+.msw{position:sticky;top:68px;z-index:40;margin:clamp(22px,3vw,34px) auto 0;width:min(1144px,100%);pointer-events:none}
+.msw-i{pointer-events:auto;width:fit-content;max-width:100%;padding:6px;border-radius:999px;background:rgba(40,8,14,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 18px 40px -18px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08)}
+.mode-switch{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}.mode-switch::-webkit-scrollbar{display:none}
+.mode-switch{gap:4px}.mode-switch button{flex:none;cursor:pointer;white-space:nowrap;padding:9px 18px;border-radius:999px;border:0;background:transparent;color:rgba(251,239,240,.78);font:500 13.5px var(--sans);transition:background .3s,color .3s}
+.mode-switch button:hover{color:#fff;background:rgba(255,255,255,.1)}
+.mode-switch button.active{background:#FFF8F4;color:var(--mar)}
+.mode-switch button:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+
+/* panggung maroon */
+.stage{margin:clamp(40px,5vw,72px) clamp(10px,1.6vw,24px) 0;padding:clamp(48px,6vw,88px) calc(var(--edge) - clamp(10px,1.6vw,24px)) clamp(36px,4vw,56px);background:var(--mar);color:#FBF3F4;border-radius:clamp(28px,4vw,56px);position:relative}
+.stage .label{color:rgba(251,243,244,.68)}.stage .big{color:#FFF8F8}.stage .big em{color:var(--rose)}.stage .note{color:rgba(251,243,244,.82)}
+.stage .band{max-width:none}.stage .wrap,.stage .msw{max-width:none;width:100%}
+.stage .panel,.stage .canvas-host{box-shadow:0 30px 60px -34px rgba(0,0,0,.55);border-color:transparent}
+.presets{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:22px 0 0}
+.presets>span{font-size:13px;color:rgba(251,243,244,.75);margin-right:4px}
+.presets button{cursor:pointer;padding:8px 15px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:transparent;color:#FBF3F4;font:500 13px var(--sans);transition:background .25s,color .25s,transform .3s var(--ease)}
+.presets button:hover{background:#FFF8F4;color:var(--mar);transform:translateY(-2px)}
+.presets button:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+/* hero graf */
+.hg{width:100%;max-width:470px;justify-self:end;aspect-ratio:1}
+.hg svg{width:100%;height:100%;display:block;overflow:visible}
+.hg line{stroke:rgba(243,198,204,.42);stroke-width:1.4}
+.hg circle{fill:#FFF8F4;stroke:#F3C6CC;stroke-width:2;cursor:grab;transition:r .25s}
+.hg circle:hover{r:11}
+
+/* latar kanvas + unduh */
+.gx-tools{position:absolute;top:12px;right:12px;z-index:3;display:flex;gap:6px;align-items:center}
+.gx-bgsw{display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(255,253,251,.92);border:1px solid var(--line)}
+.gx-bgsw button,.gx-dl{cursor:pointer;border:0;background:transparent;color:var(--dim);font:500 12px var(--sans);padding:6px 11px;border-radius:999px;transition:background .2s,color .2s}
+.gx-bgsw button:hover{color:var(--ink)}
+.gx-bgsw button.on{background:var(--mar);color:#fff}
+.gx-dl{background:rgba(255,253,251,.92);border:1px solid var(--line);color:var(--ink);display:inline-flex;align-items:center;gap:6px}
+.gx-dl:hover{background:var(--mar);border-color:var(--mar);color:#fff}
+.gx-bgsw button:focus-visible,.gx-dl:focus-visible{outline:2px solid var(--mar);outline-offset:2px}
+html[data-bg=paper] .canvas-host{background-color:#F6EEDB;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .35 0 0 0 0 .2 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+html[data-bg=paper] .gx-canvas-wrap svg,html[data-bg=plain] .gx-canvas-wrap svg{background-image:none}
+html[data-bg=plain] .canvas-host{background:#fff}
+@media (max-width:760px){.gx-tools{top:52px;right:auto;left:14px}}
+/* layout */
+.layout{display:grid;grid-template-columns:250px 1fr;gap:22px;margin:18px 0 22px;align-items:start}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px}
+.layout>.panel{position:sticky;top:132px}
+.gx-btn{width:100%;background:transparent;border:1px solid var(--ink);color:var(--ink);font:500 13px var(--sans);padding:10px 0;border-radius:999px;cursor:pointer;transition:background .2s,color .2s,border-color .2s;margin-bottom:8px}
+.gx-btn:hover{background:var(--ink);color:#fff}
+.gx-btn.danger{border-color:var(--mar);color:var(--mar)}.gx-btn.danger:hover{background:var(--mar);color:#fff}
+.gx-btn:focus-visible,.gx-toggle:focus-visible,.tab:focus-visible{outline:2px solid var(--mar);outline-offset:2px}
+.gx-toggle{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--dim);border:1px solid var(--line);border-radius:12px;padding:9px 12px;cursor:pointer;margin-bottom:14px;user-select:none;transition:border-color .2s,color .2s}
+.gx-toggle .dot{width:8px;height:8px;border-radius:50%;background:#cfc4c7;flex:none;transition:background .2s}
+.gx-toggle.on{color:var(--ink);border-color:var(--mar)}.gx-toggle.on .dot{background:var(--mar)}
+.gx-naming{display:flex;gap:4px;margin-bottom:14px;background:var(--tint);padding:4px;border-radius:999px}
+.gx-naming button{flex:1;background:transparent;border:none;color:var(--dim);font:500 12px var(--sans);padding:7px 2px;border-radius:999px;cursor:pointer;transition:background .2s,color .2s}
+.gx-naming button.active{background:var(--mar);color:#fff}
+.gx-input-set{margin-top:6px}
+.gx-input-set summary{cursor:pointer;font-size:12.5px;color:var(--dim);margin-bottom:8px}
+.gx-input-set textarea{width:100%;min-height:70px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:9px;font:11.5px var(--mono);color:var(--ink);margin-bottom:8px;background:var(--cream)}
+.gx-input-set .gx-hint-small{font-size:11px;color:var(--dim);margin-bottom:6px;line-height:1.5}
+.gx-select-row{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.gx-select-row select{flex:1;border:1px solid var(--line);border-radius:12px;padding:8px;font:12.5px var(--sans);color:var(--ink);background:#fff}
+.gx-select-row span{font-size:12px;color:var(--dim);min-width:130px}
+.gx-coloring-swatch{display:inline-flex;align-items:center;gap:6px;font:12px var(--mono);margin:3px 8px 3px 0}
+.gx-coloring-swatch i{width:11px;height:11px;border-radius:50%;display:inline-block;border:1px solid var(--ink)}
+
+/* canvas */
+.canvas-slot{min-width:0}
+.canvas-host{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:20px;height:clamp(400px,64vh,620px);overflow:hidden}
+.gx-canvas-wrap{position:absolute;inset:0 0 48px 0}
+.gx-canvas-wrap svg{width:100%;height:100%;display:block;cursor:crosshair;touch-action:none;background-image:radial-gradient(circle at 1px 1px,#E4DAD5 1px,transparent 1px);background-size:24px 24px}
+.gx-stat-pill{position:absolute;top:14px;left:14px;display:flex;gap:8px}
+.gx-stat-pill div{background:rgba(255,253,251,.92);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font:12px var(--mono);color:var(--ink)}
+.gx-stat-pill .n{color:var(--mar);font-weight:600}
+.gx-hint{position:absolute;left:18px;right:18px;bottom:0;height:48px;display:block;padding-top:9px;font-size:12px;color:var(--dim);line-height:1.5;pointer-events:none}
+.gx-hint b{color:var(--ink);font-weight:600}
+.gx-node-circle{fill:#FFFDFB;stroke:#1B1517;stroke-width:2}
+.gx-node-circle.pending{fill:var(--rose);stroke:var(--mar)}
+.gx-node-label{fill:#1B1517;font-family:var(--sans);font-size:12.5px;font-weight:600;pointer-events:none;user-select:none}
+.gx-node-weight{fill:var(--dim);font:10px var(--mono);pointer-events:none;user-select:none}
+.gx-edge-weight{fill:var(--mar);font:600 10.5px var(--mono);pointer-events:none;user-select:none}
+.gx-edge-line{stroke:#B8AAAE;stroke-width:1.8;fill:none}
+.gx-edge-line.selected{stroke:var(--mar);stroke-width:2.6}
+.gx-edge-hit{stroke:transparent;stroke-width:16;fill:none;cursor:pointer}
+
+/* hasil analisis */
+.analysis-panel{padding:0;overflow:hidden;margin-bottom:22px}
+.tabs{display:flex;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+.tab{flex:1;min-width:max-content;text-align:center;padding:14px 16px;font:500 13.5px var(--sans);color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s,background .2s}
+.tab:hover{color:var(--ink);background:var(--cream)}
+.tab.active{color:var(--mar);border-bottom-color:var(--mar)}
+.tab-content{display:none;padding:22px 24px;max-height:520px;overflow-y:auto}
+.tab-content.active{display:block;animation:rise .45s var(--ease)}
+.prop-group{margin-bottom:22px}
+.prop-group h4{margin:0 0 10px;font-size:11.5px;color:var(--dim);font-weight:600;letter-spacing:.14em;text-transform:uppercase;border-bottom:1px solid var(--line);padding-bottom:8px}
+.prop-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:14px;gap:12px}
+.prop-row .k{color:var(--dim)}
+.prop-row .v{font:12.5px var(--mono);text-align:right;color:var(--ink)}
+.gx-badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font:11.5px var(--mono)}
+.gx-badge.yes{background:var(--tint);color:var(--mar)}
+.gx-badge.no{background:#F0EBE8;color:var(--dim)}
+.gx-badge.warn{background:#fff;color:var(--ink);border:1px solid var(--dim)}
+.named-shape{margin-top:8px;padding:12px 14px;background:var(--tint);border-radius:14px;font-size:13.5px}
+.named-shape .name{color:var(--mar);font:600 13px var(--mono)}
+#tabMatrix table,#tabMatrixAm table{border-collapse:collapse;font:12px var(--mono)}
+#tabMatrix th,#tabMatrix td,#tabMatrixAm th,#tabMatrixAm td{border:1px solid var(--line);width:28px;height:28px;text-align:center;color:var(--dim)}
+#tabMatrix th,#tabMatrixAm th{color:var(--mar);background:var(--tint)}
+#tabMatrix td.one,#tabMatrixAm td.one{color:var(--ink);background:var(--cream);font-weight:600}
+#tabMatrix .mhint,#tabMatrixAm .mhint{color:var(--dim);font-size:12.5px;margin-bottom:10px}
+.edge-line{font:13px var(--mono);padding:7px 8px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;color:var(--dim)}
+.edge-line span.id{color:#B8AAAE}
+.gx-empty{color:var(--dim);font-size:13.5px;padding:30px 0;text-align:center}
+
+/* isomorfisme / amalgamasi */
+.iso-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:24px 0 22px}
+.iso-label{font-family:var(--serif);font-weight:600;font-size:18px;letter-spacing:-.02em;margin-bottom:10px}
+.iso-toolbar{display:flex;gap:8px;margin-bottom:10px}
+.iso-toolbar button{flex:1;background:var(--paper);border:1px solid var(--line);color:var(--ink);font:500 12.5px var(--sans);padding:8px 0;border-radius:999px;cursor:pointer;transition:border-color .2s,color .2s}
+.iso-toolbar button:hover{border-color:var(--mar);color:var(--mar)}
+.iso-canvas-host{height:clamp(340px,50vh,440px)}
+.iso-result{padding:24px}
+.iso-verdict{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.iso-verdict .badge-big{font:14px var(--mono);padding:7px 16px;border-radius:999px}
+.iso-verdict .badge-big.yes{background:var(--tint);color:var(--mar)}.iso-verdict .badge-big.no{background:#F0EBE8;color:var(--dim)}
+.iso-reason{font-size:14.5px;line-height:1.75;margin-bottom:10px}
+.iso-mapping{font:12.5px var(--mono);color:var(--dim);line-height:1.9}.iso-mapping b{color:var(--mar)}
+#viewAmalgam>.panel{margin-bottom:22px}
+
+/* konsep */
+.explain{max-width:1144px;margin:clamp(24px,3vw,40px) auto 0;display:grid;grid-template-columns:130px minmax(0,1fr);column-gap:clamp(20px,3.4vw,52px)}
+.explain>*{grid-column:2}
+.explain h2{font-family:var(--serif);font-weight:600;font-size:clamp(22px,2.2vw,30px);letter-spacing:-.025em;margin:0 0 12px}
+.explain h2:not(:first-child){margin-top:clamp(36px,4vw,56px)}
+.explain>p{font-size:15.5px;line-height:1.8;color:var(--ink);max-width:72ch}
+.symbol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:20px 0 0}
+.symbol-item{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;background:var(--paper);border:1px solid var(--line);border-radius:16px}
+.symbol-item .sym{font-family:var(--serif);font-style:italic;font-weight:600;font-size:19px;color:var(--mar);min-width:48px;flex:none}
+.symbol-item .desc{font-size:14px;line-height:1.6;color:var(--dim)}.symbol-item .desc b{color:var(--ink);font-weight:600}
+.example-box{background:var(--tint);border-radius:14px;padding:14px 18px;margin-top:12px}
+.example-box p{color:var(--ink);font-size:14.5px;line-height:1.7;margin:0}
+.concept-list{display:block}
+details.concept{border-bottom:1px solid var(--line)}
+details.concept:first-child{border-top:1px solid var(--line)}
+details.concept summary{cursor:pointer;list-style:none;font-family:var(--serif);font-weight:600;font-size:clamp(19px,1.9vw,26px);letter-spacing:-.02em;padding:20px 4px;display:flex;align-items:center;justify-content:space-between;gap:16px;transition:color .2s}
+details.concept summary::-webkit-details-marker{display:none}
+details.concept summary:hover{color:var(--mar)}
+details.concept summary:focus-visible{outline:2px solid var(--mar);outline-offset:2px}
+details.concept summary::after{content:'+';flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);color:var(--mar);font:400 22px/1 var(--sans);transition:background .3s,color .3s,transform .4s var(--ease)}
+details.concept[open] summary::after{content:'+';transform:rotate(45deg);background:var(--mar);color:#fff;border-color:var(--mar)}
+details.concept .concept-body{padding:2px 4px 26px;font-size:15px;line-height:1.8;color:var(--ink);animation:rise .5s var(--ease)}
+details.concept .concept-body p{margin:0 0 12px;max-width:72ch}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-top:6px}
+.gallery-item{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:14px;transition:transform .4s var(--ease),box-shadow .4s var(--ease),border-color .3s}
+.gallery-item:hover{transform:translateY(-5px);box-shadow:0 22px 38px -26px rgba(74,15,25,.5);border-color:var(--rose)}
+.gallery-item b{font-family:var(--serif);font-weight:600;color:var(--mar);font-size:17px;display:block;margin-bottom:4px}
+.gallery-item span{font-size:12.5px;color:var(--dim);line-height:1.55}
+.gallery-item .gallery-diagram{margin-bottom:10px}
+.mini-diagram{margin:14px 0 6px;border:1px solid var(--line);border-radius:16px;padding:10px;background:var(--paper)}
+.mini-diagram svg{display:block;width:100%;height:auto}
+.diagram-row{display:flex;gap:12px}.diagram-row>div{flex:1}.diagram-row .mini-diagram{flex:1}
+.diagram-caption{font-size:12px;color:var(--dim);text-align:center;margin-top:6px;line-height:1.5}
+.eq-block{text-align:center;padding:18px 10px;margin:12px 0 16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow-x:auto}
+.eq-block .katex{color:var(--mar);font-size:1.05em}
+.back{max-width:1144px;margin:clamp(56px,7vw,96px) auto 0;padding:0 var(--pad)}
+.bk{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:clamp(28px,4vw,48px);border-radius:26px;color:#FBEFF0;background:radial-gradient(120% 120% at 80% 0%,#7A1F2B,#4A0F19 70%)}
+.bk h2{font-family:var(--serif);font-weight:600;font-size:clamp(26px,3vw,42px);letter-spacing:-.03em;line-height:1.05;max-width:20ch}.bk h2 em{font-style:italic;font-weight:500;color:var(--rose)}
+.bk .btn{background:#FFF8F4;color:var(--mar)}
+@media (max-width:1020px){.hero{grid-template-columns:1fr}.hg{max-width:360px;justify-self:start}.band{grid-template-columns:1fr}.band .label,.band .note{padding-top:0}.explain{display:block}.layout{grid-template-columns:1fr}.layout>.panel{position:static;order:2}.fgrid{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){.gx-canvas-wrap{inset:0 0 78px 0}.gx-hint{height:78px;padding-top:8px;font-size:11.5px}.nav{grid-template-columns:1fr auto}.links{display:none}.fgrid{grid-template-columns:1fr}.fbar{flex-direction:column}.iso-grid{grid-template-columns:1fr}.symbol-grid{grid-template-columns:1fr}.diagram-row{flex-direction:column}.gx-select-row{flex-direction:column;align-items:stretch;gap:4px}.tab-content{padding:18px 16px}}
+@media (prefers-reduced-motion:reduce){html.js .hero-a{opacity:1!important;animation:none!important}.tab-content.active,details.concept .concept-body{animation:none}}
+</style>
+</head>
+<body id="top">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="lg" viewBox="40 50 240 200"><rect x="90" y="64" width="22" height="172" fill="var(--li)"/><path class="" fill="var(--li)" d="M60 64 H142 V71 C130 71 115 73 112 86 H90 C87 73 72 71 60 71 Z"/><path class="" fill="var(--li)" d="M60 236 H142 V229 C130 229 115 227 112 214 H90 C87 227 72 229 60 229 Z"/><polygon fill="var(--li)" points="94 64 142 64 228 236 184 236"/><path class="" fill="var(--la)" d="M178 64 H260 V71 C248 71 233 73 230 86 H208 C205 73 190 71 178 71 Z"/><rect x="208" y="64" width="22" height="172" fill="var(--la)"/></symbol></svg>
+<div id="pt" aria-hidden="true"></div>
+<header class="nav" id="nav">
+  <a class="brand" href="index.html" aria-label="Northern Sky, ke beranda"><svg class="lg " viewBox="40 50 240 200" aria-hidden="true"><use href="#lg"/></svg><span>Northern <em>Sky</em></span></a>
+  <nav class="links" aria-label="Navigasi utama"><a href="index.html">Beranda</a><a href="simulasi-konsentrasi.html">Konsentrasi Zat</a><a href="graf-explorer.html" aria-current="page" style="opacity:1;font-weight:600">Graf Explorer</a><a href="cv.html">CV</a></nav>
+  <a class="btn" href="#coba">Coba sekarang</a>
+</header>
+<main>
+<section class="sky">
+  <div class="st" aria-hidden="true"><i style="left:72.5%;top:15.8%;width:2px;height:2px;opacity:0.66;animation-delay:-3.3s"></i><i style="left:68.7%;top:38.8%;width:2px;height:2px;opacity:0.56;animation-delay:-0.5s"></i><i style="left:4.7%;top:10.9%;width:2px;height:2px;opacity:0.58;animation-delay:-1.5s"></i><i style="left:74.0%;top:39.2%;width:2px;height:2px;opacity:0.52;animation-delay:-5.4s"></i><i style="left:49.1%;top:52.0%;width:2px;height:2px;opacity:0.85;animation-delay:-5.9s"></i><i style="left:12.6%;top:47.9%;width:2px;height:2px;opacity:0.67;animation-delay:-3.7s"></i><i style="left:7.4%;top:21.2%;width:1px;height:1px;opacity:0.84;animation-delay:-4.5s"></i><i style="left:6.9%;top:41.1%;width:1px;height:1px;opacity:0.41;animation-delay:-0.3s"></i><i style="left:28.2%;top:53.1%;width:2px;height:2px;opacity:0.88;animation-delay:-0.6s"></i><i style="left:13.8%;top:45.0%;width:2px;height:2px;opacity:0.47;animation-delay:-4.4s"></i><i style="left:52.2%;top:94.7%;width:3px;height:3px;opacity:0.63;animation-delay:-5.5s"></i><i style="left:47.5%;top:35.7%;width:2px;height:2px;opacity:0.45;animation-delay:-0.2s"></i><i style="left:59.8%;top:7.5%;width:1px;height:1px;opacity:0.29;animation-delay:-1.9s"></i><i style="left:13.7%;top:7.2%;width:1px;height:1px;opacity:0.54;animation-delay:-2.2s"></i><i style="left:4.4%;top:93.6%;width:2px;height:2px;opacity:0.73;animation-delay:-0.8s"></i><i style="left:96.3%;top:34.2%;width:1px;height:1px;opacity:0.31;animation-delay:-2.8s"></i><i style="left:7.8%;top:85.7%;width:1px;height:1px;opacity:0.86;animation-delay:-0.2s"></i><i style="left:50.0%;top:1.5%;width:1px;height:1px;opacity:0.68;animation-delay:-2.3s"></i><i style="left:1.2%;top:7.2%;width:2px;height:2px;opacity:0.31;animation-delay:-0.7s"></i><i style="left:25.7%;top:41.6%;width:3px;height:3px;opacity:0.46;animation-delay:-5.6s"></i><i style="left:69.4%;top:45.8%;width:3px;height:3px;opacity:0.55;animation-delay:-3.2s"></i><i style="left:51.9%;top:51.5%;width:1px;height:1px;opacity:0.45;animation-delay:-0.5s"></i><i style="left:2.2%;top:95.7%;width:2px;height:2px;opacity:0.32;animation-delay:-4.7s"></i><i style="left:66.0%;top:48.6%;width:2px;height:2px;opacity:0.83;animation-delay:-2.2s"></i><i style="left:14.3%;top:61.2%;width:2px;height:2px;opacity:0.59;animation-delay:-4.5s"></i><i style="left:34.3%;top:93.0%;width:3px;height:3px;opacity:0.57;animation-delay:-1.4s"></i><i style="left:40.5%;top:25.1%;width:3px;height:3px;opacity:0.66;animation-delay:-4.8s"></i><i style="left:75.5%;top:20.0%;width:2px;height:2px;opacity:0.39;animation-delay:-1.3s"></i><i style="left:92.1%;top:21.0%;width:3px;height:3px;opacity:0.34;animation-delay:-2.1s"></i><i style="left:89.6%;top:4.1%;width:1px;height:1px;opacity:0.29;animation-delay:-5.9s"></i><i style="left:82.2%;top:11.3%;width:2px;height:2px;opacity:0.56;animation-delay:-5.6s"></i><i style="left:83.1%;top:38.3%;width:1px;height:1px;opacity:0.59;animation-delay:-4.0s"></i><i style="left:71.6%;top:84.2%;width:2px;height:2px;opacity:0.66;animation-delay:-1.9s"></i><i style="left:82.9%;top:27.8%;width:1px;height:1px;opacity:0.64;animation-delay:-4.1s"></i><i style="left:28.1%;top:35.4%;width:1px;height:1px;opacity:0.67;animation-delay:-3.4s"></i><i style="left:64.1%;top:40.5%;width:1px;height:1px;opacity:0.37;animation-delay:-4.6s"></i><i style="left:26.6%;top:77.9%;width:1px;height:1px;opacity:0.77;animation-delay:-5.9s"></i><i style="left:11.5%;top:10.9%;width:1px;height:1px;opacity:0.60;animation-delay:-3.8s"></i><i style="left:36.9%;top:7.8%;width:2px;height:2px;opacity:0.38;animation-delay:-4.9s"></i><i style="left:25.6%;top:71.4%;width:1px;height:1px;opacity:0.74;animation-delay:-3.2s"></i><i style="left:3.6%;top:22.6%;width:2px;height:2px;opacity:0.76;animation-delay:-3.2s"></i><i style="left:94.7%;top:50.0%;width:1px;height:1px;opacity:0.90;animation-delay:-1.0s"></i><i style="left:84.9%;top:70.0%;width:2px;height:2px;opacity:0.40;animation-delay:-2.5s"></i><i style="left:89.3%;top:38.8%;width:2px;height:2px;opacity:0.54;animation-delay:-1.2s"></i><i style="left:88.7%;top:0.7%;width:1px;height:1px;opacity:0.61;animation-delay:-3.9s"></i><i style="left:50.3%;top:81.9%;width:2px;height:2px;opacity:0.47;animation-delay:-2.0s"></i><i style="left:98.2%;top:9.9%;width:1px;height:1px;opacity:0.81;animation-delay:-4.8s"></i><i style="left:92.4%;top:12.3%;width:3px;height:3px;opacity:0.41;animation-delay:-2.3s"></i><i style="left:8.8%;top:31.0%;width:1px;height:1px;opacity:0.88;animation-delay:-5.6s"></i><i style="left:26.2%;top:71.8%;width:2px;height:2px;opacity:0.26;animation-delay:-3.0s"></i><i style="left:3.7%;top:34.2%;width:1px;height:1px;opacity:0.52;animation-delay:-1.7s"></i><i style="left:92.0%;top:21.8%;width:3px;height:3px;opacity:0.81;animation-delay:-2.6s"></i><i style="left:3.5%;top:53.3%;width:1px;height:1px;opacity:0.70;animation-delay:-5.5s"></i><i style="left:47.1%;top:100.0%;width:2px;height:2px;opacity:0.84;animation-delay:-3.1s"></i><i style="left:67.8%;top:44.0%;width:3px;height:3px;opacity:0.82;animation-delay:-3.5s"></i><i style="left:68.9%;top:75.8%;width:1px;height:1px;opacity:0.54;animation-delay:-3.4s"></i><i style="left:83.1%;top:56.2%;width:2px;height:2px;opacity:0.36;animation-delay:-3.1s"></i><i style="left:90.7%;top:25.7%;width:2px;height:2px;opacity:0.69;animation-delay:-5.7s"></i><i style="left:87.0%;top:60.9%;width:1px;height:1px;opacity:0.45;animation-delay:-0.8s"></i><i style="left:54.5%;top:27.3%;width:3px;height:3px;opacity:0.57;animation-delay:-2.5s"></i><i style="left:11.4%;top:0.5%;width:1px;height:1px;opacity:0.50;animation-delay:-3.2s"></i><i style="left:4.4%;top:91.7%;width:1px;height:1px;opacity:0.60;animation-delay:-5.9s"></i><i style="left:12.2%;top:9.3%;width:1px;height:1px;opacity:0.36;animation-delay:-5.6s"></i><i style="left:45.9%;top:92.1%;width:2px;height:2px;opacity:0.77;animation-delay:-2.4s"></i><i style="left:24.6%;top:49.3%;width:1px;height:1px;opacity:0.47;animation-delay:-5.4s"></i><i style="left:93.6%;top:92.0%;width:1px;height:1px;opacity:0.59;animation-delay:-0.7s"></i><i style="left:42.0%;top:2.9%;width:1px;height:1px;opacity:0.42;animation-delay:-4.2s"></i><i style="left:97.7%;top:3.6%;width:2px;height:2px;opacity:0.35;animation-delay:-0.1s"></i><i style="left:28.4%;top:72.4%;width:1px;height:1px;opacity:0.41;animation-delay:-3.0s"></i><i style="left:50.0%;top:58.2%;width:2px;height:2px;opacity:0.80;animation-delay:-3.7s"></i><i style="left:71.8%;top:70.1%;width:1px;height:1px;opacity:0.82;animation-delay:-0.1s"></i><i style="left:63.3%;top:82.5%;width:1px;height:1px;opacity:0.65;animation-delay:-3.2s"></i><i style="left:86.4%;top:53.4%;width:2px;height:2px;opacity:0.39;animation-delay:-1.3s"></i><i style="left:54.3%;top:58.7%;width:1px;height:1px;opacity:0.34;animation-delay:-5.5s"></i><i style="left:62.8%;top:34.8%;width:1px;height:1px;opacity:0.37;animation-delay:-3.6s"></i><i style="left:89.1%;top:19.5%;width:3px;height:3px;opacity:0.76;animation-delay:-1.2s"></i><i style="left:9.7%;top:88.9%;width:1px;height:1px;opacity:0.34;animation-delay:-0.5s"></i><i style="left:38.8%;top:43.5%;width:1px;height:1px;opacity:0.86;animation-delay:-3.3s"></i><i style="left:70.5%;top:20.1%;width:1px;height:1px;opacity:0.66;animation-delay:-4.8s"></i><i style="left:9.6%;top:57.0%;width:1px;height:1px;opacity:0.48;animation-delay:-4.9s"></i><i style="left:36.1%;top:70.5%;width:2px;height:2px;opacity:0.66;animation-delay:-2.1s"></i><i style="left:99.9%;top:83.3%;width:2px;height:2px;opacity:0.77;animation-delay:-2.9s"></i><i style="left:2.4%;top:76.2%;width:3px;height:3px;opacity:0.65;animation-delay:-5.4s"></i><i style="left:48.1%;top:19.0%;width:2px;height:2px;opacity:0.32;animation-delay:-1.0s"></i><i style="left:15.8%;top:28.3%;width:2px;height:2px;opacity:0.69;animation-delay:-3.5s"></i><i style="left:13.4%;top:68.1%;width:1px;height:1px;opacity:0.30;animation-delay:-0.6s"></i><i style="left:39.1%;top:42.6%;width:2px;height:2px;opacity:0.48;animation-delay:-1.3s"></i><i style="left:37.3%;top:63.4%;width:3px;height:3px;opacity:0.28;animation-delay:-1.2s"></i><i style="left:40.8%;top:36.0%;width:1px;height:1px;opacity:0.49;animation-delay:-5.5s"></i><i style="left:60.5%;top:9.5%;width:3px;height:3px;opacity:0.77;animation-delay:-1.9s"></i><i style="left:8.5%;top:84.2%;width:1px;height:1px;opacity:0.82;animation-delay:-5.5s"></i><i style="left:94.0%;top:57.0%;width:1px;height:1px;opacity:0.37;animation-delay:-3.5s"></i><i style="left:34.1%;top:76.2%;width:1px;height:1px;opacity:0.43;animation-delay:-0.7s"></i><i style="left:74.3%;top:16.0%;width:1px;height:1px;opacity:0.86;animation-delay:-0.8s"></i><i style="left:33.0%;top:53.9%;width:1px;height:1px;opacity:0.49;animation-delay:-2.6s"></i><i style="left:18.2%;top:20.7%;width:1px;height:1px;opacity:0.37;animation-delay:-4.8s"></i><i style="left:30.2%;top:10.1%;width:2px;height:2px;opacity:0.83;animation-delay:-5.9s"></i><i style="left:90.3%;top:5.0%;width:1px;height:1px;opacity:0.43;animation-delay:-5.8s"></i><i style="left:29.9%;top:21.6%;width:1px;height:1px;opacity:0.51;animation-delay:-1.1s"></i><i style="left:7.7%;top:51.5%;width:1px;height:1px;opacity:0.57;animation-delay:-1.3s"></i><i style="left:12.0%;top:39.5%;width:3px;height:3px;opacity:0.62;animation-delay:-0.7s"></i><i style="left:10.8%;top:23.7%;width:1px;height:1px;opacity:0.54;animation-delay:-3.0s"></i><i style="left:76.1%;top:64.8%;width:1px;height:1px;opacity:0.26;animation-delay:-1.6s"></i><i style="left:27.6%;top:34.1%;width:1px;height:1px;opacity:0.60;animation-delay:-2.5s"></i><i style="left:52.1%;top:84.6%;width:2px;height:2px;opacity:0.31;animation-delay:-2.7s"></i><i style="left:64.5%;top:54.9%;width:2px;height:2px;opacity:0.68;animation-delay:-5.7s"></i><i style="left:38.6%;top:93.9%;width:1px;height:1px;opacity:0.50;animation-delay:-5.8s"></i><i style="left:85.6%;top:54.2%;width:3px;height:3px;opacity:0.64;animation-delay:-2.6s"></i><i style="left:49.5%;top:28.4%;width:2px;height:2px;opacity:0.51;animation-delay:-1.9s"></i><i style="left:53.0%;top:48.3%;width:1px;height:1px;opacity:0.43;animation-delay:-5.6s"></i><i style="left:66.4%;top:74.8%;width:2px;height:2px;opacity:0.27;animation-delay:-4.6s"></i><i style="left:58.6%;top:63.3%;width:2px;height:2px;opacity:0.52;animation-delay:-4.1s"></i><i style="left:5.3%;top:31.5%;width:1px;height:1px;opacity:0.51;animation-delay:-3.5s"></i><i style="left:72.3%;top:31.9%;width:3px;height:3px;opacity:0.77;animation-delay:-1.3s"></i><i style="left:71.9%;top:25.1%;width:1px;height:1px;opacity:0.74;animation-delay:-0.3s"></i><i style="left:9.8%;top:81.0%;width:2px;height:2px;opacity:0.84;animation-delay:-0.9s"></i><i style="left:96.0%;top:24.5%;width:3px;height:3px;opacity:0.71;animation-delay:-0.3s"></i><i style="left:41.7%;top:11.8%;width:2px;height:2px;opacity:0.81;animation-delay:-2.1s"></i><i style="left:15.5%;top:36.3%;width:1px;height:1px;opacity:0.34;animation-delay:-2.5s"></i><i style="left:60.1%;top:64.0%;width:2px;height:2px;opacity:0.69;animation-delay:-2.2s"></i><i style="left:74.4%;top:81.5%;width:2px;height:2px;opacity:0.34;animation-delay:-1.7s"></i><i style="left:12.9%;top:48.1%;width:1px;height:1px;opacity:0.58;animation-delay:-1.9s"></i><i style="left:50.7%;top:84.7%;width:1px;height:1px;opacity:0.43;animation-delay:-3.7s"></i><i style="left:72.5%;top:69.9%;width:1px;height:1px;opacity:0.37;animation-delay:-1.7s"></i><i style="left:23.9%;top:95.2%;width:2px;height:2px;opacity:0.58;animation-delay:-3.9s"></i><i style="left:19.6%;top:68.3%;width:1px;height:1px;opacity:0.66;animation-delay:-0.1s"></i><i style="left:26.0%;top:2.7%;width:1px;height:1px;opacity:0.27;animation-delay:-1.3s"></i><i style="left:27.8%;top:75.6%;width:1px;height:1px;opacity:0.84;animation-delay:-1.0s"></i><i style="left:23.5%;top:98.1%;width:1px;height:1px;opacity:0.56;animation-delay:-2.1s"></i><i style="left:33.8%;top:49.4%;width:2px;height:2px;opacity:0.34;animation-delay:-5.2s"></i><i style="left:80.2%;top:44.7%;width:2px;height:2px;opacity:0.78;animation-delay:-5.0s"></i><i style="left:76.9%;top:44.4%;width:3px;height:3px;opacity:0.74;animation-delay:-2.3s"></i><i style="left:15.1%;top:15.3%;width:2px;height:2px;opacity:0.79;animation-delay:-3.6s"></i><i style="left:29.1%;top:75.9%;width:1px;height:1px;opacity:0.79;animation-delay:-1.1s"></i><i style="left:65.4%;top:58.1%;width:1px;height:1px;opacity:0.55;animation-delay:-1.9s"></i><i style="left:54.4%;top:43.2%;width:1px;height:1px;opacity:0.62;animation-delay:-4.9s"></i><i style="left:46.4%;top:82.3%;width:1px;height:1px;opacity:0.26;animation-delay:-1.9s"></i><i style="left:91.1%;top:60.4%;width:2px;height:2px;opacity:0.70;animation-delay:-3.0s"></i><i style="left:76.4%;top:32.8%;width:1px;height:1px;opacity:0.82;animation-delay:-1.3s"></i><i style="left:65.7%;top:32.7%;width:1px;height:1px;opacity:0.84;animation-delay:-1.9s"></i><i style="left:44.1%;top:59.5%;width:2px;height:2px;opacity:0.84;animation-delay:-4.1s"></i><i style="left:27.9%;top:53.0%;width:1px;height:1px;opacity:0.90;animation-delay:-2.7s"></i><i style="left:22.1%;top:96.8%;width:1px;height:1px;opacity:0.72;animation-delay:-3.1s"></i><i style="left:8.4%;top:82.9%;width:2px;height:2px;opacity:0.27;animation-delay:-4.1s"></i><i style="left:58.5%;top:79.6%;width:1px;height:1px;opacity:0.73;animation-delay:-2.2s"></i><i style="left:39.0%;top:15.5%;width:1px;height:1px;opacity:0.63;animation-delay:-1.1s"></i><i style="left:9.0%;top:45.4%;width:1px;height:1px;opacity:0.81;animation-delay:-4.9s"></i><i style="left:22.1%;top:5.8%;width:1px;height:1px;opacity:0.35;animation-delay:-1.8s"></i><i style="left:2.2%;top:84.2%;width:2px;height:2px;opacity:0.52;animation-delay:-3.5s"></i><i style="left:30.5%;top:54.5%;width:3px;height:3px;opacity:0.47;animation-delay:-1.6s"></i><i style="left:10.5%;top:31.4%;width:1px;height:1px;opacity:0.27;animation-delay:-3.9s"></i><i style="left:9.7%;top:81.6%;width:1px;height:1px;opacity:0.52;animation-delay:-4.3s"></i><i style="left:48.9%;top:90.8%;width:2px;height:2px;opacity:0.47;animation-delay:-2.8s"></i><i style="left:35.0%;top:80.7%;width:1px;height:1px;opacity:0.47;animation-delay:-0.8s"></i><i style="left:48.8%;top:80.5%;width:1px;height:1px;opacity:0.30;animation-delay:-3.7s"></i><i style="left:4.6%;top:75.7%;width:2px;height:2px;opacity:0.89;animation-delay:-2.1s"></i><i style="left:0.4%;top:37.8%;width:2px;height:2px;opacity:0.31;animation-delay:-2.8s"></i><i style="left:54.1%;top:2.4%;width:1px;height:1px;opacity:0.49;animation-delay:-0.1s"></i><i style="left:11.0%;top:92.4%;width:2px;height:2px;opacity:0.85;animation-delay:-1.5s"></i><i style="left:16.2%;top:63.5%;width:2px;height:2px;opacity:0.69;animation-delay:-1.9s"></i><i style="left:38.9%;top:52.9%;width:2px;height:2px;opacity:0.43;animation-delay:-5.3s"></i><i style="left:47.1%;top:73.1%;width:1px;height:1px;opacity:0.45;animation-delay:-0.9s"></i><i style="left:92.0%;top:91.2%;width:2px;height:2px;opacity:0.74;animation-delay:-0.1s"></i><i style="left:48.1%;top:80.0%;width:1px;height:1px;opacity:0.45;animation-delay:-1.2s"></i><i style="left:35.9%;top:58.8%;width:3px;height:3px;opacity:0.64;animation-delay:-2.8s"></i><i style="left:50.9%;top:44.2%;width:1px;height:1px;opacity:0.83;animation-delay:-2.4s"></i><i style="left:91.1%;top:93.7%;width:1px;height:1px;opacity:0.66;animation-delay:-5.7s"></i><i style="left:55.0%;top:85.3%;width:1px;height:1px;opacity:0.57;animation-delay:-2.4s"></i><i style="left:95.6%;top:66.0%;width:2px;height:2px;opacity:0.75;animation-delay:-0.6s"></i><i style="left:86.3%;top:39.9%;width:1px;height:1px;opacity:0.39;animation-delay:-0.8s"></i></div>
+  <div class="au a1"></div><div class="au a2"></div>
+  <div class="hero">
+    <div>
+    <span class="eb hero-a" style="--i:0">Eksperimen · Teori Graf</span>
+    <h1 class="hero-a" style="--i:1">Graf <em>Explorer.</em></h1>
+    <p class="lede hero-a" style="--i:2">Gambar graf sembarang di kanvas, lalu lihat apa yang bisa disimpulkan darinya: derajat, keterhubungan, jenis khususnya, sampai apakah dua graf sebenarnya &ldquo;kembar&rdquo; (isomorfik).</p>
+    <div class="cta hero-a" style="--i:3"><a class="btn" href="#coba">Langsung coba ↓</a><a class="btn ghost" href="#konsep">Baca konsepnya</a></div>
+  </div>
+  <div class="hg hero-a" style="--i:2" aria-hidden="true"><svg id="hg" viewBox="0 0 400 400"></svg></div>
+</section>
+
+<section class="stage" id="coba">
+  <div class="band"><div class="label">01<br>Coba</div><h2 class="big">Gambar grafnya, <em>lihat sifatnya.</em></h2><p class="note"><span id="modeHint">gambar di kanvas, hasilnya otomatis muncul di panel bawah</span></p></div>
+  <div class="msw"><div class="msw-i">
+    <div class="mode-switch" id="modeSwitch">
+      <button data-mode="undirected" class="active">Tak Berarah</button>
+      <button data-mode="directed">Berarah</button>
+      <button data-mode="colored">Berwarna</button>
+      <button data-mode="iso">Isomorfisme</button>
+      <button data-mode="amalgam">Amalgamasi</button>
+    </div>
+  </div></div>
+  <div class="wrap">
+    <div id="viewSingle">
+<div class="presets" id="presets"><span>Coba contoh:</span><button type="button" data-set="V = {A,B,C}
+E = {(A,B),(B,C),(A,C)}">Segitiga K₃</button><button type="button" data-set="V = {A,B,C,D,E}
+E = {(A,B),(B,C),(C,D),(D,E),(E,A)}">Siklus C₅</button><button type="button" data-set="V = {A,B,C,D,E,F}
+E = {(A,B),(B,C),(C,D),(D,E),(E,A),(F,A),(F,B),(F,C),(F,D),(F,E)}">Roda W₅</button><button type="button" data-set="V = {A,B,C,D,E,F}
+E = {(A,B),(A,C),(B,D),(B,E),(C,F)}">Pohon</button><button type="button" data-set="V = {A,B,C,D,E,F}
+E = {(A,D),(A,E),(A,F),(B,D),(B,E),(B,F),(C,D),(C,E),(C,F)}">K₃,₃</button><button type="button" data-set="V = {A,B,C,D,E,F,G,H,I,J}
+E = {(A,B),(B,C),(C,D),(D,E),(E,A),(F,H),(H,J),(J,G),(G,I),(I,F),(A,F),(B,G),(C,H),(D,I),(E,J)}">Petersen</button></div>
+      <div class="layout">
+        <div class="panel">
+          <div class="gx-naming" id="namingSwitch">
+            <button data-style="alpha" class="active">A, B, C…</button>
+            <button data-style="indexed">V₁, V₂, V₃…</button>
+          </div>
+          <div class="gx-toggle" id="toggleMulti"><span class="dot"></span> Izinkan multi-edge / loop</div>
+          <button class="gx-btn" id="btnAutoColor" style="display:none;">Warnai otomatis</button>
+          <button class="gx-btn" id="btnUndoSingle">↶ Undo</button>
+          <button class="gx-btn" id="btnRandomSingle">Graf acak</button>
+          <button class="gx-btn danger" id="btnClearSingle">Bersihkan</button>
+          <details class="gx-input-set">
+            <summary style="cursor:pointer;font-size:12.5px;color:var(--ink-dim);margin-bottom:8px;">Input himpunan V, E</summary>
+            <div class="gx-hint-small">Contoh:<br>V = {A,B,C}<br>E = {(A,B),(B,C),(A,C)}</div>
+            <textarea id="setInputSingle" placeholder="V = {A,B,C}&#10;E = {(A,B),(B,C)}"></textarea>
+            <button class="gx-btn" id="btnDrawSetSingle">Gambar dari himpunan</button>
+          </details>
+        </div>
+        <div class="canvas-slot">
+          <div class="canvas-host" id="hostUndirected"></div>
+          <div class="canvas-host" id="hostDirected" style="display:none;"></div>
+        </div>
+      </div>
+      <div class="panel analysis-panel" id="sharedAnalysisPanel">
+        <div class="tabs">
+          <div class="tab active" data-tab="tabProps">Properti</div>
+          <div class="tab" data-tab="tabMatrix">Matriks</div>
+          <div class="tab" data-tab="tabEdges">Daftar sisi</div>
+          <div class="tab" data-tab="tabColoring" id="tabColoringBtn" style="display:none;">Pewarnaan</div>
+        </div>
+        <div class="tab-content active" id="tabProps"></div>
+        <div class="tab-content" id="tabMatrix"></div>
+        <div class="tab-content" id="tabEdges"></div>
+        <div class="tab-content" id="tabColoring"></div>
+      </div>
+    </div>
+
+    <div id="viewIso" style="display:none;">
+      <div class="iso-grid">
+        <div class="iso-col">
+          <div class="iso-label">Graf 1</div>
+          <div class="iso-toolbar">
+            <button id="btnUndoA">↶ Undo</button>
+            <button id="btnRandomA">Acak</button>
+            <button id="btnClearA">Bersihkan</button>
+          </div>
+          <div class="canvas-host iso-canvas-host" id="isoACanvasHost"></div>
+        </div>
+        <div class="iso-col">
+          <div class="iso-label">Graf 2</div>
+          <div class="iso-toolbar">
+            <button id="btnUndoB">↶ Undo</button>
+            <button id="btnRandomB">Acak</button>
+            <button id="btnClearB">Bersihkan</button>
+          </div>
+          <div class="canvas-host iso-canvas-host" id="isoBCanvasHost"></div>
+        </div>
+      </div>
+      <div class="panel analysis-panel iso-result" id="isoResult"></div>
+    </div>
+
+    <div id="viewAmalgam" style="display:none;">
+      <div class="iso-grid">
+        <div class="iso-col">
+          <div class="iso-label">Graf 1</div>
+          <div class="iso-toolbar">
+            <button id="btnUndoAmA">↶ Undo</button>
+            <button id="btnRandomAmA">Acak</button>
+            <button id="btnClearAmA">Bersihkan</button>
+          </div>
+          <div class="canvas-host iso-canvas-host" id="amalgamACanvasHost"></div>
+        </div>
+        <div class="iso-col">
+          <div class="iso-label">Graf 2</div>
+          <div class="iso-toolbar">
+            <button id="btnUndoAmB">↶ Undo</button>
+            <button id="btnRandomAmB">Acak</button>
+            <button id="btnClearAmB">Bersihkan</button>
+          </div>
+          <div class="canvas-host iso-canvas-host" id="amalgamBCanvasHost"></div>
+        </div>
+      </div>
+      <div class="panel" style="margin-bottom:22px;">
+        <div class="gx-select-row">
+          <span>Titik penempel di Graf 1</span>
+          <select id="amalgamSelectA"></select>
+        </div>
+        <div class="gx-select-row">
+          <span>Titik penempel di Graf 2</span>
+          <select id="amalgamSelectB"></select>
+        </div>
+        <button class="gx-btn" id="btnAmalgamate">Gabungkan (Amalgamasi)</button>
+        <div style="font-size:11.5px;color:var(--ink-dim);margin-top:6px;line-height:1.5;">Kedua titik yang dipilih akan melebur jadi satu titik di graf hasil, titik lain dari Graf 2 ditandai tanda kutip (') untuk membedakan dari Graf 1.</div>
+      </div>
+      <div class="canvas-host" id="hostAmalgamResult" style="margin-bottom:22px;"></div>
+      <div class="panel analysis-panel" id="amalgamAnalysisPanel">
+        <div class="tabs">
+          <div class="tab active" data-tab="tabPropsAm">Properti</div>
+          <div class="tab" data-tab="tabMatrixAm">Matriks</div>
+          <div class="tab" data-tab="tabEdgesAm">Daftar sisi</div>
+        </div>
+        <div class="tab-content active" id="tabPropsAm"></div>
+        <div class="tab-content" id="tabMatrixAm"></div>
+        <div class="tab-content" id="tabEdgesAm"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="konsep">
+  <div class="band"><div class="label">02<br>Konsep</div><h2 class="big">Teori di balik <em>hasilnya.</em></h2><p class="note">Buka konsep yang mau dibaca. Ada diagram kecil di tiap bagian.</p></div>
+    <div class="explain">
+      <h2>Dasar-dasar</h2>
+      <p>
+        Sebuah graf ditulis <b>G(V, E)</b>: <b>V</b> adalah himpunan simpul (disebut juga <i>titik</i>), dan <b>E</b> adalah himpunan sisi yang menghubungkan pasangan simpul. Itu saja, semua sifat lain yang lebih rumit (pohon, siklus, bipartit, dst.) diturunkan dari cara simpul dan sisi ini tersusun.
+      </p>
+      <div class="symbol-grid">
+        <div class="symbol-item"><span class="sym">|V|</span><span class="desc"><b>Orde</b>: banyaknya simpul dalam graf.</span></div>
+        <div class="symbol-item"><span class="sym">|E|</span><span class="desc"><b>Ukuran</b>: banyaknya sisi dalam graf.</span></div>
+        <div class="symbol-item"><span class="sym">deg(v)</span><span class="desc"><b>Derajat</b>: banyaknya sisi yang menempel di simpul v.</span></div>
+        <div class="symbol-item"><span class="sym">G ≅ H</span><span class="desc"><b>Isomorfik</b>: dua graf punya struktur sambungan yang sama persis, walau digambar/dilabeli beda.</span></div>
+      </div>
+
+      <h2>Jelajahi tiap konsep</h2>
+      <div class="concept-list">
+
+        <details class="concept">
+          <summary>Sirkuit &amp; Lintasan Euler</summary>
+          <div class="concept-body">
+            <p>Sirkuit Euler adalah jalan tertutup yang melewati <b>setiap sisi tepat satu kali</b> dan kembali ke simpul awal. Menurut teorema Euler, graf terhubung punya sirkuit Euler jika dan hanya jika <b>semua simpulnya berderajat genap</b>. Kalau tepat dua simpul berderajat ganjil, yang ada cuma lintasan Euler (jalan terbuka, tidak kembali ke awal), bukan sirkuit.</p>
+            <div class="eq-block"><div id="eq-euler"></div></div>
+            <div class="mini-diagram" id="diagram-euler"></div>
+            <div class="diagram-caption">Semua simpul berderajat genap → seluruh sisi bisa dilewati tepat sekali dan kembali ke awal.</div>
+            <div class="example-box"><p><b>Contoh nyata:</b> tukang pos yang ingin melewati setiap jalan di komplek tepat sekali lalu kembali ke kantor pos, itu persis mencari sirkuit Euler.</p></div>
+          </div>
+        </details>
+
+        <details class="concept">
+          <summary>Sirkuit &amp; Lintasan Hamilton</summary>
+          <div class="concept-body">
+            <p>Kalau Euler soal melewati setiap <b>sisi</b> sekali, Hamilton soal melewati setiap <b>simpul</b> tepat sekali. Sayangnya tidak ada syarat sederhana seperti teorema Euler untuk ini, satu-satunya cara pasti adalah mencoba semua kemungkinan urutan (pencarian mundur/backtracking), makanya di alat ini pencariannya dibatasi sampai 12 simpul saja. Ada syarat cukup (bukan syarat perlu) dari teorema Dirac:</p>
+            <div class="eq-block"><div id="eq-hamilton"></div></div>
+            <div class="mini-diagram" id="diagram-hamilton"></div>
+            <div class="diagram-caption">Garis merah = satu sirkuit Hamilton (lewat tiap simpul sekali). Garis abu = sisi lain yang ada tapi tidak dipakai di sirkuit ini.</div>
+            <div class="example-box"><p><b>Contoh nyata:</b> ini persis "traveling salesman problem" versi sederhana, sales yang mau mengunjungi tiap kota tepat sekali dan balik ke kota asal.</p></div>
+          </div>
+        </details>
+
+        <details class="concept">
+          <summary>Bipartit &amp; Multipartit Lengkap</summary>
+          <div class="concept-body">
+            <p>Graf bipartit bisa dibagi jadi dua kelompok simpul sehingga tiap sisi selalu menghubungkan simpul dari kelompok berbeda (tidak ada sisi di dalam satu kelompok). Diuji dengan pewarnaan dua warna: kalau berhasil diwarnai tanpa ada dua tetangga sewarna, berarti bipartit. Multipartit lengkap adalah perluasannya ke k kelompok, dengan setiap simpul terhubung ke <i>semua</i> simpul di kelompok lain.</p>
+            <div class="mini-diagram" id="diagram-bipartite"></div>
+            <div class="diagram-caption">Dua warna simpul = dua kelompok. Semua sisi selalu menyeberang, tidak ada yang di dalam satu warna.</div>
+            <div class="example-box"><p><b>Contoh nyata:</b> penjadwalan, mata kuliah vs slot waktu, di mana sisi berarti "bentrok". Bipartit di sini artinya bisa dipisah jadi dua kelompok tanpa konflik internal.</p></div>
+          </div>
+        </details>
+
+        <details class="concept">
+          <summary>Pohon, Hutan &amp; Graf Siklik</summary>
+          <div class="concept-body">
+            <p>Graf disebut <b>siklik</b> kalau ada jalan tertutup yang kembali tanpa mengulang sisi. <b>Pohon</b> adalah graf terhubung tanpa siklus sama sekali, selalu punya tepat |V|−1 sisi. Kalau tidak terhubung tapi tetap tanpa siklus, itu <b>hutan</b> (kumpulan pohon).</p>
+            <div class="mini-diagram" id="diagram-tree"></div>
+            <div class="diagram-caption">6 simpul, 5 sisi, tidak ada jalan yang kembali ke dirinya sendiri, ini pohon.</div>
+          </div>
+        </details>
+
+        <details class="concept">
+          <summary>Planaritas</summary>
+          <div class="concept-body">
+            <p>Graf planar bisa digambar di bidang datar tanpa ada sisi yang saling silang. Uji eksaknya (Kuratowski/Boyer–Myrvold) rumit, jadi alat ini cuma pakai <b>syarat perlu</b> dari ketaksamaan Euler:</p>
+            <div class="eq-block"><div id="eq-planar"></div></div>
+            <p>Kalau syarat ini dilanggar, pasti bukan planar. Kalau terpenuhi, statusnya "mungkin planar", bukan jaminan pasti.</p>
+            <div class="diagram-row">
+              <div>
+                <div class="mini-diagram" id="diagram-planar-crossed"></div>
+                <div class="diagram-caption">K₄ digambar naif, dua diagonal saling silang.</div>
+              </div>
+              <div>
+                <div class="mini-diagram" id="diagram-planar-clean"></div>
+                <div class="diagram-caption">K₄ yang sama, digambar ulang, nol persilangan. K₄ tetap planar.</div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="concept">
+          <summary>Graf Berarah &amp; Turnamen</summary>
+          <div class="concept-body">
+            <p>Di graf berarah, tiap sisi punya arah. Konsep terhubungnya jadi dua: <b>terhubung lemah</b> (terhubung kalau arah sisi diabaikan) dan <b>terhubung kuat</b> (dari simpul mana pun bisa saling dicapai lewat sisi berarah). <b>Turnamen</b> adalah kasus khusus: graf lengkap yang tiap pasangnya punya tepat satu sisi berarah, seperti hasil pertandingan round-robin, tiap dua tim pasti ada satu pemenang.</p>
+            <div class="mini-diagram" id="diagram-tournament"></div>
+            <div class="diagram-caption">3 simpul, tiap pasang punya tepat satu arah, ini turnamen di atas K₃.</div>
+          </div>
+        </details>
+
+        <details class="concept">
+          <summary>Isomorfisma Graf</summary>
+          <div class="concept-body">
+            <p>Dua graf isomorfik kalau ada cara memetakan simpul graf satu ke simpul graf lain sehingga semua sisi ikut terpetakan persis (dan tidak ada sisi tambahan/hilang):</p>
+            <div class="eq-block"><div id="eq-iso"></div></div>
+            <div class="diagram-row">
+              <div class="mini-diagram" id="diagram-iso-a"></div>
+              <div class="mini-diagram" id="diagram-iso-b"></div>
+            </div>
+            <div class="diagram-caption">Dua gambar yang beda bentuk, tapi warna simpul yang sama menunjukkan pemetaan yang membuat keduanya isomorfik (sama-sama siklus C₄).</div>
+            <p>Cara mengeceknya: cocokkan dulu ciri-ciri dasar (banyak simpul, banyak sisi, barisan derajat), kalau ada yang beda, langsung pasti bukan isomorfik. Kalau semua cocok, baru dicoba dipetakan simpul-ke-simpul satu-satu sampai ketemu satu pemetaan yang konsisten.</p>
+          </div>
+        </details>
+
+        <h2>Galeri graf khusus yang bisa dikenali</h2>
+        <div class="gallery-grid">
+          <div class="gallery-item"><div class="gallery-diagram" data-fam="Kn" data-n="5"></div><b>K<sub>n</sub></b><span>Graf lengkap, semua pasang simpul terhubung</span></div>
+          <div class="gallery-item"><div class="gallery-diagram" data-fam="Cn" data-n="6"></div><b>C<sub>n</sub></b><span>Graf siklus, semua simpul berderajat 2, membentuk lingkaran</span></div>
+          <div class="gallery-item"><div class="gallery-diagram" data-fam="Pn" data-n="5"></div><b>P<sub>n</sub></b><span>Graf lintasan, rangkaian simpul lurus tanpa cabang</span></div>
+          <div class="gallery-item"><div class="gallery-diagram" data-fam="Kmn" data-m="2" data-k="3"></div><b>K<sub>m,n</sub></b><span>Bipartit lengkap, dua kelompok, semua pasang lintas kelompok tersambung</span></div>
+          <div class="gallery-item"><div class="gallery-diagram" data-fam="Wn" data-n="5"></div><b>W<sub>n</sub></b><span>Roda, satu hub tersambung ke seluruh siklus</span></div>
+          <div class="gallery-item"><div class="gallery-diagram" data-fam="Fn" data-n="4"></div><b>F<sub>n</sub></b><span>Kipas, satu hub tersambung ke seluruh lintasan</span></div>
+          <div class="gallery-item"><div class="gallery-diagram" data-fam="Hn" data-n="4"></div><b>H<sub>n</sub></b><span>Helm, roda dengan satu daun tambahan di tiap simpul luar</span></div>
+          <div class="gallery-item"><div class="gallery-diagram" data-fam="Gn" data-n="4"></div><b>G<sub>n</sub></b><span>Gir, roda dengan simpul sisipan di tiap sisi luar</span></div>
+          <div class="gallery-item"><div class="gallery-diagram" data-fam="Friendship" data-n="3"></div><b>Persahabatan</b><span>Beberapa segitiga berbagi satu simpul pusat (windmill)</span></div>
+          <div class="gallery-item"><div class="gallery-diagram" data-fam="Book" data-n="4"></div><b>Buku / berlian</b><span>Beberapa segitiga berbagi satu sisi yang sama</span></div>
+          <div class="gallery-item"><div class="gallery-diagram" data-fam="Ladder" data-n="4"></div><b>Tangga (L<sub>n</sub>)</b><span>Dua lintasan sejajar disambung tiap pasang</span></div>
+          <div class="gallery-item"><div class="gallery-diagram" data-fam="Prism" data-n="4"></div><b>Prisma (Y<sub>n</sub>)</b><span>Dua siklus sejajar disambung tiap pasang</span></div>
+          <div class="gallery-item"><div class="gallery-diagram" data-fam="Mobius" data-n="4"></div><b>Tangga Möbius</b><span>Siklus dengan sisi "diameter" antar simpul berseberangan</span></div>
+          <div class="gallery-item"><div class="gallery-diagram" data-fam="Antiprism" data-n="4"></div><b>Antiprisma</b><span>Dua siklus sejajar disambung zig-zag</span></div>
+          <div class="gallery-item"><div class="gallery-diagram" data-fam="Petersen"></div><b>Petersen</b><span>Graf istimewa 10 simpul, 3-reguler, girth 5, unik</span></div>
+        </div>
+      </div>
+    </div>
+</section>
+
+<div class="back"><div class="bk"><h2>Mau lihat yang <em>lain?</em></h2><a class="btn" href="simulasi-konsentrasi.html">Simulasi konsentrasi →</a></div></div>
+</main>
+
+<footer class="foot">
+  <div class="fgrid">
+    <div><h4>Isi web</h4><ul><li><a href="index.html">Beranda</a></li><li><a href="#coba">Coba</a></li><li><a href="#konsep">Konsep</a></li><li><a href="#top">Atas</a></li></ul></div>
+    <div><h4>Eksperimen</h4><ul><li><a href="simulasi-konsentrasi.html">Simulasi Konsentrasi Zat</a></li><li><a href="graf-explorer.html">Graf Explorer</a></li></ul></div>
+    <div><h4>Status</h4><span class="status">Ongoing</span><p>Belum selesai dan memang begitu. Mampir lagi nanti.</p></div>
+    <div class="cvcol" id="cvcol"><h4><button class="cvtog" type="button" aria-expanded="false" aria-controls="cvpanel"><span>CV</span><i aria-hidden="true"></i><em class="cvhint">pencet dulu</em></button></h4><div class="cvpanel" id="cvpanel"><div><a class="cvname" href="cv.html" aria-label="Buka CV Normand"><b style="--k:0">N</b><b style="--k:1">o</b><b style="--k:2">r</b><b style="--k:3">m</b><b style="--k:4">a</b><b style="--k:5">n</b><b style="--k:6">d</b><span class="ar" aria-hidden="true">→</span></a><p>Klik namanya buat baca cerita saya.</p></div></div></div>
+  </div>
+  <div class="fbar"><span>© 2026 Northern Sky. Dibuat Normand, masih jalan terus.</span><a href="#top">Kembali ke atas ↑</a></div>
+  <div class="wm" aria-hidden="true">northern <em>sky</em></div>
+</footer>
+<script>
+(function(){
+  "use strict";
+
+  // =================================================================
+  // Graph instance factory, every canvas (tak berarah / berarah /
+  // isomorfisme A / isomorfisme B) is one independent instance of this.
+  // =================================================================
+  const COLOR_PALETTE = ['#7A1F2B','#2b6cb0','#2f855a','#d69e2e','#805ad5','#dd6b20','#319795','#718096'];
+
+  function createGraphInstance(hostEl, opts){
+    opts = opts || {};
+    const directed = !!opts.directed;
+    let allowMulti = !!opts.allowMultiDefault;
+    let namingStyle = opts.namingStyle || 'alpha'; // 'alpha' | 'indexed'
+    let nodes = [], edges = [];
+    let nextNodeId = 1, nextEdgeId = 1;
+    let pendingNode = null, selectedEdge = null;
+    let dragNode = null, dragMoved = false, dragStart = null;
+    let history = [];
+
+    hostEl.innerHTML =
+      '<div class="gx-canvas-wrap">' +
+        '<svg><defs><marker id="arrow-' + opts.uid + '" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">' +
+          '<path d="M0,0 L10,5 L0,10 Z" fill="#6D6366"></path></marker></defs>' +
+          '<g class="edgeLayer"></g><g class="nodeLayer"></g></svg>' +
+        '<div class="gx-stat-pill"><div>|V| = <span class="n statV">0</span></div><div>|E| = <span class="n statE">0</span></div></div>' +
+        '<div class="gx-hint">' + (opts.hintText || '') + '</div>' +
+      '</div>';
+
+    const svg = hostEl.querySelector('svg');
+    const edgeLayer = hostEl.querySelector('.edgeLayer');
+    const nodeLayer = hostEl.querySelector('.nodeLayer');
+    const statV = hostEl.querySelector('.statV');
+    const statE = hostEl.querySelector('.statE');
+    const NODE_R = 18;
+
+    function labelForIndex(i){
+      let s = ''; i = i + 1;
+      while(i > 0){ const rem = (i-1)%26; s = String.fromCharCode(65+rem)+s; i = Math.floor((i-1)/26); }
+      return s;
+    }
+    function nextLabel(){
+      return namingStyle === 'indexed' ? ('V'+(nodes.length+1)) : labelForIndex(nodes.length);
+    }
+    function nodeById(id){ return nodes.find(n => n.id === id); }
+
+    function relabelAuto(){
+      // regenerate auto labels (skip nodes the user renamed manually) to match the current naming style
+      let counter = 0;
+      nodes.forEach(n => {
+        if(n.customLabel) { counter++; return; }
+        n.label = namingStyle === 'indexed' ? ('V'+(counter+1)) : labelForIndex(counter);
+        counter++;
+      });
+    }
+    function setNamingStyle(style){ namingStyle = style; relabelAuto(); render(); }
+
+    function snapshot(){
+      history.push(JSON.stringify({ nodes, edges, nextNodeId, nextEdgeId }));
+      if(history.length > 60) history.shift();
+    }
+    function undo(){
+      if(!history.length) return;
+      const s = JSON.parse(history.pop());
+      nodes = s.nodes; edges = s.edges; nextNodeId = s.nextNodeId; nextEdgeId = s.nextEdgeId;
+      pendingNode = null; selectedEdge = null;
+      render();
+    }
+
+    function addNode(x, y){
+      snapshot();
+      nodes.push({ id: nextNodeId++, label: nextLabel(), x, y, weight: null, colorIndex: -1 });
+      render();
+    }
+    function removeNode(id){
+      snapshot();
+      nodes = nodes.filter(n => n.id !== id);
+      edges = edges.filter(e => e.a !== id && e.b !== id);
+      if(pendingNode === id) pendingNode = null;
+      render();
+    }
+    function edgeExists(a, b){
+      const key = directed ? (a+'->'+b) : [a,b].sort((x,y)=>x-y).join('-');
+      return edges.some(e => {
+        const ek = directed ? (e.a+'->'+e.b) : [e.a,e.b].sort((x,y)=>x-y).join('-');
+        return ek === key;
+      });
+    }
+    function addEdge(a, b){
+      if(a === b && !allowMulti) return;
+      if(!allowMulti && edgeExists(a,b)) return;
+      snapshot();
+      edges.push({ id: nextEdgeId++, a, b, weight: null });
+      render();
+    }
+    function removeEdge(id){
+      snapshot();
+      edges = edges.filter(e => e.id !== id);
+      if(selectedEdge === id) selectedEdge = null;
+      render();
+    }
+    function clearAll(){
+      snapshot();
+      nodes = []; edges = []; nextNodeId = 1; nextEdgeId = 1; pendingNode = null; selectedEdge = null;
+      render();
+    }
+    function randomGraph(){
+      history = [];
+      nodes = []; edges = []; nextNodeId = 1; nextEdgeId = 1;
+      const rect = svg.getBoundingClientRect();
+      const w = rect.width || 400, h = rect.height || 300;
+      const cx = w/2, cy = h/2, R = Math.min(w,h)/2 - 46;
+      const n = 5 + Math.floor(Math.random()*5);
+      const created = [];
+      for(let i=0;i<n;i++){
+        const angle = (2*Math.PI*i)/n - Math.PI/2;
+        created.push({ id: nextNodeId++, label: namingStyle==='indexed'?('V'+(i+1)):labelForIndex(i), x: cx+R*Math.cos(angle), y: cy+R*Math.sin(angle), weight:null, colorIndex:-1 });
+      }
+      nodes = created;
+      const density = 0.3 + Math.random()*0.25;
+      for(let i=0;i<n;i++){
+        for(let j=0;j<n;j++){
+          if(i===j) continue;
+          if(!directed && j<i) continue;
+          if(Math.random() < density) edges.push({ id: nextEdgeId++, a: created[i].id, b: created[j].id, weight:null });
+        }
+      }
+      render();
+    }
+    function loadGraph(nodesArr, edgesArr){
+      snapshot();
+      nodes = nodesArr.map(n => Object.assign({ weight:null, colorIndex:-1 }, n));
+      edges = edgesArr.map(e => Object.assign({ weight:null }, e));
+      nextNodeId = (nodes.length ? Math.max.apply(null, nodes.map(n=>n.id)) : 0) + 1;
+      nextEdgeId = (edges.length ? Math.max.apply(null, edges.map(e=>e.id)) : 0) + 1;
+      render();
+    }
+    function loadFromSets(labels, pairs){
+      const rect = svg.getBoundingClientRect();
+      const w = rect.width || 400, h = rect.height || 300, cx=w/2, cy=h/2, R=Math.min(w,h)/2-46;
+      const idOf = {};
+      const newNodes = labels.map((lab,i) => {
+        const angle=(2*Math.PI*i)/labels.length - Math.PI/2;
+        const id = i+1;
+        idOf[lab] = id;
+        return { id, label: lab, customLabel:true, x: cx+R*Math.cos(angle), y: cy+R*Math.sin(angle) };
+      });
+      const newEdges = pairs.map((p,i) => ({ id:i+1, a: idOf[p[0]], b: idOf[p[1]] }));
+      loadGraph(newNodes, newEdges);
+    }
+
+    function renameNode(id, newLabel){
+      snapshot();
+      const n = nodeById(id);
+      if(n){ n.label = newLabel; n.customLabel = true; }
+      render();
+    }
+    function setNodeWeight(id, w){
+      snapshot();
+      const n = nodeById(id);
+      if(n) n.weight = (w===null || w===''||isNaN(w)) ? null : parseFloat(w);
+      render();
+    }
+    function setEdgeWeightById(id, w){
+      snapshot();
+      const e = edges.find(e => e.id === id);
+      if(e) e.weight = (w===null || w===''||isNaN(w)) ? null : parseFloat(w);
+      render();
+    }
+    function cycleNodeColor(id){
+      snapshot();
+      const n = nodeById(id);
+      if(!n) return;
+      const cur = (n.colorIndex===undefined || n.colorIndex===null) ? -1 : n.colorIndex;
+      n.colorIndex = (cur+1 >= COLOR_PALETTE.length) ? -1 : cur+1;
+      render();
+    }
+    function autoColor(){
+      const res = chromaticNumberOf(nodes, edges);
+      if(res.k == null) return res;
+      snapshot();
+      nodes.forEach(n => { n.colorIndex = res.coloring[n.id]; });
+      render();
+      return res;
+    }
+
+    // ---------------- rendering ----------------
+    function edgeGroupKey(e){ return [e.a,e.b].sort((x,y)=>x-y).join('-'); }
+
+    function render(){
+      renderSvg();
+      statV.textContent = nodes.length;
+      statE.textContent = edges.length;
+      if(opts.onChange) opts.onChange(api);
+    }
+
+    function renderSvg(){
+      edgeLayer.innerHTML = ''; nodeLayer.innerHTML = '';
+      const groups = {};
+      edges.forEach(e => { const k = edgeGroupKey(e); (groups[k] = groups[k]||[]).push(e); });
+      Object.values(groups).forEach(group => {
+        group.forEach((e, idx) => { if(e.a === e.b) drawLoop(e, idx); else drawEdge(e, idx, group.length); });
+      });
+      nodes.forEach(n => drawNode(n));
+    }
+
+    function makeHitAndVisible(dPath, e, midX, midY){
+      const visible = document.createElementNS('http://www.w3.org/2000/svg','path');
+      visible.setAttribute('d', dPath);
+      visible.setAttribute('class', 'gx-edge-line' + (selectedEdge===e.id ? ' selected':''));
+      if(directed) visible.setAttribute('marker-end', 'url(#arrow-'+opts.uid+')');
+      const hit = document.createElementNS('http://www.w3.org/2000/svg','path');
+      hit.setAttribute('d', dPath);
+      hit.setAttribute('class', 'gx-edge-hit');
+      hit.addEventListener('click', ev => {
+        ev.stopPropagation();
+        opts.setLastActive && opts.setLastActive(api);
+        if(ev.altKey){
+          const val = window.prompt('Bobot sisi ini:', e.weight!=null ? e.weight : '');
+          if(val !== null) setEdgeWeightById(e.id, val);
+          return;
+        }
+        selectedEdge = (selectedEdge===e.id)?null:e.id; render();
+      });
+      hit.addEventListener('contextmenu', ev => { ev.preventDefault(); ev.stopPropagation(); removeEdge(e.id); });
+      edgeLayer.appendChild(visible);
+      edgeLayer.appendChild(hit);
+      if(e.weight != null && midX !== undefined){
+        const wt = document.createElementNS('http://www.w3.org/2000/svg','text');
+        wt.setAttribute('x', midX); wt.setAttribute('y', midY-4);
+        wt.setAttribute('text-anchor','middle'); wt.setAttribute('class','gx-edge-weight');
+        wt.textContent = e.weight;
+        edgeLayer.appendChild(wt);
+      }
+    }
+
+    function drawEdge(e, idx, total){
+      const a = nodeById(e.a), b = nodeById(e.b);
+      if(!a || !b) return;
+      const dx=b.x-a.x, dy=b.y-a.y, dist=Math.sqrt(dx*dx+dy*dy)||1;
+      const ux=dx/dist, uy=dy/dist;
+      const sx=a.x+ux*NODE_R, sy=a.y+uy*NODE_R, ex=b.x-ux*NODE_R, ey=b.y-uy*NODE_R;
+      const mid=(total-1)/2, off=(idx-mid)*20;
+      const mx=(sx+ex)/2 - uy*off, my=(sy+ey)/2 + ux*off;
+      const d = off===0 ? ('M '+sx+' '+sy+' L '+ex+' '+ey) : ('M '+sx+' '+sy+' Q '+mx+' '+my+' '+ex+' '+ey);
+      makeHitAndVisible(d, e, mx, my);
+    }
+    function drawLoop(e, idx){
+      const a = nodeById(e.a); if(!a) return;
+      const r = 14 + idx*9;
+      const cy = a.y - NODE_R - r;
+      const d = 'M '+(a.x-6)+' '+(a.y-NODE_R+2)+' C '+(a.x-r)+' '+cy+', '+(a.x+r)+' '+cy+', '+(a.x+6)+' '+(a.y-NODE_R+2);
+      makeHitAndVisible(d, e, a.x, cy);
+    }
+    function drawNode(n){
+      const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+      g.setAttribute('transform', 'translate('+n.x+','+n.y+')');
+      const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      circle.setAttribute('r', NODE_R);
+      const colorFill = (opts.allowColoring && n.colorIndex!=null && n.colorIndex>=0) ? COLOR_PALETTE[n.colorIndex] : null;
+      circle.setAttribute('class', 'gx-node-circle' + (pendingNode===n.id ? ' pending':''));
+      if(colorFill){ circle.setAttribute('fill', colorFill); circle.setAttribute('stroke', '#1B1517'); }
+      const text = document.createElementNS('http://www.w3.org/2000/svg','text');
+      text.setAttribute('class','gx-node-label'); text.setAttribute('text-anchor','middle'); text.setAttribute('dy','0.32em');
+      if(colorFill) text.setAttribute('fill', '#ffffff');
+      text.textContent = n.label;
+      g.appendChild(circle); g.appendChild(text);
+      if(n.weight != null){
+        const wt = document.createElementNS('http://www.w3.org/2000/svg','text');
+        wt.setAttribute('class','gx-node-weight'); wt.setAttribute('text-anchor','middle'); wt.setAttribute('y', NODE_R+13);
+        wt.textContent = '('+n.weight+')';
+        g.appendChild(wt);
+      }
+      g.style.cursor = 'pointer';
+      g.addEventListener('mousedown', ev => {
+        ev.stopPropagation();
+        if(ev.altKey){
+          const val = window.prompt('Bobot simpul '+n.label+':', n.weight!=null?n.weight:'');
+          if(val !== null) setNodeWeight(n.id, val);
+          return;
+        }
+        if(ev.shiftKey && opts.allowColoring){ cycleNodeColor(n.id); return; }
+        opts.setLastActive && opts.setLastActive(api);
+        dragNode=n.id; dragMoved=false; dragStart={x:ev.clientX,y:ev.clientY};
+      });
+      g.addEventListener('click', ev => ev.stopPropagation());
+      g.addEventListener('dblclick', ev => {
+        ev.stopPropagation();
+        if(ev.ctrlKey || ev.metaKey){
+          const val = window.prompt('Nama baru untuk simpul ini:', n.label);
+          if(val) renameNode(n.id, val);
+          return;
+        }
+        if(allowMulti) addEdge(n.id,n.id);
+      });
+      g.addEventListener('contextmenu', ev => { ev.preventDefault(); ev.stopPropagation(); removeNode(n.id); });
+      nodeLayer.appendChild(g);
+    }
+
+    svg.addEventListener('click', ev => {
+      if(ev.target !== svg) return;
+      opts.setLastActive && opts.setLastActive(api);
+      const rect = svg.getBoundingClientRect();
+      addNode(ev.clientX-rect.left, ev.clientY-rect.top);
+      pendingNode = null; selectedEdge = null; render();
+    });
+    window.addEventListener('mousemove', ev => {
+      if(dragNode===null) return;
+      const dxm=ev.clientX-dragStart.x, dym=ev.clientY-dragStart.y;
+      if(Math.abs(dxm)>4||Math.abs(dym)>4) dragMoved=true;
+      if(dragMoved){
+        const rect = svg.getBoundingClientRect();
+        const n = nodeById(dragNode);
+        if(n){ n.x=ev.clientX-rect.left; n.y=ev.clientY-rect.top; renderSvg(); }
+      }
+    });
+    window.addEventListener('mouseup', () => {
+      if(dragNode===null) return;
+      const clicked=dragNode, wasDrag=dragMoved;
+      dragNode=null; dragMoved=false;
+      if(!wasDrag){
+        if(pendingNode===null) pendingNode=clicked;
+        else if(pendingNode===clicked) pendingNode=null;
+        else { addEdge(pendingNode, clicked); pendingNode=null; }
+        selectedEdge=null;
+      }
+      setTimeout(render,0);
+    });
+
+    function deleteSelectedEdge(){ if(selectedEdge!==null) removeEdge(selectedEdge); }
+    function setSelectedEdgeWeight(){
+      if(selectedEdge===null) return;
+      const e = edges.find(x=>x.id===selectedEdge);
+      if(!e) return;
+      const val = window.prompt('Bobot sisi ini:', e.weight!=null?e.weight:'');
+      if(val !== null) setEdgeWeightById(e.id, val);
+    }
+
+    const api = {
+      get nodes(){ return nodes; }, get edges(){ return edges; },
+      get directed(){ return directed; },
+      get allowMulti(){ return allowMulti; }, setAllowMulti(v){ allowMulti = v; },
+      get namingStyle(){ return namingStyle; }, setNamingStyle,
+      undo, clear: clearAll, randomGraph, loadGraph, loadFromSets,
+      deleteSelectedEdge, setSelectedEdgeWeight, autoColor, render
+    };
+    render();
+    return api;
+  }
+
+  // =================================================================
+  // Pure graph algorithms, operate on a given instance's nodes/edges.
+  // =================================================================
+  function degreeInfoOf(nodes, edges){
+    const deg={}, indeg={}, outdeg={};
+    nodes.forEach(n=>{deg[n.id]=0; indeg[n.id]=0; outdeg[n.id]=0;});
+    edges.forEach(e=>{
+      if(e.a===e.b){ deg[e.a]+=2; indeg[e.a]+=1; outdeg[e.a]+=1; }
+      else{ deg[e.a]+=1; deg[e.b]+=1; outdeg[e.a]+=1; indeg[e.b]+=1; }
+    });
+    return { deg, indeg, outdeg };
+  }
+  function isSimpleGraphOf(nodes, edges, directed){
+    const seen=new Set();
+    for(const e of edges){
+      if(e.a===e.b) return false;
+      const key = directed ? (e.a+'->'+e.b) : [e.a,e.b].sort((x,y)=>x-y).join('-');
+      if(seen.has(key)) return false;
+      seen.add(key);
+    }
+    return true;
+  }
+  function weakAdjacencyOf(nodes, edges){
+    const adj={}; nodes.forEach(n=>adj[n.id]=new Set());
+    edges.forEach(e=>{ if(e.a!==e.b){ adj[e.a].add(e.b); adj[e.b].add(e.a); } });
+    return adj;
+  }
+  function weakComponentsOf(nodes, edges){
+    const adj = weakAdjacencyOf(nodes, edges);
+    const visited=new Set(); const comps=[];
+    nodes.forEach(n=>{
+      if(visited.has(n.id)) return;
+      const stack=[n.id]; visited.add(n.id); const comp=[n.id];
+      while(stack.length){ const u=stack.pop(); adj[u].forEach(v=>{ if(!visited.has(v)){visited.add(v); comp.push(v); stack.push(v);} }); }
+      comps.push(comp);
+    });
+    return comps;
+  }
+  function stronglyConnectedOf(nodes, edges){
+    if(nodes.length===0) return [];
+    const adj={}, radj={};
+    nodes.forEach(n=>{adj[n.id]=[]; radj[n.id]=[];});
+    edges.forEach(e=>{ if(e.a===e.b) return; adj[e.a].push(e.b); radj[e.b].push(e.a); });
+    const visited=new Set(); const order=[];
+    function dfs1(u){ visited.add(u); adj[u].forEach(v=>{ if(!visited.has(v)) dfs1(v); }); order.push(u); }
+    nodes.forEach(n=>{ if(!visited.has(n.id)) dfs1(n.id); });
+    const visited2=new Set(); const comps=[];
+    for(let i=order.length-1;i>=0;i--){
+      const u=order[i]; if(visited2.has(u)) continue;
+      const comp=[]; const stack=[u]; visited2.add(u);
+      while(stack.length){ const x=stack.pop(); comp.push(x); radj[x].forEach(v=>{ if(!visited2.has(v)){visited2.add(v); stack.push(v);} }); }
+      comps.push(comp);
+    }
+    return comps;
+  }
+  function hasSelfLoopOf(edges){ return edges.some(e=>e.a===e.b); }
+  function hasCycleUndirectedOf(nodes, edges){
+    if(hasSelfLoopOf(edges)) return true;
+    const adjList={}; nodes.forEach(n=>adjList[n.id]=[]);
+    edges.forEach(e=>{ if(e.a===e.b) return; adjList[e.a].push({to:e.b,id:e.id}); adjList[e.b].push({to:e.a,id:e.id}); });
+    const visited=new Set();
+    for(const start of nodes){
+      if(visited.has(start.id)) continue;
+      visited.add(start.id);
+      const stack=[[start.id,-1]];
+      while(stack.length){
+        const [u, cameEdge] = stack.pop();
+        for(const {to,id} of adjList[u]){
+          if(id===cameEdge) continue;
+          if(visited.has(to)) return true;
+          visited.add(to); stack.push([to,id]);
+        }
+      }
+    }
+    return false;
+  }
+  function hasCycleDirectedOf(nodes, edges){
+    if(hasSelfLoopOf(edges)) return true;
+    const adj={}; nodes.forEach(n=>adj[n.id]=[]);
+    edges.forEach(e=>{ if(e.a!==e.b) adj[e.a].push(e.b); });
+    const color={}; nodes.forEach(n=>color[n.id]=0);
+    let found=false;
+    function dfs(u){
+      color[u]=1;
+      for(const v of adj[u]){ if(color[v]===1){found=true;return;} if(color[v]===0){dfs(v); if(found)return;} }
+      color[u]=2;
+    }
+    for(const n of nodes){ if(color[n.id]===0) dfs(n.id); if(found) break; }
+    return found;
+  }
+  function bipartiteCheckOf(nodes, edges){
+    if(hasSelfLoopOf(edges)) return { bipartite:false };
+    const adj = weakAdjacencyOf(nodes, edges);
+    const color={};
+    for(const n of nodes){
+      if(color[n.id]!==undefined) continue;
+      color[n.id]=0; const queue=[n.id];
+      while(queue.length){
+        const u=queue.shift();
+        for(const v of adj[u]){
+          if(color[v]===undefined){ color[v]=1-color[u]; queue.push(v); }
+          else if(color[v]===color[u]) return { bipartite:false };
+        }
+      }
+    }
+    const partA = nodes.filter(n=>color[n.id]===0).map(n=>n.id);
+    const partB = nodes.filter(n=>color[n.id]===1).map(n=>n.id);
+    return { bipartite:true, partA, partB };
+  }
+  function eulerianStatusOf(nodes, edges, directed){
+    if(edges.length===0) return 'trivial';
+    const { deg, indeg, outdeg } = degreeInfoOf(nodes, edges);
+    const comps = weakComponentsOf(nodes, edges).filter(c=>c.some(id=>deg[id]>0));
+    if(comps.length>1) return 'disconnected';
+    if(!directed){
+      const oddCount = nodes.filter(n=>deg[n.id]%2===1).length;
+      if(oddCount===0) return 'circuit';
+      if(oddCount===2) return 'path';
+      return 'none';
+    } else {
+      const allEqual = nodes.every(n=>indeg[n.id]===outdeg[n.id]);
+      if(allEqual) return 'circuit';
+      let plus1=0,minus1=0,ok=true;
+      nodes.forEach(n=>{ const diff=outdeg[n.id]-indeg[n.id]; if(diff===1)plus1++; else if(diff===-1)minus1++; else if(diff!==0)ok=false; });
+      if(ok && plus1<=1 && minus1<=1) return 'path';
+      return 'none';
+    }
+  }
+  const HAM_VERTEX_LIMIT=12, HAM_STEP_LIMIT=400000;
+  function hamiltonianStatusOf(nodes, edges, directed){
+    const n = nodes.length;
+    if(n<3) return { status:'na' };
+    if(n>HAM_VERTEX_LIMIT) return { status:'skipped' };
+    const ids = nodes.map(nd=>nd.id); const idx={}; ids.forEach((id,i)=>idx[id]=i);
+    const adjM = Array.from({length:n},()=>new Array(n).fill(false));
+    edges.forEach(e=>{ if(e.a===e.b) return; const i=idx[e.a],j=idx[e.b]; adjM[i][j]=true; if(!directed) adjM[j][i]=true; });
+    let steps=0,timeout=false,cyclePath=null,anyPath=null;
+    for(let s=0;s<n && !cyclePath && !timeout;s++){
+      const visited=new Array(n).fill(false); const path=[s]; visited[s]=true;
+      dfs(s);
+      function dfs(v){
+        steps++; if(steps>HAM_STEP_LIMIT){timeout=true;return;}
+        if(path.length===n){ if(adjM[v][s]) cyclePath=path.slice(); else if(!anyPath) anyPath=path.slice(); return; }
+        for(let u=0;u<n;u++){
+          if(timeout||cyclePath) return;
+          if(!visited[u] && adjM[v][u]){ visited[u]=true; path.push(u); dfs(u); visited[u]=false; path.pop(); }
+        }
+      }
+    }
+    if(timeout) return { status:'timeout' };
+    if(cyclePath) return { status:'cycle', order: cyclePath.map(i=>ids[i]) };
+    if(anyPath) return { status:'path', order: anyPath.map(i=>ids[i]) };
+    return { status:'none' };
+  }
+  function planarityHeuristicOf(nodes, edges, bip){
+    const V=nodes.length, E=edges.filter(e=>e.a!==e.b).length;
+    if(V<3) return { status:'trivial' };
+    const bound = bip.bipartite ? 2*V-4 : 3*V-6;
+    if(E>bound) return { status:'not-planar', bound };
+    return { status:'maybe', bound };
+  }
+  function isTournamentOf(nodes, edges, directed){
+    if(!directed || nodes.length<2) return false;
+    const ids = nodes.map(n=>n.id);
+    const edgeSet = new Set(edges.filter(e=>e.a!==e.b).map(e=>e.a+'->'+e.b));
+    for(let i=0;i<ids.length;i++) for(let j=i+1;j<ids.length;j++){
+      const uv=edgeSet.has(ids[i]+'->'+ids[j]), vu=edgeSet.has(ids[j]+'->'+ids[i]);
+      if(uv===vu) return false;
+    }
+    return true;
+  }
+  const CHROMATIC_VERTEX_LIMIT = 14, CHROMATIC_STEP_LIMIT = 300000;
+  function chromaticNumberOf(nodes, edges){
+    const n = nodes.length;
+    if(n===0) return { k:0, coloring:{} };
+    if(n>CHROMATIC_VERTEX_LIMIT) return { k:null, timeout:true };
+    const ids = nodes.map(nd=>nd.id); const idx={}; ids.forEach((id,i)=>idx[id]=i);
+    const adj = Array.from({length:n},()=>new Set());
+    edges.forEach(e=>{ if(e.a===e.b) return; adj[idx[e.a]].add(idx[e.b]); adj[idx[e.b]].add(idx[e.a]); });
+    const order = Array.from({length:n},(_,i)=>i).sort((a,b)=>adj[b].size-adj[a].size);
+    for(let k=1;k<=n;k++){
+      const color = new Array(n).fill(-1);
+      let steps=0, timedOut=false;
+      function bt(pos){
+        steps++; if(steps>CHROMATIC_STEP_LIMIT){ timedOut=true; return false; }
+        if(pos===n) return true;
+        const u = order[pos];
+        for(let c=0;c<k;c++){
+          let ok=true;
+          for(const v of adj[u]){ if(color[v]===c){ ok=false; break; } }
+          if(!ok) continue;
+          color[u]=c;
+          if(bt(pos+1)) return true;
+          color[u]=-1;
+          if(timedOut) return false;
+        }
+        return false;
+      }
+      const found = bt(0);
+      if(timedOut) return { k:null, timeout:true };
+      if(found){
+        const coloring={}; ids.forEach((id,i)=>coloring[id]=color[i]);
+        return { k, coloring };
+      }
+    }
+    return { k:n, coloring:{} };
+  }
+  function coloringValidityOf(nodes, edges){
+    const invalid = [];
+    edges.forEach(e => {
+      if(e.a===e.b) return;
+      const a=nodes.find(n=>n.id===e.a), b=nodes.find(n=>n.id===e.b);
+      if(!a||!b) return;
+      const ca=(a.colorIndex==null?-1:a.colorIndex), cb=(b.colorIndex==null?-1:b.colorIndex);
+      if(ca>=0 && ca===cb) invalid.push(e.id);
+    });
+    const allColored = nodes.every(n => n.colorIndex!=null && n.colorIndex>=0);
+    return { valid: invalid.length===0, invalidEdges: invalid, allColored };
+  }
+
+  // ---- canonical named-family constructors + isomorphism engine ----
+  function cAdj(n){ const a={}; for(let i=0;i<n;i++) a[i]=new Set(); return a; }
+  function cLink(a,i,j){ a[i].add(j); a[j].add(i); }
+  function canonCycle(n){ const a=cAdj(n); for(let i=0;i<n;i++) cLink(a,i,(i+1)%n); return a; }
+  function canonPath(n){ const a=cAdj(n); for(let i=0;i<n-1;i++) cLink(a,i,i+1); return a; }
+  function canonWheel(n){ const a=canonCycle(n); a[n]=new Set(); for(let i=0;i<n;i++) cLink(a,i,n); return a; }
+  function canonFan(n){ const a=canonPath(n); a[n]=new Set(); for(let i=0;i<n;i++) cLink(a,i,n); return a; }
+  function canonHelm(n){ const a=cAdj(2*n+1);
+    for(let i=1;i<=n;i++) cLink(a,0,i);
+    for(let i=1;i<=n;i++) cLink(a,i, i===n?1:i+1);
+    for(let i=1;i<=n;i++) cLink(a,i,n+i);
+    return a; }
+  function canonGear(n){ const a=cAdj(2*n+1);
+    for(let i=1;i<=n;i++) cLink(a,0,i);
+    for(let i=1;i<=n;i++){ const sub=n+i, nxt=(i===n?1:i+1); cLink(a,i,sub); cLink(a,sub,nxt); }
+    return a; }
+  function canonFriendship(n){ const a=cAdj(2*n+1);
+    for(let i=0;i<n;i++){ const p=1+2*i,q=2+2*i; cLink(a,0,p); cLink(a,0,q); cLink(a,p,q); }
+    return a; }
+  function canonBook(n){ const a=cAdj(n+2);
+    cLink(a,0,1);
+    for(let i=2;i<n+2;i++){ cLink(a,0,i); cLink(a,1,i); }
+    return a; }
+  function canonLadder(n){ const a=cAdj(2*n);
+    for(let i=0;i<n-1;i++){ cLink(a,i,i+1); cLink(a,n+i,n+i+1); }
+    for(let i=0;i<n;i++) cLink(a,i,n+i);
+    return a; }
+  function canonPrism(n){ const a=cAdj(2*n);
+    for(let i=0;i<n;i++){ const j=(i+1)%n; cLink(a,i,j); cLink(a,n+i,n+j); }
+    for(let i=0;i<n;i++) cLink(a,i,n+i);
+    return a; }
+  function canonMobius(n){ const a=canonCycle(2*n);
+    for(let i=0;i<n;i++) cLink(a,i,i+n);
+    return a; }
+  function canonAntiprism(n){ const a=cAdj(2*n);
+    for(let i=0;i<n;i++){ const j=(i+1)%n; cLink(a,i,j); cLink(a,n+i,n+j); }
+    for(let i=0;i<n;i++){ cLink(a,i,n+i); cLink(a,i,n+((i+1)%n)); }
+    return a; }
+  function canonPetersen(){ const a=cAdj(10);
+    for(let i=0;i<5;i++) cLink(a,i,(i+1)%5);
+    for(let i=0;i<5;i++) cLink(a,5+i,5+((i+2)%5));
+    for(let i=0;i<5;i++) cLink(a,i,5+i);
+    return a; }
+
+  // =================================================================
+  // Theory-panel visuals: mini SVG diagrams (gallery + concept examples)
+  // =================================================================
+  function miniGraphSVG(adj, opts){
+    opts = opts || {};
+    const W = opts.w || 200, H = opts.h || 120;
+    const ids = Object.keys(adj).map(Number);
+    const n = ids.length;
+    const pos = {};
+    const layout = opts.layout || 'circle';
+    const cx = W/2, cy = H/2 + (opts.cyOffset||0);
+    const R = opts.r || Math.min(W,H)/2 - 22;
+
+    if(layout === 'hub'){
+      const hub = opts.hubIndex===undefined ? 0 : opts.hubIndex;
+      pos[hub] = { x: cx, y: cy };
+      const rest = ids.filter(i=>i!==hub);
+      rest.forEach((id,i)=>{ const a=(2*Math.PI*i)/rest.length - Math.PI/2; pos[id]={x:cx+R*Math.cos(a), y:cy+R*Math.sin(a)}; });
+    } else if(layout === 'bipartite'){
+      const lc = opts.leftCount, rc = opts.rightCount;
+      const stepL = (H-40)/Math.max(lc-1,1), stepR = (H-40)/Math.max(rc-1,1);
+      for(let i=0;i<lc;i++) pos[i] = { x:34, y:20+i*stepL };
+      for(let i=0;i<rc;i++) pos[lc+i] = { x:W-34, y:20+i*stepR };
+    } else if(layout === 'rows'){
+      const half = n/2;
+      const stepX = (W-56)/Math.max(half-1,1);
+      for(let i=0;i<half;i++){ pos[i]={x:28+i*stepX,y:cy-22}; pos[half+i]={x:28+i*stepX,y:cy+22}; }
+    } else if(layout === 'line'){
+      const stepX = (W-56)/Math.max(n-1,1);
+      ids.forEach((id,i)=>{ pos[id]={x:28+i*stepX,y:cy}; });
+    } else if(layout === 'petersen'){
+      for(let i=0;i<5;i++){ const a=(2*Math.PI*i)/5 - Math.PI/2; pos[i]={x:cx+R*Math.cos(a),y:cy+R*Math.sin(a)}; pos[5+i]={x:cx+(R*0.48)*Math.cos(a),y:cy+(R*0.48)*Math.sin(a)}; }
+    } else {
+      ids.forEach((id,i)=>{ const a=(2*Math.PI*i)/n - Math.PI/2; pos[id]={x:cx+R*Math.cos(a), y:cy+R*Math.sin(a)}; });
+    }
+
+    let edgesSvg = '';
+    const seen = new Set();
+    ids.forEach(u => { adj[u].forEach(v => {
+      const k = [Math.min(u,v),Math.max(u,v)].join('-');
+      if(seen.has(k)) return; seen.add(k);
+      edgesSvg += '<line x1="'+pos[u].x+'" y1="'+pos[u].y+'" x2="'+pos[v].x+'" y2="'+pos[v].y+'" stroke="#B8AAAE" stroke-width="1.6"/>';
+    }); });
+    let nodesSvg = '';
+    ids.forEach(id => {
+      const fill = (opts.nodeColors && opts.nodeColors[id]) || '#ffffff';
+      nodesSvg += '<circle cx="'+pos[id].x+'" cy="'+pos[id].y+'" r="6.5" fill="'+fill+'" stroke="#1B1517" stroke-width="1.6"/>';
+    });
+    return '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">'+edgesSvg+nodesSvg+'</svg>';
+  }
+
+  const GALLERY_BUILDERS = {
+    Kn: (n) => { const a=cAdj(n); for(let i=0;i<n;i++) for(let j=i+1;j<n;j++) cLink(a,i,j); return { adj:a, layout:'circle' }; },
+    Cn: (n) => ({ adj: canonCycle(n), layout:'circle' }),
+    Pn: (n) => ({ adj: canonPath(n), layout:'line' }),
+    Kmn: (m,k) => { const a=cAdj(m+k); for(let i=0;i<m;i++) for(let j=0;j<k;j++) cLink(a,i,m+j);
+      const colors={}; for(let i=0;i<m;i++) colors[i]='#F4E8EA'; for(let j=0;j<k;j++) colors[m+j]='#F4E8EA';
+      return { adj:a, layout:'bipartite', leftCount:m, rightCount:k, colors }; },
+    Wn: (n) => ({ adj: canonWheel(n), layout:'hub', hubIndex:n }),
+    Fn: (n) => ({ adj: canonFan(n), layout:'hub', hubIndex:n }),
+    Hn: (n) => ({ adj: canonHelm(n), layout:'hub', hubIndex:0 }),
+    Gn: (n) => ({ adj: canonGear(n), layout:'hub', hubIndex:0 }),
+    Friendship: (n) => ({ adj: canonFriendship(n), layout:'hub', hubIndex:0 }),
+    Book: (n) => ({ adj: canonBook(n), layout:'circle' }),
+    Ladder: (n) => ({ adj: canonLadder(n), layout:'rows' }),
+    Prism: (n) => ({ adj: canonPrism(n), layout:'rows' }),
+    Mobius: (n) => ({ adj: canonMobius(n), layout:'rows' }),
+    Antiprism: (n) => ({ adj: canonAntiprism(n), layout:'rows' }),
+    Petersen: () => ({ adj: canonPetersen(), layout:'petersen' })
+  };
+
+  function renderGalleryDiagrams(){
+    document.querySelectorAll('.gallery-diagram').forEach(el => {
+      try{
+        const fam = el.dataset.fam;
+        const builder = GALLERY_BUILDERS[fam];
+        if(!builder) return;
+        const n = el.dataset.n ? parseInt(el.dataset.n,10) : undefined;
+        const m = el.dataset.m ? parseInt(el.dataset.m,10) : undefined;
+        const k = el.dataset.k ? parseInt(el.dataset.k,10) : undefined;
+        const spec = fam==='Kmn' ? builder(m,k) : builder(n);
+        el.innerHTML = miniGraphSVG(spec.adj, { layout: spec.layout, hubIndex: spec.hubIndex, nodeColors: spec.colors, leftCount: spec.leftCount, rightCount: spec.rightCount, h:90 });
+      } catch(err){
+        console.error('gallery diagram failed for', el.dataset.fam, err);
+      }
+    });
+  }
+
+  function svgArrowDefs(color){
+    return '<defs><marker id="mk-'+color.replace('#','')+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="'+color+'"/></marker></defs>';
+  }
+
+  function safe(fn){ try{ fn(); } catch(err){ console.error('diagram render failed:', err); } }
+
+  function renderConceptDiagrams(){
+    // Euler: C5, whole cycle highlighted as the traversal, arrows show direction
+    safe(function(){
+      const el = document.getElementById('diagram-euler'); if(!el) return;
+      const pts = [[100,15],[138,43],[124,87],[76,87],[62,43]];
+      let s = '<svg viewBox="0 0 200 110">'+svgArrowDefs('#7A1F2B');
+      for(let i=0;i<5;i++){ const a=pts[i], b=pts[(i+1)%5];
+        s += '<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="#7A1F2B" stroke-width="2.4" marker-end="url(#mk-e1222c)"/>'; }
+      pts.forEach((p,i)=>{ s += '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="7" fill="#fff" stroke="#1B1517" stroke-width="1.6"/><text x="'+p[0]+'" y="'+(p[1]+4)+'" font-size="9" text-anchor="middle" font-family="Inter,sans-serif">'+(i+1)+'</text>'; });
+      s += '</svg>';
+      el.innerHTML = s;
+    });
+
+    // Hamilton: wheel W5 (hub=5), highlight one Hamiltonian cycle
+    safe(function(){
+      const el = document.getElementById('diagram-hamilton'); if(!el) return;
+      const rim = [[100,15],[138,43],[124,87],[76,87],[62,43]];
+      const hub = [100,55];
+      let s = '<svg viewBox="0 0 200 110">'+svgArrowDefs('#7A1F2B');
+      // gray: all wheel edges
+      for(let i=0;i<5;i++){ const a=rim[i], b=rim[(i+1)%5];
+        s += '<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="#DDD2D5" stroke-width="2"/>'; }
+      for(let i=0;i<5;i++){ s += '<line x1="'+hub[0]+'" y1="'+hub[1]+'" x2="'+rim[i][0]+'" y2="'+rim[i][1]+'" stroke="#DDD2D5" stroke-width="2"/>'; }
+      // red: hub-rim0, rim0-rim1, rim1-rim2, rim2-rim3, rim3-rim4, rim4-hub
+      const redEdges = [[hub,rim[0]],[rim[0],rim[1]],[rim[1],rim[2]],[rim[2],rim[3]],[rim[3],rim[4]],[rim[4],hub]];
+      redEdges.forEach(([a,b]) => { s += '<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="#7A1F2B" stroke-width="2.6"/>'; });
+      rim.forEach(p => s += '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="6.5" fill="#fff" stroke="#1B1517" stroke-width="1.6"/>');
+      s += '<circle cx="'+hub[0]+'" cy="'+hub[1]+'" r="6.5" fill="#F4E8EA" stroke="#7A1F2B" stroke-width="1.6"/>';
+      s += '</svg>';
+      el.innerHTML = s;
+    });
+
+    // Bipartite: 3 left (white) vs 3 right (red-soft), partial connections
+    safe(function(){
+      const el = document.getElementById('diagram-bipartite'); if(!el) return;
+      const L = [[40,20],[40,55],[40,90]], R = [[160,20],[160,55],[160,90]];
+      const edges = [[0,0],[0,1],[1,1],[1,2],[2,0],[2,2]];
+      let s = '<svg viewBox="0 0 200 110">';
+      edges.forEach(([i,j]) => { s += '<line x1="'+L[i][0]+'" y1="'+L[i][1]+'" x2="'+R[j][0]+'" y2="'+R[j][1]+'" stroke="#B8AAAE" stroke-width="1.6"/>'; });
+      L.forEach(p => s += '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="7" fill="#ffffff" stroke="#1B1517" stroke-width="1.6"/>');
+      R.forEach(p => s += '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="7" fill="#F4E8EA" stroke="#7A1F2B" stroke-width="1.6"/>');
+      s += '</svg>';
+      el.innerHTML = s;
+    });
+
+    // Tree: simple branching, 6 nodes
+    safe(function(){
+      const el = document.getElementById('diagram-tree'); if(!el) return;
+      const pos = { root:[100,15], l:[60,55], r:[140,55], l1:[35,95], l2:[80,95], r1:[150,95] };
+      const edges = [['root','l'],['root','r'],['l','l1'],['l','l2'],['r','r1']];
+      let s = '<svg viewBox="0 0 200 110">';
+      edges.forEach(([a,b]) => { s += '<line x1="'+pos[a][0]+'" y1="'+pos[a][1]+'" x2="'+pos[b][0]+'" y2="'+pos[b][1]+'" stroke="#B8AAAE" stroke-width="1.6"/>'; });
+      Object.values(pos).forEach(p => s += '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="6.5" fill="#ffffff" stroke="#1B1517" stroke-width="1.6"/>');
+      s += '</svg>';
+      el.innerHTML = s;
+    });
+
+    // Planarity: K4 crossed vs K4 clean
+    safe(function(){
+      const el1 = document.getElementById('diagram-planar-crossed');
+      const el2 = document.getElementById('diagram-planar-clean');
+      if(el1){
+        const p = [[40,20],[160,20],[160,90],[40,90]];
+        let s = '<svg viewBox="0 0 200 110">';
+        const pairs = [[0,1],[1,2],[2,3],[3,0],[0,2],[1,3]];
+        pairs.forEach(([i,j]) => { s += '<line x1="'+p[i][0]+'" y1="'+p[i][1]+'" x2="'+p[j][0]+'" y2="'+p[j][1]+'" stroke="#B8AAAE" stroke-width="1.6"/>'; });
+        s += '<circle cx="100" cy="55" r="3" fill="#7A1F2B"/>';
+        p.forEach(pt => s += '<circle cx="'+pt[0]+'" cy="'+pt[1]+'" r="6.5" fill="#fff" stroke="#1B1517" stroke-width="1.6"/>');
+        s += '</svg>';
+        el1.innerHTML = s;
+      }
+      if(el2){
+        const p = [[100,18],[162,90],[38,90],[100,62]];
+        let s = '<svg viewBox="0 0 200 110">';
+        const pairs = [[0,1],[1,2],[2,0],[3,0],[3,1],[3,2]];
+        pairs.forEach(([i,j]) => { s += '<line x1="'+p[i][0]+'" y1="'+p[i][1]+'" x2="'+p[j][0]+'" y2="'+p[j][1]+'" stroke="#B8AAAE" stroke-width="1.6"/>'; });
+        p.forEach(pt => s += '<circle cx="'+pt[0]+'" cy="'+pt[1]+'" r="6.5" fill="#fff" stroke="#1B1517" stroke-width="1.6"/>');
+        s += '</svg>';
+        el2.innerHTML = s;
+      }
+    });
+
+    // Tournament: directed triangle
+    safe(function(){
+      const el = document.getElementById('diagram-tournament'); if(!el) return;
+      const p = [[100,20],[160,90],[40,90]];
+      let s = '<svg viewBox="0 0 200 110">'+svgArrowDefs('#1B1517');
+      const dirs = [[0,1],[1,2],[2,0]];
+      dirs.forEach(([i,j]) => { s += '<line x1="'+p[i][0]+'" y1="'+p[i][1]+'" x2="'+p[j][0]+'" y2="'+p[j][1]+'" stroke="#1B1517" stroke-width="2" marker-end="url(#mk-111111)"/>'; });
+      p.forEach(pt => s += '<circle cx="'+pt[0]+'" cy="'+pt[1]+'" r="7" fill="#fff" stroke="#1B1517" stroke-width="1.6"/>');
+      s += '</svg>';
+      el.innerHTML = s;
+    });
+
+    // Isomorphism: same C4, two different layouts, matching colors
+    safe(function(){
+      const elA = document.getElementById('diagram-iso-a');
+      const elB = document.getElementById('diagram-iso-b');
+      const colors = ['#7A1F2B','#1B1517','#6D6366','#F3C6CC'];
+      if(elA){
+        const p = [[40,20],[160,20],[160,90],[40,90]];
+        let s = '<svg viewBox="0 0 200 110">';
+        for(let i=0;i<4;i++){ const a=p[i], b=p[(i+1)%4]; s += '<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="#B8AAAE" stroke-width="1.6"/>'; }
+        p.forEach((pt,i)=> s += '<circle cx="'+pt[0]+'" cy="'+pt[1]+'" r="7" fill="'+colors[i]+'" stroke="#1B1517" stroke-width="1.2"/>');
+        s += '</svg>';
+        elA.innerHTML = s;
+      }
+      if(elB){
+        const p = [[100,15],[165,55],[100,95],[35,55]];
+        let s = '<svg viewBox="0 0 200 110">';
+        for(let i=0;i<4;i++){ const a=p[i], b=p[(i+1)%4]; s += '<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="#B8AAAE" stroke-width="1.6"/>'; }
+        p.forEach((pt,i)=> s += '<circle cx="'+pt[0]+'" cy="'+pt[1]+'" r="7" fill="'+colors[i]+'" stroke="#1B1517" stroke-width="1.2"/>');
+        s += '</svg>';
+        elB.innerHTML = s;
+      }
+    });
+  }
+
+  function renderTheoryEquations(){
+    if(typeof katex === 'undefined') return;
+    const eqs = {
+      'eq-euler': 'G\\ \\text{terhubung punya sirkuit Euler} \\iff \\deg(v)\\ \\text{genap}\\ \\ \\forall v \\in V',
+      'eq-hamilton': '\\deg(v) \\ge \\dfrac{n}{2}\\ \\ \\forall v \\in V \\ \\implies\\ G\\ \\text{punya sirkuit Hamilton}',
+      'eq-planar': 'E \\le 3V - 6 \\quad \\text{(atau } E \\le 2V-4 \\text{ jika bipartit)}',
+      'eq-iso': 'G \\cong H \\iff \\exists\\, f:V(G)\\to V(H)\\ \\text{bijektif},\\ \\ (u,v)\\in E(G) \\iff (f(u),f(v))\\in E(H)'
+    };
+    Object.keys(eqs).forEach(id => {
+      const el = document.getElementById(id);
+      if(el) katex.render(eqs[id], el, { throwOnError: false, displayMode: true });
+    });
+  }
+
+  function initTheoryVisuals(){
+    renderGalleryDiagrams();
+    renderConceptDiagrams();
+    if(document.readyState === 'complete' || typeof katex !== 'undefined') renderTheoryEquations();
+    else window.addEventListener('load', renderTheoryEquations);
+  }
+
+  function reindexAdjacency(nodes, edges){
+    const adj = weakAdjacencyOf(nodes, edges);
+    const ids = nodes.map(n=>n.id); const idx={}; ids.forEach((id,i)=>idx[id]=i);
+    const out={}; const back=[];
+    ids.forEach((id,i)=>{ out[i]=new Set(); adj[id].forEach(nb=>out[i].add(idx[nb])); back[i]=nodes.find(n=>n.id===id); });
+    return { adj: out, labelOf: back };
+  }
+
+  function isIsomorphic(adjA, adjB){ return findMapping(adjA, adjB) !== null; }
+
+  function findMapping(adjA, adjB){
+    const idsA = Object.keys(adjA).map(Number), idsB = Object.keys(adjB).map(Number);
+    if(idsA.length !== idsB.length) return null;
+    const degA = idsA.map(id=>adjA[id].size).sort((x,y)=>x-y);
+    const degB = idsB.map(id=>adjB[id].size).sort((x,y)=>x-y);
+    if(degA.join(',') !== degB.join(',')) return null;
+    const order = idsA.slice().sort((x,y)=>adjA[y].size-adjA[x].size);
+    const mapping={}; const used=new Set(); let steps=0; const LIMIT=300000;
+    function consistent(u,v){
+      for(const key in mapping){ const mu=Number(key), mv=mapping[key]; if(adjA[u].has(mu)!==adjB[v].has(mv)) return false; }
+      return true;
+    }
+    function backtrack(idx){
+      steps++; if(steps>LIMIT) return false;
+      if(idx===order.length) return true;
+      const u=order[idx];
+      for(const v of idsB){
+        if(used.has(v)) continue;
+        if(adjA[u].size!==adjB[v].size) continue;
+        if(!consistent(u,v)) continue;
+        mapping[u]=v; used.add(v);
+        if(backtrack(idx+1)) return true;
+        delete mapping[u]; used.delete(v);
+      }
+      return false;
+    }
+    return backtrack(0) ? Object.assign({}, mapping) : null;
+  }
+
+  function completeMultipartiteParts(adj){
+    const ids = Object.keys(adj).map(Number);
+    const compAdj={}; ids.forEach(id=>compAdj[id]=new Set());
+    for(let i=0;i<ids.length;i++) for(let j=i+1;j<ids.length;j++){
+      const u=ids[i], v=ids[j];
+      if(!adj[u].has(v)){ compAdj[u].add(v); compAdj[v].add(u); }
+    }
+    const visited=new Set(); const comps=[];
+    for(const id of ids){
+      if(visited.has(id)) continue;
+      const stack=[id]; visited.add(id); const comp=[id];
+      while(stack.length){ const u=stack.pop(); compAdj[u].forEach(v=>{ if(!visited.has(v)){visited.add(v); comp.push(v); stack.push(v);} }); }
+      comps.push(comp);
+    }
+    for(const comp of comps) for(let i=0;i<comp.length;i++) for(let j=i+1;j<comp.length;j++)
+      if(!compAdj[comp[i]].has(comp[j])) return null;
+    return comps;
+  }
+
+  function detectNamedGraph(nodes, edges, directed, deg, connected, simple, drawn){
+    const V = nodes.length, E = edges.length;
+    if(V===0 || !simple || directed) return null;
+    const degs = nodes.map(n=>deg[n.id]).sort((a,b)=>a-b);
+    const allSame = degs.every(d=>d===degs[0]);
+
+    if(V===10 && E===15 && allSame && degs[0]===3 && isIsomorphic(drawn, canonPetersen())) return 'Graf Petersen';
+    if(connected && E===V*(V-1)/2) return 'K<sub>'+V+'</sub>: graf lengkap';
+    if(connected && allSame && degs[0]===2 && V===E && V>=3) return 'C<sub>'+V+'</sub>: graf siklus';
+    if(connected && E===V-1 && V>=2){
+      const leaves=degs.filter(d=>d===1).length, middles=degs.filter(d=>d===2).length;
+      if(leaves===2 && middles===V-2) return 'P<sub>'+V+'</sub>: graf lintasan';
+    }
+    const parts = completeMultipartiteParts(drawn);
+    if(parts && parts.length>=2 && parts.length<V){
+      const sizes = parts.map(p=>p.length).sort((a,b)=>a-b);
+      if(parts.length===2){
+        const m=sizes[0], k=sizes[1];
+        if(m===1) return 'K<sub>1,'+k+'</sub>: graf bintang (star)';
+        return 'K<sub>'+m+','+k+'</sub>: graf bipartit lengkap';
+      }
+      if(parts.length===3 && sizes[0]===1 && sizes[1]===1){
+        const n = sizes[2];
+        return n===2 ? 'Graf berlian (diamond), juga B₂ (graf buku) / K<sub>1,1,2</sub>'
+                      : 'B<sub>'+n+'</sub>: graf buku (book), juga K<sub>1,1,'+n+'</sub>';
+      }
+      const balanced = sizes.every(s=>s===sizes[0]);
+      return 'K<sub>'+sizes.join(',')+'</sub>: graf '+(balanced?'multipartit lengkap seimbang':'multipartit lengkap');
+    }
+    if(V-1>=3 && isIsomorphic(drawn, canonWheel(V-1))) return 'W<sub>'+(V-1)+'</sub>: graf roda (wheel)';
+    if(V-1>=2 && isIsomorphic(drawn, canonFan(V-1))) return 'F<sub>'+(V-1)+'</sub>: graf kipas (fan)';
+    if(V%2===1){
+      const n=(V-1)/2;
+      if(n>=3 && isIsomorphic(drawn, canonHelm(n))) return 'H<sub>'+n+'</sub>: graf helm';
+      if(n>=3 && isIsomorphic(drawn, canonGear(n))) return 'G<sub>'+n+'</sub>: graf gir (gear)';
+      if(n>=2 && isIsomorphic(drawn, canonFriendship(n))) return n===2 ? 'Graf kupu-kupu (bowtie)' : 'F<sub>'+n+'</sub>: graf persahabatan (windmill)';
+    }
+    if(V%2===0 && V>=4){
+      const n=V/2;
+      if(isIsomorphic(drawn, canonLadder(n))) return 'L<sub>'+n+'</sub>: graf tangga (ladder)';
+      if(n>=3 && isIsomorphic(drawn, canonPrism(n))) return 'Y<sub>'+n+'</sub>: graf prisma';
+      if(n>=3 && isIsomorphic(drawn, canonMobius(n))) return 'M<sub>'+n+'</sub>: graf tangga Möbius';
+      if(n>=3 && isIsomorphic(drawn, canonAntiprism(n))) return 'Graf antiprisma (n = '+n+')';
+    }
+    return null;
+  }
+
+  // =================================================================
+  // Shared analysis panel (used by both "undirected" and "directed" views)
+  // =================================================================
+  function renderSharedAnalysis(inst, ids){
+    ids = ids || { props:'tabProps', matrix:'tabMatrix', edges:'tabEdges' };
+    const nodes = inst.nodes, edges = inst.edges, directed = inst.directed;
+    const propsEl = document.getElementById(ids.props);
+    const matrixEl = document.getElementById(ids.matrix);
+    const edgesEl = document.getElementById(ids.edges);
+
+    if(nodes.length===0){
+      propsEl.innerHTML = '<div class="gx-empty">Gambar graf di kanvas untuk melihat analisisnya di sini.</div>';
+      matrixEl.innerHTML = '<div class="gx-empty">Belum ada simpul.</div>';
+      edgesEl.innerHTML = '<div class="gx-empty">Belum ada sisi.</div>';
+      return;
+    }
+    const V=nodes.length, E=edges.length;
+    const { deg, indeg, outdeg } = degreeInfoOf(nodes, edges);
+    const simple = isSimpleGraphOf(nodes, edges, directed);
+    const comps = weakComponentsOf(nodes, edges);
+    const connected = comps.length===1;
+    const cyclic = directed ? hasCycleDirectedOf(nodes,edges) : hasCycleUndirectedOf(nodes,edges);
+    const bip = bipartiteCheckOf(nodes, edges);
+    const eul = eulerianStatusOf(nodes, edges, directed);
+    const ham = hamiltonianStatusOf(nodes, edges, directed);
+    const planar = planarityHeuristicOf(nodes, edges, bip);
+    const isTree = connected && !cyclic && simple;
+    const isForest = !cyclic && simple;
+    const { adj: drawn } = reindexAdjacency(nodes, edges);
+    const namedShape = detectNamedGraph(nodes, edges, directed, deg, connected, simple, drawn);
+
+    const degs = nodes.map(n=>deg[n.id]);
+    let regularBadge;
+    if(directed){
+      const inV=nodes.map(n=>indeg[n.id]), outV=nodes.map(n=>outdeg[n.id]);
+      const same = inV.every(d=>d===inV[0]) && outV.every(d=>d===outV[0]);
+      regularBadge = same ? '<span class="gx-badge yes">ya · in='+inV[0]+', out='+outV[0]+'</span>' : '<span class="gx-badge no">tidak</span>';
+    } else {
+      const same = degs.every(d=>d===degs[0]);
+      regularBadge = same ? '<span class="gx-badge yes">ya · '+degs[0]+'-reguler</span>' : '<span class="gx-badge no">tidak</span>';
+    }
+    const degSeqStr = directed
+      ? nodes.map(n=>n.label+'('+indeg[n.id]+'/'+outdeg[n.id]+')').join(', ')
+      : '['+degs.slice().sort((a,b)=>b-a).join(', ')+']';
+
+    function eulLabel(v){
+      return v==='circuit' ? '<span class="gx-badge yes">sirkuit Euler</span>'
+           : v==='path' ? '<span class="gx-badge warn">lintasan Euler</span>'
+           : v==='trivial' ? '<span class="gx-badge no">tanpa sisi</span>'
+           : v==='disconnected' ? '<span class="gx-badge no">tidak terhubung</span>'
+           : '<span class="gx-badge no">tidak ada</span>';
+    }
+    function hamLabel(h){
+      if(h.status==='cycle') return '<span class="gx-badge yes">sirkuit Hamilton</span>';
+      if(h.status==='path') return '<span class="gx-badge warn">lintasan Hamilton</span>';
+      if(h.status==='timeout') return '<span class="gx-badge warn">tak tersimpulkan (batas komputasi)</span>';
+      if(h.status==='skipped') return '<span class="gx-badge no">dilewati (V &gt; '+HAM_VERTEX_LIMIT+')</span>';
+      if(h.status==='na') return '<span class="gx-badge no">butuh V ≥ 3</span>';
+      return '<span class="gx-badge no">tidak ada</span>';
+    }
+    function planarLabel(p){
+      if(p.status==='trivial') return '<span class="gx-badge yes">ya (trivial)</span>';
+      if(p.status==='not-planar') return '<span class="gx-badge no">bukan planar (E &gt; '+p.bound+')</span>';
+      return '<span class="gx-badge warn">mungkin planar (E ≤ '+p.bound+')</span>';
+    }
+    let strongInfo = '';
+    if(directed){
+      const sc = stronglyConnectedOf(nodes, edges);
+      const strongly = sc.length===1;
+      const tourn = isTournamentOf(nodes, edges, directed);
+      strongInfo = '<div class="prop-row"><span class="k">Terhubung kuat</span><span class="v">'+(strongly?'<span class="gx-badge yes">ya</span>':'<span class="gx-badge no">tidak ('+sc.length+' komponen)</span>')+'</span></div>'+
+        '<div class="prop-row"><span class="k">Turnamen</span><span class="v">'+(tourn?'<span class="gx-badge yes">ya</span>':'<span class="gx-badge no">tidak</span>')+'</span></div>';
+    }
+
+    propsEl.innerHTML =
+      '<div class="prop-group"><h4>Ringkasan G(V, E)</h4>'+
+        '<div class="prop-row"><span class="k">Simpul |V|</span><span class="v">'+V+'</span></div>'+
+        '<div class="prop-row"><span class="k">Sisi |E|</span><span class="v">'+E+'</span></div>'+
+        '<div class="prop-row"><span class="k">Tipe</span><span class="v">'+(directed?'Berarah':'Tak berarah')+'</span></div>'+
+        '<div class="prop-row"><span class="k">Bentuk</span><span class="v">'+(simple?'<span class="gx-badge yes">sederhana</span>':'<span class="gx-badge warn">multigraf</span>')+'</span></div>'+
+        (namedShape?'<div class="named-shape">Terdeteksi sebagai <span class="name">'+namedShape+'</span></div>':'')+
+      '</div>'+
+      '<div class="prop-group"><h4>Derajat</h4>'+
+        '<div class="prop-row"><span class="k">Reguler</span><span class="v">'+regularBadge+'</span></div>'+
+        '<div class="prop-row" style="flex-direction:column;align-items:flex-start;gap:4px;"><span class="k">Barisan derajat</span><span class="v" style="text-align:left;">'+degSeqStr+'</span></div>'+
+      '</div>'+
+      '<div class="prop-group"><h4>Konektivitas</h4>'+
+        '<div class="prop-row"><span class="k">Terhubung</span><span class="v">'+(connected?'<span class="gx-badge yes">ya</span>':'<span class="gx-badge no">tidak ('+comps.length+' komponen)</span>')+'</span></div>'+
+        strongInfo+
+        '<div class="prop-row"><span class="k">Siklik</span><span class="v">'+(cyclic?'<span class="gx-badge warn">ya</span>':'<span class="gx-badge yes">asiklik</span>')+'</span></div>'+
+        '<div class="prop-row"><span class="k">Pohon (tree)</span><span class="v">'+(isTree?'<span class="gx-badge yes">ya</span>':'<span class="gx-badge no">tidak</span>')+'</span></div>'+
+        '<div class="prop-row"><span class="k">Hutan (forest)</span><span class="v">'+(isForest?'<span class="gx-badge yes">ya</span>':'<span class="gx-badge no">tidak</span>')+'</span></div>'+
+      '</div>'+
+      '<div class="prop-group"><h4>Bipartit &amp; kelengkapan</h4>'+
+        '<div class="prop-row"><span class="k">Bipartit</span><span class="v">'+(bip.bipartite?'<span class="gx-badge yes">ya</span>':'<span class="gx-badge no">tidak</span>')+'</span></div>'+
+        (bip.bipartite?'<div class="prop-row"><span class="k">Partisi</span><span class="v">|A|='+bip.partA.length+', |B|='+bip.partB.length+'</span></div>':'')+
+      '</div>'+
+      '<div class="prop-group"><h4>Lintasan &amp; sirkuit klasik</h4>'+
+        '<div class="prop-row"><span class="k">Euler</span><span class="v">'+eulLabel(eul)+'</span></div>'+
+        '<div class="prop-row"><span class="k">Hamilton</span><span class="v">'+hamLabel(ham)+'</span></div>'+
+      '</div>'+
+      '<div class="prop-group"><h4>Planaritas (heuristik)</h4>'+
+        '<div class="prop-row"><span class="k">Status</span><span class="v">'+planarLabel(planar)+'</span></div>'+
+        '<div style="font-size:11.5px;color:var(--ink-dim);margin-top:4px;line-height:1.5;">Hanya syarat perlu (E ≤ 3V−6, atau E ≤ 2V−4 jika bipartit), bukan uji eksak.</div>'+
+      '</div>'+
+      weightStatsHtml(nodes, edges);
+
+    const n=nodes.length; const idx={}; nodes.forEach((nd,i)=>idx[nd.id]=i);
+    const M = Array.from({length:n},()=>new Array(n).fill(0));
+    edges.forEach(e=>{ const i=idx[e.a], j=idx[e.b]; M[i][j]+=1; if(!directed && e.a!==e.b) M[j][i]+=1; });
+    let mhtml = '<div class="mhint">Nilai sel = jumlah sisi antar simpul (mendukung multigraf).</div><table><tr><th></th>'+nodes.map(nd=>'<th>'+nd.label+'</th>').join('')+'</tr>';
+    nodes.forEach((row,i)=>{ mhtml+='<tr><th>'+row.label+'</th>'+nodes.map((col,j)=>{ const v=M[i][j]; return '<td class="'+(v>0?'one':'')+'">'+v+'</td>'; }).join('')+'</tr>'; });
+    mhtml += '</table>';
+    matrixEl.innerHTML = mhtml;
+
+    if(edges.length===0){ edgesEl.innerHTML = '<div class="gx-empty">Belum ada sisi.</div>'; }
+    else {
+      const sep = directed ? ' → ' : ' - ';
+      edgesEl.innerHTML = edges.map(e=>{
+        const a=nodeById2(nodes,e.a), b=nodeById2(nodes,e.b);
+        if(!a||!b) return '';
+        const label = e.a===e.b ? (a.label+' (loop)') : (a.label+sep+b.label);
+        return '<div class="edge-line"><span>'+label+'</span><span class="id">e'+e.id+'</span></div>';
+      }).join('');
+    }
+  }
+  function nodeById2(nodes, id){ return nodes.find(n=>n.id===id); }
+
+  function weightStatsHtml(nodes, edges){
+    const weightedNodes = nodes.filter(n => n.weight != null);
+    const weightedEdges = edges.filter(e => e.weight != null);
+    if(weightedNodes.length===0 && weightedEdges.length===0) return '';
+    let html = '<div class="prop-group"><h4>Bobot</h4>';
+    if(weightedNodes.length){
+      const total = weightedNodes.reduce((s,n)=>s+n.weight,0);
+      const max = weightedNodes.reduce((a,b)=>b.weight>a.weight?b:a);
+      const min = weightedNodes.reduce((a,b)=>b.weight<a.weight?b:a);
+      html += '<div class="prop-row"><span class="k">Total bobot simpul</span><span class="v">'+total+'</span></div>'+
+        '<div class="prop-row"><span class="k">Simpul terberat</span><span class="v">'+max.label+' ('+max.weight+')</span></div>'+
+        '<div class="prop-row"><span class="k">Simpul teringan</span><span class="v">'+min.label+' ('+min.weight+')</span></div>';
+    }
+    if(weightedEdges.length){
+      const total = weightedEdges.reduce((s,e)=>s+e.weight,0);
+      html += '<div class="prop-row"><span class="k">Total bobot sisi</span><span class="v">'+total+'</span></div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function renderColoringPanel(inst){
+    const el = document.getElementById('tabColoring');
+    if(!el) return;
+    const nodes = inst.nodes, edges = inst.edges;
+    if(nodes.length===0){ el.innerHTML = '<div class="gx-empty">Gambar graf dulu untuk mewarnainya.</div>'; return; }
+    const res = chromaticNumberOf(nodes, edges);
+    const validity = coloringValidityOf(nodes, edges);
+    let html = '<div class="prop-group"><h4>Bilangan kromatik</h4>';
+    html += '<div class="prop-row"><span class="k">χ(G)</span><span class="v">'+(res.k==null ? '<span class="gx-badge warn">tak tersimpulkan (batas komputasi)</span>' : '<span class="gx-badge yes">'+res.k+'</span>')+'</span></div>';
+    html += '</div><div class="prop-group"><h4>Status pewarnaan saat ini</h4>';
+    if(!validity.allColored){
+      html += '<div class="prop-row"><span class="k">Kelengkapan</span><span class="v"><span class="gx-badge warn">belum semua simpul diwarnai</span></span></div>';
+    }
+    html += '<div class="prop-row"><span class="k">Validitas</span><span class="v">'+(validity.valid ? '<span class="gx-badge yes">valid, tidak ada tetangga sewarna</span>' : '<span class="gx-badge no">'+validity.invalidEdges.length+' sisi menghubungkan simpul sewarna</span>')+'</span></div>';
+    html += '</div><div class="prop-group"><h4>Legenda warna</h4>';
+    COLOR_PALETTE.forEach((c,i) => { html += '<span class="gx-coloring-swatch"><i style="background:'+c+';"></i>warna '+(i+1)+'</span>'; });
+    html += '</div>';
+    html += '<div style="font-size:11.5px;color:var(--ink-dim);line-height:1.6;">Shift+klik simpul untuk ganti warna manual satu per satu, atau tombol "Warnai otomatis" di panel kiri untuk langsung memakai χ(G) warna.</div>';
+    el.innerHTML = html;
+  }
+
+  // =================================================================
+  // Isomorphism comparison panel
+  // =================================================================
+  function renderIsoComparison(instA, instB){
+    const el = document.getElementById('isoResult');
+    const nA=instA.nodes, eA=instA.edges, nB=instB.nodes, eB=instB.edges;
+    if(nA.length===0 || nB.length===0){
+      el.innerHTML = '<div class="gx-empty">Gambar graf di kedua kanvas untuk membandingkannya.</div>';
+      return;
+    }
+    const degA = degreeInfoOf(nA,eA).deg, degB = degreeInfoOf(nB,eB).deg;
+    const seqA = nA.map(n=>degA[n.id]).sort((a,b)=>a-b);
+    const seqB = nB.map(n=>degB[n.id]).sort((a,b)=>a-b);
+    const compsA = weakComponentsOf(nA,eA).length, compsB = weakComponentsOf(nB,eB).length;
+    const bipA = bipartiteCheckOf(nA,eA).bipartite, bipB = bipartiteCheckOf(nB,eB).bipartite;
+
+    let reason = null;
+    if(nA.length !== nB.length) reason = 'Banyak simpul beda: |V₁|='+nA.length+' vs |V₂|='+nB.length+'.';
+    else if(eA.length !== eB.length) reason = 'Banyak sisi beda: |E₁|='+eA.length+' vs |E₂|='+eB.length+'.';
+    else if(seqA.join(',') !== seqB.join(',')) reason = 'Barisan derajat beda: ['+seqA.join(',')+'] vs ['+seqB.join(',')+'].';
+    else if(compsA !== compsB) reason = 'Jumlah komponen terhubung beda: '+compsA+' vs '+compsB+'.';
+    else if(bipA !== bipB) reason = 'Satu graf bipartit, yang lain tidak.';
+
+    const { adj: adjA, labelOf: labA } = reindexAdjacency(nA, eA);
+    const { adj: adjB, labelOf: labB } = reindexAdjacency(nB, eB);
+    const mapping = reason ? null : findMapping(adjA, adjB);
+    const isIso = !reason && mapping !== null;
+
+    let html = '<div class="iso-verdict"><span class="badge-big '+(isIso?'yes':'no')+'">'+(isIso?'Isomorfik':'Bukan isomorfik')+'</span></div>';
+    if(isIso){
+      html += '<div class="iso-reason">Semua ciri dasar (|V|, |E|, barisan derajat, komponen, bipartit) cocok, dan ditemukan pemetaan simpul yang mempertahankan semua sisi.</div>';
+      const pairs = Object.keys(mapping).map(k => labA[Number(k)].label + ' ↔ ' + labB[mapping[k]].label);
+      html += '<div class="iso-mapping"><b>Pemetaan:</b> ' + pairs.join(', ') + '</div>';
+    } else {
+      html += '<div class="iso-reason">'+(reason || 'Semua ciri dasar (|V|, |E|, barisan derajat, komponen, bipartit) sama, tapi tidak ditemukan pemetaan simpul yang mempertahankan semua sisi persis, struktur sambungannya tetap beda.')+'</div>';
+    }
+    el.innerHTML = html;
+  }
+
+  // =================================================================
+  // Wiring
+  // =================================================================
+  let lastActive = null;
+  function setLastActive(inst){ lastActive = inst; }
+  let currentMode = 'undirected';
+  let activeSingle = null;
+
+  function parseSetInput(text){
+    const matches = text.match(/\{[^}]*\}/g);
+    if(!matches || matches.length<2){
+      alert('Format tidak dikenali. Contoh:\nV = {A,B,C}\nE = {(A,B),(B,C)}');
+      return null;
+    }
+    const labels = matches[0].replace(/[{}]/g,'').split(',').map(s=>s.trim()).filter(Boolean);
+    const pairRe = /\(([^,]+),([^)]+)\)/g;
+    const pairs = []; let m;
+    while((m = pairRe.exec(matches[1]))) pairs.push([m[1].trim(), m[2].trim()]);
+    const labelSet = new Set(labels);
+    for(const [a,b] of pairs){
+      if(!labelSet.has(a) || !labelSet.has(b)){
+        alert('Sisi ('+a+','+b+') memuat simpul yang tidak ada di V.');
+        return null;
+      }
+    }
+    return { labels, pairs };
+  }
+
+  const undirectedInst = createGraphInstance(document.getElementById('hostUndirected'), {
+    uid: 'u', directed: false, allowMultiDefault: false, allowColoring: true,
+    hintText: '<b>Klik</b> kosong: tambah simpul · <b>klik</b> 2 simpul: buat sisi · <b>seret</b>: pindah · <b>klik kanan</b>: hapus · <b>Ctrl+klik ganda</b>: ganti nama · <b>Alt+klik</b>: bobot · <b>Shift+klik</b>: warna (mode Berwarna)',
+    setLastActive,
+    onChange: (inst) => {
+      if(currentMode==='undirected' || currentMode==='colored'){
+        renderSharedAnalysis(inst);
+        if(currentMode==='colored') renderColoringPanel(inst);
+      }
+    }
+  });
+  const directedInst = createGraphInstance(document.getElementById('hostDirected'), {
+    uid: 'd', directed: true, allowMultiDefault: false,
+    hintText: '<b>Klik</b> kosong: tambah simpul · <b>klik</b> 2 simpul (urut): buat sisi berarah · <b>seret</b>: pindah · <b>klik kanan</b>: hapus',
+    setLastActive,
+    onChange: (inst) => { if(currentMode==='directed') renderSharedAnalysis(inst); }
+  });
+  const isoAInst = createGraphInstance(document.getElementById('isoACanvasHost'), {
+    uid: 'ia', directed: false, allowMultiDefault: false,
+    hintText: 'Gambar graf pertama di sini',
+    setLastActive,
+    onChange: () => { if(currentMode==='iso') renderIsoComparison(isoAInst, isoBInst); }
+  });
+  const isoBInst = createGraphInstance(document.getElementById('isoBCanvasHost'), {
+    uid: 'ib', directed: false, allowMultiDefault: false,
+    hintText: 'Gambar graf kedua di sini',
+    setLastActive,
+    onChange: () => { if(currentMode==='iso') renderIsoComparison(isoAInst, isoBInst); }
+  });
+  const amalgamAInst = createGraphInstance(document.getElementById('amalgamACanvasHost'), {
+    uid: 'ama', directed: false, allowMultiDefault: false,
+    hintText: 'Gambar graf pertama di sini',
+    setLastActive,
+    onChange: () => { if(currentMode==='amalgam') refreshAmalgamSelects(); }
+  });
+  const amalgamBInst = createGraphInstance(document.getElementById('amalgamBCanvasHost'), {
+    uid: 'amb', directed: false, allowMultiDefault: false,
+    hintText: 'Gambar graf kedua di sini',
+    setLastActive,
+    onChange: () => { if(currentMode==='amalgam') refreshAmalgamSelects(); }
+  });
+  const amalgamResultInst = createGraphInstance(document.getElementById('hostAmalgamResult'), {
+    uid: 'amr', directed: false, allowMultiDefault: false,
+    hintText: 'Hasil amalgamasi muncul di sini, masih bisa diedit manual',
+    setLastActive,
+    onChange: (inst) => { if(currentMode==='amalgam') renderSharedAnalysis(inst, { props:'tabPropsAm', matrix:'tabMatrixAm', edges:'tabEdgesAm' }); }
+  });
+
+  function refreshAmalgamSelects(){
+    const selA = document.getElementById('amalgamSelectA');
+    const selB = document.getElementById('amalgamSelectB');
+    const curA = selA.value, curB = selB.value;
+    selA.innerHTML = amalgamAInst.nodes.map(n => '<option value="'+n.label+'">'+n.label+'</option>').join('') || '<option value="">(belum ada simpul)</option>';
+    selB.innerHTML = amalgamBInst.nodes.map(n => '<option value="'+n.label+'">'+n.label+'</option>').join('') || '<option value="">(belum ada simpul)</option>';
+    if(amalgamAInst.nodes.some(n=>n.label===curA)) selA.value = curA;
+    if(amalgamBInst.nodes.some(n=>n.label===curB)) selB.value = curB;
+  }
+
+  function performAmalgamation(){
+    const labelA = document.getElementById('amalgamSelectA').value;
+    const labelB = document.getElementById('amalgamSelectB').value;
+    if(!labelA || !labelB){ alert('Pilih titik penempel di kedua graf terlebih dahulu.'); return; }
+    const nodeA = amalgamAInst.nodes.find(n=>n.label===labelA);
+    const nodeB = amalgamBInst.nodes.find(n=>n.label===labelB);
+    if(!nodeA || !nodeB) return;
+    let nid = 1;
+    const idMapA = {}, idMapB = {};
+    const newNodes = [];
+    amalgamAInst.nodes.forEach(n => { const id=nid++; idMapA[n.id]=id; newNodes.push({ id, label:n.label, x:n.x, y:n.y, customLabel:true }); });
+    const dx = nodeA.x - nodeB.x, dy = nodeA.y - nodeB.y;
+    amalgamBInst.nodes.forEach(n => {
+      if(n.id === nodeB.id){ idMapB[n.id] = idMapA[nodeA.id]; return; }
+      const id = nid++; idMapB[n.id] = id;
+      const dup = amalgamAInst.nodes.some(an => an.label === n.label);
+      newNodes.push({ id, label: dup ? (n.label+"'") : n.label, x: n.x+dx, y: n.y+dy, customLabel:true });
+    });
+    let eid = 1; const newEdges = [];
+    amalgamAInst.edges.forEach(e => newEdges.push({ id: eid++, a: idMapA[e.a], b: idMapA[e.b] }));
+    amalgamBInst.edges.forEach(e => newEdges.push({ id: eid++, a: idMapB[e.a], b: idMapB[e.b] }));
+    amalgamResultInst.loadGraph(newNodes, newEdges);
+    renderSharedAnalysis(amalgamResultInst, { props:'tabPropsAm', matrix:'tabMatrixAm', edges:'tabEdgesAm' });
+  }
+
+  const hostUndirectedEl = document.getElementById('hostUndirected');
+  const hostDirectedEl = document.getElementById('hostDirected');
+  activeSingle = undirectedInst;
+
+  const modeSwitch = document.getElementById('modeSwitch');
+  const viewSingle = document.getElementById('viewSingle');
+  const viewIso = document.getElementById('viewIso');
+  const viewAmalgam = document.getElementById('viewAmalgam');
+  const modeHint = document.getElementById('modeHint');
+  const toggleMultiEl = document.getElementById('toggleMulti');
+  const btnAutoColorEl = document.getElementById('btnAutoColor');
+  const tabColoringBtnEl = document.getElementById('tabColoringBtn');
+  const namingSwitchEl = document.getElementById('namingSwitch');
+
+  function resetToPropsTab(){
+    const panel = document.getElementById('sharedAnalysisPanel');
+    panel.querySelectorAll('.tabs .tab').forEach(x=>x.classList.remove('active'));
+    panel.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+    panel.querySelector('[data-tab="tabProps"]').classList.add('active');
+    document.getElementById('tabProps').classList.add('active');
+  }
+
+  modeSwitch.addEventListener('click', (ev) => {
+    const btn = ev.target.closest('button[data-mode]');
+    if(!btn) return;
+    const mode = btn.dataset.mode;
+    if(mode === currentMode) return;
+    currentMode = mode;
+    modeSwitch.querySelectorAll('button').forEach(b => b.classList.toggle('active', b===btn));
+
+    if(mode === 'iso'){
+      viewSingle.style.display = 'none'; viewAmalgam.style.display = 'none';
+      viewIso.style.display = 'block';
+      modeHint.textContent = 'gambar dua graf berbeda, lalu bandingkan hasilnya di panel bawah';
+      renderIsoComparison(isoAInst, isoBInst);
+    } else if(mode === 'amalgam'){
+      viewSingle.style.display = 'none'; viewIso.style.display = 'none';
+      viewAmalgam.style.display = 'block';
+      modeHint.textContent = 'pilih titik penempel di kedua graf, lalu gabungkan';
+      refreshAmalgamSelects();
+      renderSharedAnalysis(amalgamResultInst, { props:'tabPropsAm', matrix:'tabMatrixAm', edges:'tabEdgesAm' });
+    } else {
+      viewIso.style.display = 'none'; viewAmalgam.style.display = 'none';
+      viewSingle.style.display = 'block';
+      modeHint.textContent = 'gambar di kanvas, hasilnya otomatis muncul di panel bawah';
+      toggleMultiEl.style.display = '';
+      const inst = mode === 'directed' ? directedInst : undirectedInst;
+      hostUndirectedEl.style.display = (mode === 'undirected' || mode === 'colored') ? '' : 'none';
+      hostDirectedEl.style.display = (mode === 'directed') ? '' : 'none';
+      activeSingle = inst;
+      btnAutoColorEl.style.display = (mode === 'colored') ? '' : 'none';
+      tabColoringBtnEl.style.display = (mode === 'colored') ? '' : 'none';
+      if(mode !== 'colored' && tabColoringBtnEl.classList.contains('active')) resetToPropsTab();
+      renderSharedAnalysis(inst);
+      if(mode === 'colored') renderColoringPanel(inst);
+      toggleMultiEl.classList.toggle('on', inst.allowMulti);
+      namingSwitchEl.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.style === inst.namingStyle));
+    }
+  });
+
+  toggleMultiEl.addEventListener('click', () => {
+    activeSingle.setAllowMulti(!activeSingle.allowMulti);
+    toggleMultiEl.classList.toggle('on', activeSingle.allowMulti);
+  });
+  namingSwitchEl.addEventListener('click', (ev) => {
+    const btn = ev.target.closest('button[data-style]');
+    if(!btn) return;
+    namingSwitchEl.querySelectorAll('button').forEach(b => b.classList.toggle('active', b===btn));
+    activeSingle.setNamingStyle(btn.dataset.style);
+  });
+  btnAutoColorEl.addEventListener('click', () => {
+    const res = undirectedInst.autoColor();
+    if(res.k == null) alert('Graf terlalu besar / kompleks untuk dihitung otomatis dalam batas waktu yang wajar.');
+  });
+  document.getElementById('btnUndoSingle').addEventListener('click', () => activeSingle.undo());
+  document.getElementById('btnRandomSingle').addEventListener('click', () => activeSingle.randomGraph());
+  document.getElementById('btnClearSingle').addEventListener('click', () => activeSingle.clear());
+  document.getElementById('btnDrawSetSingle').addEventListener('click', () => {
+    const val = parseSetInput(document.getElementById('setInputSingle').value);
+    if(val) activeSingle.loadFromSets(val.labels, val.pairs);
+  });
+
+  document.getElementById('btnUndoA').addEventListener('click', () => isoAInst.undo());
+  document.getElementById('btnRandomA').addEventListener('click', () => isoAInst.randomGraph());
+  document.getElementById('btnClearA').addEventListener('click', () => isoAInst.clear());
+  document.getElementById('btnUndoB').addEventListener('click', () => isoBInst.undo());
+  document.getElementById('btnRandomB').addEventListener('click', () => isoBInst.randomGraph());
+  document.getElementById('btnClearB').addEventListener('click', () => isoBInst.clear());
+
+  document.getElementById('btnUndoAmA').addEventListener('click', () => amalgamAInst.undo());
+  document.getElementById('btnRandomAmA').addEventListener('click', () => amalgamAInst.randomGraph());
+  document.getElementById('btnClearAmA').addEventListener('click', () => amalgamAInst.clear());
+  document.getElementById('btnUndoAmB').addEventListener('click', () => amalgamBInst.undo());
+  document.getElementById('btnRandomAmB').addEventListener('click', () => amalgamBInst.randomGraph());
+  document.getElementById('btnClearAmB').addEventListener('click', () => amalgamBInst.clear());
+  document.getElementById('btnAmalgamate').addEventListener('click', performAmalgamation);
+
+  document.querySelectorAll('.tabs .tab').forEach(t => {
+    t.addEventListener('click', () => {
+      const panel = t.closest('.analysis-panel') || document;
+      panel.querySelectorAll('.tabs .tab').forEach(x=>x.classList.remove('active'));
+      panel.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      const content = document.getElementById(t.dataset.tab);
+      if(content) content.classList.add('active');
+    });
+  });
+
+  window.addEventListener('keydown', (ev) => {
+    const tag = (ev.target && ev.target.tagName) || '';
+    if(tag === 'TEXTAREA' || tag === 'INPUT' || tag === 'SELECT' || (ev.target && ev.target.isContentEditable)) return;
+    if(!lastActive) return;
+    if(ev.key==='Delete' || ev.key==='Backspace'){ ev.preventDefault(); lastActive.deleteSelectedEdge(); }
+    if(ev.ctrlKey && ev.key==='z'){ ev.preventDefault(); lastActive.undo(); }
+    if(ev.key==='w' || ev.key==='W'){ lastActive.setSelectedEdgeWeight && lastActive.setSelectedEdgeWeight(); }
+  });
+
+  renderSharedAnalysis(undirectedInst);
+  initTheoryVisuals();
+})();
+</script>
+<script>
+(function(){
+  var root=document.documentElement,rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  requestAnimationFrame(function(){root.classList.add('go')});
+  /* graf Petersen di hero: melayang pelan, menghindar dari kursor */
+  (function(){
+    var svg=document.getElementById('hg');if(!svg)return;
+    var NS='http://www.w3.org/2000/svg',base=[],E=[],i,k;
+    for(i=0;i<5;i++){var a=-Math.PI/2+i*2*Math.PI/5;base.push([200+150*Math.cos(a),200+150*Math.sin(a)])}
+    for(i=0;i<5;i++){var a2=-Math.PI/2+i*2*Math.PI/5;base.push([200+74*Math.cos(a2),200+74*Math.sin(a2)])}
+    for(i=0;i<5;i++){E.push([i,(i+1)%5]);E.push([i,i+5]);E.push([i+5,(i+2)%5+5])}
+    var L=E.map(function(){var l=document.createElementNS(NS,'line');svg.appendChild(l);return l});
+    var C=base.map(function(){var c=document.createElementNS(NS,'circle');c.setAttribute('r',8);svg.appendChild(c);return c});
+    var P=base.map(function(b){return {x:b[0],y:b[1]}}),mx=-999,my=-999;
+    function draw(){
+      E.forEach(function(e,j){var l=L[j];l.setAttribute('x1',P[e[0]].x);l.setAttribute('y1',P[e[0]].y);l.setAttribute('x2',P[e[1]].x);l.setAttribute('y2',P[e[1]].y)});
+      C.forEach(function(c,j){c.setAttribute('cx',P[j].x);c.setAttribute('cy',P[j].y)});
+    }
+    draw();if(rm)return;
+    svg.parentNode.parentNode.addEventListener('pointermove',function(e){var r=svg.getBoundingClientRect();mx=(e.clientX-r.left)/r.width*400;my=(e.clientY-r.top)/r.height*400});
+    svg.parentNode.parentNode.addEventListener('pointerleave',function(){mx=my=-999});
+    function loop(t){
+      for(k=0;k<P.length;k++){
+        var tx=base[k][0]+Math.sin(t*.0007+k*1.3)*9,ty=base[k][1]+Math.cos(t*.0006+k*1.7)*9;
+        var dx=tx-mx,dy=ty-my,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<90&&d>0.1){var f=(90-d)*.7;tx+=dx/d*f;ty+=dy/d*f}
+        P[k].x+=(tx-P[k].x)*.08;P[k].y+=(ty-P[k].y)*.08;
+      }
+      draw();requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  })();
+  /* contoh siap pakai */
+  [].forEach.call(document.querySelectorAll('#presets button'),function(bt){
+    bt.addEventListener('click',function(){
+      document.getElementById('setInputSingle').value=bt.getAttribute('data-set');
+      document.getElementById('btnDrawSetSingle').click();
+    });
+  });
+
+
+  /* sentuh: seret simpul dan tahan lama untuk menghapus (kode asli hanya paham mouse) */
+  (function(){
+    function ev(type,t,x,y,extra){var e=new MouseEvent(type,{bubbles:true,cancelable:true,clientX:x,clientY:y,view:window,button:0});return e}
+    [].forEach.call(document.querySelectorAll('.canvas-host'),function(h){
+      var svg=h.querySelector('.gx-canvas-wrap svg');if(!svg)return;
+      var tgt=null,moved=false,sx=0,sy=0,timer=null,long=false;
+      svg.addEventListener('touchstart',function(e){
+        if(e.touches.length!==1)return;
+        var t=e.touches[0],el=e.target;
+        var g=el.closest&&el.closest('g');
+        if(!g||!g.querySelector('.gx-node-circle')||el.classList.contains('gx-edge-hit'))return;
+        e.preventDefault();tgt=el;moved=false;long=false;sx=t.clientX;sy=t.clientY;
+        el.dispatchEvent(ev('mousedown',el,t.clientX,t.clientY));
+        timer=setTimeout(function(){
+          if(moved||!tgt)return;long=true;
+          window.dispatchEvent(ev('mouseup',null,sx,sy));
+          var cur=document.elementFromPoint(sx,sy)||tgt;
+          cur.dispatchEvent(ev('contextmenu',cur,sx,sy));tgt=null;
+        },650);
+      },{passive:false});
+      function mv(e){
+        if(!tgt)return;e.preventDefault();var t=e.touches[0];
+        if(Math.abs(t.clientX-sx)>6||Math.abs(t.clientY-sy)>6){moved=true;clearTimeout(timer)}
+        window.dispatchEvent(ev('mousemove',null,t.clientX,t.clientY));
+      }
+      function end(e){
+        var el=e.currentTarget;
+        el.removeEventListener('touchmove',mv);el.removeEventListener('touchend',end);el.removeEventListener('touchcancel',end);
+        if(!tgt)return;clearTimeout(timer);e.preventDefault();
+        var t=e.changedTouches[0];window.dispatchEvent(ev('mouseup',null,t.clientX,t.clientY));tgt=null;
+      }
+      svg.addEventListener('touchstart',function(e){
+        if(tgt)return;
+        var el=e.target;if(el&&el.addEventListener&&tgt===null){
+          /* dipasang langsung di elemen: tetap menerima event walau simpul digambar ulang saat digeser */
+          setTimeout(function(){},0);
+          var g=el.closest&&el.closest('g');
+          if(g&&g.querySelector('.gx-node-circle')&&!el.classList.contains('gx-edge-hit')){
+            el.addEventListener('touchmove',mv,{passive:false});el.addEventListener('touchend',end,{passive:false});el.addEventListener('touchcancel',end,{passive:false});
+          }
+        }
+      },{passive:false,capture:true});
+    });
+  })();
+  /* latar kanvas + unduh PNG */
+  (function(){
+    var BGC={dots:'#FFFDFB',paper:'#F6EEDB',plain:'#FFFFFF'};
+    function setBg(k){
+      root.setAttribute('data-bg',k);
+      [].forEach.call(document.querySelectorAll('.gx-bgsw button'),function(x){var on=x.getAttribute('data-bg')===k;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on?'true':'false')});
+      try{localStorage.setItem('ns-gx-bg',k)}catch(e){}
+    }
+    var props=['fill','stroke','stroke-width','stroke-dasharray','opacity','fill-opacity','stroke-opacity','font-size','font-weight','font-style','text-anchor','dominant-baseline','stroke-linecap','stroke-linejoin'];
+    function exportPng(host,name){
+      var svg=host.querySelector('.gx-canvas-wrap svg');if(!svg)return;
+      var r=svg.getBoundingClientRect(),W=Math.round(r.width),H=Math.round(r.height),S=2;
+      var clone=svg.cloneNode(true),o=svg.querySelectorAll('*'),c=clone.querySelectorAll('*'),i,j;
+      for(i=0;i<o.length;i++){
+        var cs=getComputedStyle(o[i]),st='';
+        for(j=0;j<props.length;j++)st+=props[j]+':'+cs.getPropertyValue(props[j])+';';
+        st+="font-family:Inter,Helvetica,Arial,sans-serif;";
+        c[i].setAttribute('style',st);
+      }
+      [].forEach.call(clone.querySelectorAll('.gx-edge-hit'),function(e){e.parentNode.removeChild(e)});
+      clone.setAttribute('xmlns','http://www.w3.org/2000/svg');clone.setAttribute('width',W);clone.setAttribute('height',H);
+      clone.removeAttribute('style');clone.removeAttribute('class');
+      var data='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(clone));
+      var img=new Image();
+      img.onload=function(){
+        var cv=document.createElement('canvas');cv.width=W*S;cv.height=H*S;var x=cv.getContext('2d');
+        var k=root.getAttribute('data-bg')||'dots';
+        x.fillStyle=BGC[k];x.fillRect(0,0,cv.width,cv.height);
+        if(k==='dots'){x.fillStyle='#E4DAD5';for(var px=1;px<W;px+=24)for(var py=1;py<H;py+=24){x.beginPath();x.arc(px*S,py*S,S,0,6.2832);x.fill()}}
+        x.drawImage(img,0,0,W*S,H*S);
+        cv.toBlob(function(bl){var a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download=name+'.png';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(a.href)},2000)},'image/png');
+      };
+      img.src=data;
+    }
+    var saved='dots';try{saved=localStorage.getItem('ns-gx-bg')||'dots'}catch(e){}
+    [].forEach.call(document.querySelectorAll('.canvas-host'),function(h,n){
+      var t=document.createElement('div');t.className='gx-tools';
+      t.innerHTML='<div class="gx-bgsw" role="group" aria-label="Latar kanvas"><button type="button" data-bg="dots">Titik</button><button type="button" data-bg="paper">Kertas</button><button type="button" data-bg="plain">Polos</button></div><button type="button" class="gx-dl" aria-label="Unduh grafik sebagai PNG">PNG <span aria-hidden="true">↓</span></button>';
+      h.appendChild(t);
+      t.querySelector('.gx-dl').addEventListener('click',function(){exportPng(h,'graf-northern-sky-'+(h.id||('kanvas'+n)).replace(/^host|CanvasHost$/g,'').toLowerCase())});
+      [].forEach.call(t.querySelectorAll('.gx-bgsw button'),function(bt){bt.addEventListener('click',function(){setBg(bt.getAttribute('data-bg'))})});
+    });
+    setBg(BGC[saved]?saved:'dots');
+  })();
+  var nav=document.getElementById('nav');
+  function navState(){nav.classList.toggle('solid',window.scrollY>40)}
+  addEventListener('scroll',navState,{passive:true});navState();
+
+  /* ---------- footer CV: pencet -> Normand -> cv.html ---------- */
+  (function(){
+    var col=document.getElementById('cvcol');if(!col)return;
+    var tog=col.querySelector('.cvtog'),name=col.querySelector('.cvname');
+    var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    tog.addEventListener('click',function(){
+      var o=col.classList.toggle('open');tog.setAttribute('aria-expanded',o?'true':'false');
+      if(o)setTimeout(function(){var r=name.getBoundingClientRect();if(r.bottom>innerHeight-10)window.scrollBy({top:r.bottom-innerHeight+40,behavior:'smooth'})},650);
+    });
+    var pt=document.getElementById('pt');
+    name.addEventListener('click',function(e){
+      var h=name.getAttribute('href');if(h.charAt(0)==='#')return;
+      if(rm||!pt||!pt.animate||e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;
+      e.preventDefault();
+      var x=e.clientX||innerWidth/2,y=e.clientY||innerHeight/2;
+      pt.style.visibility='visible';
+      var a=pt.animate([{clipPath:'circle(0px at '+x+'px '+y+'px)'},{clipPath:'circle(150% at '+x+'px '+y+'px)'}],{duration:650,easing:'cubic-bezier(.65,0,.35,1)',fill:'forwards'});
+      try{sessionStorage.setItem('ns-pt','1')}catch(_){}
+      var go=function(){location.href=h};a.onfinish=go;setTimeout(go,900);
+    });
+    window.addEventListener('pageshow',function(e){
+      if(e.persisted&&pt){pt.getAnimations().forEach(function(a){a.cancel()});pt.style.visibility='hidden'}
+    });
+  })();
+
+})();
+</script>
+</body>
+</html>
