@@ -357,6 +357,7 @@ details.concept .concept-body p{margin:0 0 12px;max-width:72ch}
 .mode-switch button small{font-size:10.5px;letter-spacing:.06em;margin-left:6px;opacity:.8}
 
 .algp{gap:12px}
+.note2{font-size:13px;line-height:1.5;color:var(--mar);background:var(--tint);border-radius:12px;padding:10px 12px}
 .alg-head{display:flex;justify-content:space-between;align-items:center}
 .alg-t{font:600 11.5px var(--sans,Inter);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
 .alg-tools{display:flex;gap:6px}
@@ -483,6 +484,40 @@ body.kb-on{padding-bottom:0}
 .rx-ctl{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.rx-ctl .gx-btn{margin:0}
 .rx-ctl .gx-btn:disabled{opacity:.4;cursor:default}.rx-ctl #rx-auto.on{background:var(--tint);border-color:var(--mar);color:var(--mar)}
 @media (max-width:900px){.rx-grid{grid-template-columns:1fr}.rx-body{min-height:0}}
+.rx-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn.alt{background:transparent;color:var(--mar);border:1.5px solid var(--mar);display:inline-flex;align-items:center;gap:8px}
+.btn.alt:hover{background:var(--tint)}
+@keyframes fin{from{opacity:0}to{opacity:1}}
+body.film-on{overflow:hidden}
+.film{position:fixed;inset:0;z-index:90;background:rgba(14,4,8,.94);display:grid;place-items:center;animation:fin .3s}
+.film[hidden]{display:none}
+.film-box{width:min(1240px,96vw,calc((100vh - 130px)*1.7778));display:grid;gap:10px}
+.film-head{display:flex;justify-content:space-between;align-items:center;color:#fff}
+.film-chip{font:600 12.5px Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#F3C6CC;background:rgba(255,255,255,.08);padding:7px 14px;border-radius:99px}
+.fm-ib{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;display:grid;place-items:center;cursor:pointer;flex:none}
+.fm-ib:hover{background:rgba(255,255,255,.2)}.fm-ib.big{width:48px;height:48px;background:#fff;color:#7A1F2B}
+.film-vid{position:relative;aspect-ratio:16/9;border-radius:20px;overflow:hidden;background:#14050a;box-shadow:0 30px 80px -20px rgba(0,0,0,.7)}
+.film-vid video{position:absolute;inset:0;width:100%;height:100%;background:#14050a;display:block}
+.film-live{position:absolute;inset:0;overflow:hidden}
+.film-live[hidden]{display:none}
+.film-live .fs-stage{position:absolute;left:0;top:0;transform-origin:0 0}
+.film-live .fs-stage canvas{position:absolute;left:0;top:0}
+.fm-snd{display:flex;gap:8px;align-items:center;height:38px;padding:0 16px;border-radius:99px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font:600 13px Inter,sans-serif;cursor:pointer}.fm-snd.on{background:#fff;color:#7A1F2B}.fm-snd .w{opacity:.35}.fm-snd.on .w{opacity:1}
+.fm-note{font:13px Inter,sans-serif;color:#F3C6CC;background:rgba(255,255,255,.07);padding:8px 14px;border-radius:12px}.fm-note[hidden]{display:none}
+.film-ctl{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.07);border-radius:99px;padding:8px 14px}
+.film-ctl[hidden]{display:none}
+.film-ctl input{flex:1;accent-color:#fff;min-width:60px}
+.fm-time{font:12.5px var(--mono);color:#F3C6CC;min-width:84px;text-align:center}
+.film-end{position:absolute;inset:0;display:grid;place-content:center;gap:14px;justify-items:center;text-align:center;background:rgba(20,5,10,.6);color:#fff;z-index:3}
+.film-end[hidden]{display:none}.film-end div{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}.film-end .gx-btn{margin:0;width:auto;padding:0 20px}
+.fs-stage{position:relative;width:1280px;height:720px;overflow:hidden;background:#14050a;transform-origin:0 0;font-family:Inter,"Helvetica Neue",Arial,sans-serif}
+.fs-stage canvas{position:absolute;left:0;top:0;width:1280px;height:720px}
+.fs-ov{position:absolute;inset:0;pointer-events:none}
+.fs-o{position:absolute;white-space:nowrap;line-height:1.2;color:#FBEFEA;will-change:transform,opacity}
+.fs-o b{font-weight:600}
+.fs-o .katex{font-size:1em}
+.fs-sub{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);width:1040px;text-align:center;font-size:25px;line-height:1.45;color:#FFF6F2;padding:12px 26px;border-radius:16px;background:linear-gradient(180deg,rgba(20,5,10,0),rgba(20,5,10,.55));text-shadow:0 2px 10px rgba(0,0,0,.6);opacity:0}
+.fs-sub .katex{color:#F5C26B}
 </style>
 </head>
 <body id="top">
@@ -535,11 +570,13 @@ body.kb-on{padding-bottom:0}
   </div>
 
   <div id="view2" hidden>
-    <div class="presets"><span>Coba contoh:</span><span id="pre2" style="display:contents"><button type="button" data-f="x^2+y^2" data-a="0" data-b="1" data-c="0" data-d="1" data-n="8" data-tex="x^2+y^2">x^2+y^2</button><button type="button" data-f="sin(x)*cos(y)" data-a="0" data-b="pi" data-c="0" data-d="pi/2" data-n="10" data-tex="\sin x\cos y">sin x cos y</button><button type="button" data-f="e^(-(x^2+y^2))" data-a="-2" data-b="2" data-c="-2" data-d="2" data-n="14" data-tex="e^{-(x^2+y^2)}">Lonceng 2D</button><button type="button" data-f="x+y" data-a="0" data-b="1" data-c="0" data-d="x" data-n="8" data-tex="x+y">Segitiga</button><button type="button" data-f="4-x^2-y^2" data-a="-2" data-b="2" data-c="-sqrt(4-x^2)" data-d="sqrt(4-x^2)" data-n="14" data-tex="4-x^2-y^2">Paraboloid</button></span></div>
+    <div class="presets"><span>Coba contoh:</span><span id="pre2" style="display:contents"><button type="button" data-f="x^2+y^2" data-a="0" data-b="1" data-c="0" data-d="1" data-n="8" data-tex="x^2+y^2">x^2+y^2</button><button type="button" data-f="sin(x)*cos(y)" data-a="0" data-b="pi" data-c="0" data-d="pi/2" data-n="10" data-tex="\sin x\cos y">sin x cos y</button><button type="button" data-f="e^(-(x^2+y^2))" data-a="-2" data-b="2" data-c="-2" data-d="2" data-n="14" data-tex="e^{-(x^2+y^2)}">Lonceng 2D</button><button type="button" data-f="x+y" data-a="0" data-b="1" data-c="0" data-d="x" data-n="8" data-tex="x+y" data-sw="y|1|0|1">Segitiga</button><button type="button" data-f="4-x^2-y^2" data-a="-2" data-b="2" data-c="-sqrt(4-x^2)" data-d="sqrt(4-x^2)" data-n="14" data-tex="4-x^2-y^2" data-sw="-sqrt(4-y^2)|sqrt(4-y^2)|-2|2">Paraboloid</button></span></div>
     <div class="layout">
       <div class="panel ctl algp">
         <div class="alg-head"><span class="alg-t">Aljabar</span><span class="alg-tools"><button type="button" class="ur undo" aria-label="Urungkan" disabled><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button><button type="button" class="ur redo" aria-label="Ulangi" disabled><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14l5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg></button></span></div>
         <div class="alg" id="alg2"></div>
+        <div class="fl"><span>Urutan integral</span><div class="gx-naming" id="ord2"><button type="button" class="active" data-o="yx" data-tex="dy\,dx">dy dx</button><button type="button" data-o="xy" data-tex="dx\,dy">dx dy</button></div></div>
+        <div class="note2" id="note2" hidden></div>
         <div class="fl"><span>Tampilan</span><div class="gx-naming" id="vm2"><button type="button" class="active" data-v="col">Kolom</button><button type="button" data-v="slice">Irisan</button></div></div>
         <div id="colCtl" class="ctl"><div class="ar"><span class="dot" style="--c:#8a7f82"></span><div class="arc wide"><span class="al nlab">n=</span><input type="range" id="n2" min="2" max="30" value="8" aria-label="Kolom per sisi n"><b id="n2v" class="nv">8</b></div></div>
           <label class="chk"><input type="checkbox" id="cols2" checked> Kolom</label>
@@ -566,7 +603,7 @@ body.kb-on{padding-bottom:0}
 <section class="sec" id="riemann">
   <div class="band"><div class="label">02<br>Pengantar</div><h2 class="big">Apa itu <em>integral Riemann?</em></h2><p class="note">Penjelasan dari nol, lengkap dengan animasi.</p></div>
   <div class="explain">
-    <div class="rx-intro"><p>Integral Riemann adalah cara menghitung luas di bawah kurva dengan memotongnya jadi batang-batang tipis, menjumlahkan luasnya, lalu membuat batangnya makin tipis tanpa batas. Mau lihat prosesnya pelan-pelan dari awal sampai dapat rumusnya?</p><button type="button" class="btn" id="rx-go">Mulai eksplor ↓</button></div>
+    <div class="rx-intro"><p>Integral Riemann adalah cara menghitung luas di bawah kurva dengan memotongnya jadi batang-batang tipis, menjumlahkan luasnya, lalu membuat batangnya makin tipis tanpa batas. Mau lihat prosesnya pelan-pelan dari awal sampai dapat rumusnya?</p><div class="rx-btns"><button type="button" class="btn" id="rx-go">Mulai eksplor ↓</button><button type="button" class="btn alt" id="fm-open"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6a1 1 0 0 0 1.5.9l11-6.8a1 1 0 0 0 0-1.8l-11-6.8A1 1 0 0 0 8 5.2z"/></svg> Lihat visual</button></div></div>
     <div class="rx" id="rx" hidden>
       <div class="rx-top"><div class="rx-chips"><span>Contoh fungsi:</span><span id="rx-ex" style="display:contents"></span></div><div class="rx-dots" id="rx-dots" role="group" aria-label="Pilih langkah"></div></div>
       <div class="rx-grid">
@@ -577,6 +614,23 @@ body.kb-on{padding-bottom:0}
     </div>
   </div>
 </section>
+
+<div class="film" id="film" hidden role="dialog" aria-modal="true" aria-label="Video penjelasan integral Riemann">
+  <div class="film-box">
+    <div class="film-head"><span class="film-chip">Video integral Riemann</span><span style="display:flex;gap:10px;align-items:center"><button type="button" class="fm-snd" id="fm-snd" aria-pressed="false" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="w" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>Suara narasi</button><button type="button" class="fm-ib" id="fm-close" aria-label="Tutup"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span></div>
+    <div id="fm-sndnote" class="fm-note" hidden>Perangkat ini belum punya suara bahasa Indonesia. Pasang di pengaturan suara sistem, atau coba browser lain.</div>
+    <div class="film-vid">
+      <video id="fm-video" preload="auto" playsinline controls></video>
+      <div class="film-live" id="fm-live" hidden><div class="fs-stage" id="fs-stage"><canvas id="fs-cv" width="1280" height="720"></canvas><div class="fs-ov" id="fs-ov"></div><div class="fs-sub" id="fs-sub"></div></div></div>
+      <div class="film-end" id="fm-end" hidden><b>Selesai</b><div><button type="button" class="gx-btn" id="fm-replay2">Putar ulang</button><button type="button" class="gx-btn solid" id="fm-explore">Eksplor sendiri</button></div></div>
+    </div>
+    <div class="film-ctl" id="fm-ctl" hidden>
+      <button type="button" class="fm-ib big" id="fm-pp" aria-label="Putar"></button>
+      <input type="range" id="fm-bar" min="0" max="1000" value="0" aria-label="Posisi video">
+      <span class="fm-time" id="fm-time">0:00</span>
+    </div>
+  </div>
+</div>
 
 <section class="sec" id="konsep">
   <div class="band"><div class="label">03<br>Konsep</div><h2 class="big">Cara <em>membacanya.</em></h2><p class="note">Buka yang mau dibaca.</p></div>
@@ -1015,16 +1069,19 @@ function readout1(){
 function syncC1(){const show=S1.trace.length>1;el('hostC').hidden=!show;if(show&&S1.ok)drawConv(el('cvC'),S1.trace,S1.ok.ex,20)}
 function upd1(){calc1();draw1();readout1();form1();syncC1()}
 /* ================= 2 LIPAT ================= */
-const S2={f:'x^2+y^2',a:'0',b:'1',c:'0',d:'1',n:8,view:'col',surf:true,cols:true,x0:.5,yaw:-0.75,pitch:.62,zoom:1,ok:null,trace:[],inf:false};
+const S2={order:'yx',f:'x^2+y^2',a:'0',b:'1',c:'0',d:'1',n:8,view:'col',surf:true,cols:true,x0:.5,yaw:-0.75,pitch:.62,zoom:1,ok:null,trace:[],inf:false};
 function calc2(){
   const err=el('err2');
   try{
-    const f=compileExpr(S2.f,['x','y']),cf=compileExpr(S2.c,['x']),df=compileExpr(S2.d,['x']),a=constVal(S2.a),b=constVal(S2.b);
-    if(!(a<b))throw new Error('batas x bawah harus lebih kecil dari batas atas');
+    const xy=S2.order==='xy',ou=xy?'y':'x',iv=xy?'x':'y',f0=compileExpr(S2.f,['x','y']);
+    let f,cf,df,a,b;
+    if(!xy){f=f0;cf=compileExpr(S2.c,['x']);df=compileExpr(S2.d,['x']);a=constVal(S2.a);b=constVal(S2.b)}
+    else{f=function(u,v){return f0(v,u)};cf=compileExpr(S2.a,['y']);df=compileExpr(S2.b,['y']);a=constVal(S2.c);b=constVal(S2.d)}
+    if(!(a<b))throw new Error('batas '+ou+' bawah harus lebih kecil dari batas atas');
     let cmin=1e300,dmax=-1e300,fmin=1e300,fmax=-1e300;const G=36;
     for(let i=0;i<=G;i++){const x=a+(b-a)*i/G,c=cf(x),d=df(x);
-      if(!isFinite(c)||!isFinite(d))throw new Error('batas y tidak terdefinisi di x = '+fmtNum(x,3));
-      if(d<c-1e-12)throw new Error('batas atas y lebih kecil dari batas bawah di x = '+fmtNum(x,3));
+      if(!isFinite(c)||!isFinite(d))throw new Error('batas '+iv+' tidak terdefinisi di '+ou+' = '+fmtNum(x,3));
+      if(d<c-1e-12)throw new Error('batas atas '+iv+' lebih kecil dari batas bawah di '+ou+' = '+fmtNum(x,3));
       cmin=Math.min(cmin,c);dmax=Math.max(dmax,d);
       for(let j=0;j<=G;j++){const y=c+(d-c)*j/G,v=f(x,y);if(!isFinite(v))throw new Error('f(x, y) tidak terdefinisi di ('+fmtNum(x,3)+', '+fmtNum(y,3)+')');fmin=Math.min(fmin,v);fmax=Math.max(fmax,v)}}
     if(dmax<=cmin)dmax=cmin+1;
@@ -1034,7 +1091,7 @@ function calc2(){
     const AX=[],K=70;for(let i=0;i<=K;i++){const x=a+(b-a)*i/K;AX.push(inner(x,12))}
     const zmin=Math.min(0,fmin),zmax=Math.max(0,fmax),zr=(zmax-zmin)||1;
     err.textContent='';err.hidden=true;
-    S2.ok={f:f,cf:cf,df:df,a:a,b:b,cmin:cmin,dmax:dmax,fmin:fmin,fmax:fmax,zmin:zmin,zmax:zmax,zr:zr,ex:ex,AX:AX,K:K,inner:inner};
+    S2.ok={ord:S2.order,ou:ou,iv:iv,wx0:xy?cmin:a,wx1:xy?dmax:b,wy0:xy?a:cmin,wy1:xy?b:dmax,f:f,cf:cf,df:df,a:a,b:b,cmin:cmin,dmax:dmax,fmin:fmin,fmax:fmax,zmin:zmin,zmax:zmax,zr:zr,ex:ex,AX:AX,K:K,inner:inner};
     return true;
   }catch(e){S2.ok=null;err.textContent='Belum bisa dibaca: '+e.message;err.hidden=false;return false}
 }
@@ -1044,7 +1101,7 @@ function cols2(){const o=S2.ok,n=S2.n,keep=n<=30,dx=(o.b-o.a)/n,out=[];let sum=0
   return {cells:out,sum:sum,dx:dx}}
 /* proyeksi */
 function mk2(w,h){
-  const o=S2.ok,xm=(o.a+o.b)/2,xh=(o.b-o.a)/2,ym=(o.cmin+o.dmax)/2,yh=(o.dmax-o.cmin)/2||1,zc=(o.zmin+o.zmax)/2;
+  const o=S2.ok,xm=(o.wx0+o.wx1)/2,xh=(o.wx1-o.wx0)/2||1,ym=(o.wy0+o.wy1)/2,yh=(o.wy1-o.wy0)/2||1,zc=(o.zmin+o.zmax)/2;
   const cy=Math.cos(S2.yaw),sy=Math.sin(S2.yaw),cp=Math.cos(S2.pitch),sp=Math.sin(S2.pitch);
   const sc=Math.min(w*.25,h*.30)*S2.zoom;
   return function(x,y,z){const X=(x-xm)/xh,Y=(y-ym)/yh,Z=(z-zc)/o.zr*1.5;
@@ -1053,17 +1110,17 @@ function mk2(w,h){
 function colorOf(v){const o=S2.ok,t=Math.max(0,Math.min(1,(v-o.fmin)/((o.fmax-o.fmin)||1)));return t<.5?mix([243,198,204],[196,87,103],t*2):mix([196,87,103],[74,15,25],(t-.5)*2)}
 function draw2(){
   const cv=el('cv2'),F=fitCanvas(cv),c=F.c,w=F.w,h=F.h;paintBg(c,w,h);if(!S2.ok)return;
-  const o=S2.ok,P=mk2(w,h),faces=[];
+  const o=S2.ok,P0=mk2(w,h),faces=[],xyo=o.ord==='xy',P=function(u,v,z){return xyo?P0(v,u,z):P0(u,v,z)};
   /* lantai: tepi daerah */
   const z0=0;c.strokeStyle='rgba(27,21,23,.5)';c.lineWidth=1.4;c.fillStyle='rgba(27,21,23,.05)';c.beginPath();
   const R=60;for(let i=0;i<=R;i++){const x=o.a+(o.b-o.a)*i/R,p=P(x,o.cf(x),z0);if(i===0)c.moveTo(p[0],p[1]);else c.lineTo(p[0],p[1])}
   for(let i=R;i>=0;i--){const x=o.a+(o.b-o.a)*i/R,p=P(x,o.df(x),z0);c.lineTo(p[0],p[1])}c.closePath();c.fill();c.stroke();
   /* sumbu */
   c.font='600 12px Inter,Helvetica,Arial,sans-serif';c.fillStyle=INK;c.textAlign='center';
-  const lab=[['x',P(o.b+(o.b-o.a)*.08,o.cmin,z0)],['y',P(o.a,o.dmax+(o.dmax-o.cmin)*.08,z0)],['z',P(o.a,o.cmin,o.zmax+(o.zr)*.1)]];
+  const lab=[['x',P0(o.wx1+(o.wx1-o.wx0)*.08,o.wy0,z0)],['y',P0(o.wx0,o.wy1+(o.wy1-o.wy0)*.08,z0)],['z',P0(o.wx0,o.wy0,o.zmax+(o.zr)*.1)]];
   lab.forEach(function(l){c.fillText(l[0],l[1][0],l[1][1])});
   c.fillStyle=DIM;c.font='11px Inter,Helvetica,Arial,sans-serif';
-  [[o.a,o.cmin],[o.b,o.cmin]].forEach(function(q){const p=P(q[0],q[1],z0);c.fillText(fmtNum(q[0],2),p[0],p[1]+14)});
+  [[o.wx0,o.wy0],[o.wx1,o.wy0]].forEach(function(q){const p=P0(q[0],q[1],z0);c.fillText(fmtNum(q[0],2),p[0],p[1]+14)});
   /* kolom */
   let info=null;
   if(S2.view==='col'){info=cols2();if(S2.cols&&S2.n<=30)
@@ -1075,6 +1132,10 @@ function draw2(){
       add([A,B,B2,A2],.84);add([B,C,C2,B2],.72);add([C,D,D2,C2],.84);add([D,A,A2,D2],.72);add([A2,B2,C2,D2],1.06);
     });
   }
+  if(S2.view==='col'&&S2.cols&&S2.n>30){const G=44;
+    const pt=function(i,j){const u=o.a+(o.b-o.a)*i/G,c0=o.cf(u),d0=o.df(u),v=c0+(d0-c0)*j/G;return [P(u,v,o.f(u,v)),o.f(u,v)]};
+    for(let i=0;i<G;i++)for(let j=0;j<G;j++){const q=[pt(i,j),pt(i+1,j),pt(i+1,j+1),pt(i,j+1)],vm=(q[0][1]+q[1][1]+q[2][1]+q[3][1])/4,col=colorOf(vm);let d=0;q.forEach(function(r){d+=r[0][2]});
+      const lit=1.04-.1*((i+j)%2);faces.push({p:q.map(function(r){return r[0]}),d:d/4,col:rgb(col.map(function(v){return v*lit}),.97),st:rgb(col,.5)})}}
   faces.sort(function(a,b){return b.d-a.d});
   c.lineWidth=.6;faces.forEach(function(f){c.beginPath();c.moveTo(f.p[0][0],f.p[0][1]);for(let i=1;i<f.p.length;i++)c.lineTo(f.p[i][0],f.p[i][1]);c.closePath();c.fillStyle=f.col;c.fill();c.strokeStyle=f.st;c.stroke()});
   /* permukaan (kawat) */
@@ -1102,16 +1163,17 @@ function drawA(){
   c.strokeStyle=MAR;c.lineWidth=2.2;c.beginPath();o.AX.forEach(function(v,i){const x=o.a+(o.b-o.a)*i/o.K;if(i===0)c.moveTo(X(x),Y(v));else c.lineTo(X(x),Y(v))});c.stroke();
   const x0=o.a+(o.b-o.a)*S2.x0,i0=S2.x0*o.K,ia=Math.floor(i0),ib=Math.min(o.K,ia+1),av=o.AX[ia]+(o.AX[ib]-o.AX[ia])*(i0-ia);
   c.fillStyle=INK;c.beginPath();c.arc(X(x0),Y(av),4.5,0,6.2832);c.fill();
-  c.fillStyle=MAR;c.font='600 12px Inter,Helvetica,Arial,sans-serif';c.textAlign='left';c.fillText('A(x) = luas irisan di tiap x',ml+4,14);
+  c.fillStyle=MAR;c.font='600 12px Inter,Helvetica,Arial,sans-serif';c.textAlign='left';c.fillText('A('+o.ou+') = luas irisan di tiap '+o.ou,ml+4,14);
 }
 function sliceVals(){const o=S2.ok,i0=S2.x0*o.K,ia=Math.floor(i0),ib=Math.min(o.K,ia+1),av=o.AX[ia]+(o.AX[ib]-o.AX[ia])*(i0-ia);
   let v=0;const dx=(o.b-o.a)/o.K;for(let i=0;i<ia;i++)v+=(o.AX[i]+o.AX[i+1])/2*dx;v+=(o.AX[ia]+av)/2*dx*(i0-ia);return {A:av,V:v,x:o.a+(o.b-o.a)*S2.x0}}
 function form2(){
-  const box=el('ib2'),o=S2.ok,F=LT(MFR.f2),A=LT(MFR.a2),B=LT(MFR.b2),C=LT(MFR.c2),D=LT(MFR.d2);
+  const box=el('ib2'),o=S2.ok,xy=S2.order==='xy',F=LT(MFR.f2),A=LT(MFR.a2),B=LT(MFR.b2),C=LT(MFR.c2),D=LT(MFR.d2);
+  const ou=xy?'y':'x',iv=xy?'x':'y',ol=xy?C:A,oh=xy?D:B,il=xy?A:C,ih=xy?B:D;
   let h='<div class="ib-t">Bentuk integral</div>'+
-   '<div class="ib-m">'+K('\\displaystyle\\iint_{R} f(x,y)\\,dA=\\int_{'+A+'}^{'+B+'}\\int_{'+C+'}^{'+D+'} '+F+'\\,dy\\,dx',true)+'</div>'+
-   '<div class="ib-m sm">'+K('A(x)=\\int_{'+C+'}^{'+D+'} '+F+'\\,dy,\\qquad V=\\int_{'+A+'}^{'+B+'}A(x)\\,dx',true)+'</div>'+
-   '<div class="ib-m sm">'+K('=\\lim_{n\\to\\infty}\\sum_{i=1}^{n}\\sum_{j=1}^{n} f(x_i,y_j)\\,\\Delta y\\,\\Delta x',true)+'</div>';
+   '<div class="ib-m">'+K('\\displaystyle\\iint_{R} f(x,y)\\,dA=\\int_{'+ol+'}^{'+oh+'}\\int_{'+il+'}^{'+ih+'} '+F+'\\,d'+iv+'\\,d'+ou+'',true)+'</div>'+
+   '<div class="ib-m sm">'+K('A('+ou+')=\\int_{'+il+'}^{'+ih+'} '+F+'\\,d'+iv+',\\qquad V=\\int_{'+ol+'}^{'+oh+'}A('+ou+')\\,d'+ou,true)+'</div>'+
+   '<div class="ib-m sm">'+K('=\\lim_{n\\to\\infty}\\sum_{i=1}^{n}\\sum_{j=1}^{n} f(x_i,y_j)\\,\\Delta '+iv+'\\,\\Delta '+ou,true)+'</div>';
   if(o)h+='<div class="ib-m val">'+K('=\\,'+Tn(o.ex,6),true)+'</div>';
   box.innerHTML=h}
 function readout2(){
@@ -1122,12 +1184,12 @@ function readout2(){
     html='<div class="ro-grid"><div class="ro-card main"><small>Jumlah Riemann ('+S2.n+' x '+S2.n+' kolom)</small><b>'+Hn(q.sum,6)+'</b><span>'+fmtInt(S2.n*S2.n)+' kolom kecil dijumlahkan'+(S2.n>30?' (terlalu halus untuk digambar)':'')+'</span></div>'+
     '<div class="ro-card"><small>Volume pasti</small><b>'+Hn(o.ex,6)+'</b><span>kuadratur Gauss-Legendre bersarang</span></div>'+
     '<div class="ro-card"><small>Selisih</small><b>'+Hn(Math.abs(o.ex-q.sum),6)+'</b><span>'+(o.ex!==0?'sekitar '+Hn(Math.abs(o.ex-q.sum)/Math.abs(o.ex)*100,3)+'%':'')+'</span></div></div>'+
-    '<div class="steps"><p><b>Satu kolom</b> '+K('\\Delta V_{ij}=f(x_i,y_j)\\,\\Delta y\\,\\Delta x,\\quad \\Delta x='+tn(q.dx,5))+'</p><p><b>Semuanya</b> '+K('\\sum_{i=1}^{'+S2.n+'}\\sum_{j=1}^{'+S2.n+'} f(x_i,y_j)\\,\\Delta y\\,\\Delta x\\approx '+tn(q.sum))+'</p></div>';
+    '<div class="steps"><p><b>Satu kolom</b> '+K('\\Delta V_{ij}=f(x_i,y_j)\\,\\Delta '+o.iv+'\\,\\Delta '+o.ou)+'</p><p><b>Semuanya</b> '+K('\\sum_{i=1}^{'+S2.n+'}\\sum_{j=1}^{'+S2.n+'} f(x_i,y_j)\\,\\Delta '+o.iv+'\\,\\Delta '+o.ou+'\\approx '+tn(q.sum))+'</p></div>';
   }else{const s=sliceVals();
     html='<div class="ro-grid"><div class="ro-card main"><small>Irisan di x = '+Kn(s.x,4)+'</small><b>A = '+Kn(s.A,6)+'</b><span>hasil integral dalam terhadap y</span></div>'+
-    '<div class="ro-card"><small>Volume terkumpul</small><b>'+Hn(s.V,6)+'</b><span>jumlah irisan dari x = '+Kn(o.a,3)+' sampai sekarang</span></div>'+
-    '<div class="ro-card"><small>Volume pasti</small><b>'+Hn(o.ex,6)+'</b><span>setelah irisan sampai x = '+Kn(o.b,3)+'</span></div></div>'+
-    '<div class="steps"><p><b>Langkah 1 (dalam)</b> '+K('A(x)=\\int_{'+tn(o.cf(s.x),4)+'}^{'+tn(o.df(s.x),4)+'} f(x,y)\\,dy')+'</p><p><b>Langkah 2 (luar)</b> '+K('V=\\int_{'+tn(o.a,3)+'}^{'+tn(o.b,3)+'} A(x)\\,dx')+'</p></div>';}
+    '<div class="ro-card"><small>Volume terkumpul</small><b>'+Hn(s.V,6)+'</b><span>jumlah irisan dari '+o.ou+' = '+Kn(o.a,3)+' sampai sekarang</span></div>'+
+    '<div class="ro-card"><small>Volume pasti</small><b>'+Hn(o.ex,6)+'</b><span>setelah irisan sampai '+o.ou+' = '+Kn(o.b,3)+'</span></div></div>'+
+    '<div class="steps"><p><b>Langkah 1 (dalam)</b> '+K('A('+o.ou+')=\\int_{'+tn(o.cf(s.x),4)+'}^{'+tn(o.df(s.x),4)+'} f(x,y)\\,d'+o.iv)+'</p><p><b>Langkah 2 (luar)</b> '+K('V=\\int_{'+tn(o.a,3)+'}^{'+tn(o.b,3)+'} A('+o.ou+')\\,d'+o.ou)+'</p></div>';}
   box.innerHTML=html;
 }
 function syncA(){const show=S2.view==='slice'||(S2.view==='col'&&S2.trace.length>1);el('hostA').hidden=!show}
@@ -1250,6 +1312,294 @@ function rxInit(){
   el('rx-go').addEventListener('click',rxOpen);
   window.addEventListener('resize',function(){if(!el('rx').hidden)rxDraw()});
   window.__RX=RX;window.__rxGoto=rxGoto;rxAutoBtn()}
+/* ===== Film Riemann (deterministik: tampilan = fungsi dari waktu T) ===== */
+(function(){
+const W=1280,H=720,TOTAL=118;
+const cl=function(x){return x<0?0:x>1?1:x},sg=function(T,a,b){return cl((T-a)/(b-a))};
+const eio=function(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2},eo=function(t){return 1-Math.pow(1-t,3)};
+const eob=function(t){const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)};
+const lerp=function(a,b,t){return a+(b-a)*t};
+const fmt=function(v,d){return (+v.toFixed(d==null?4:d)).toString().replace('.',',')};
+const fint=function(n){return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,'.')};
+const f=function(x){return x*x},VEX=8/3;
+const C={cream:'#FBEFEA',rose:'#F3A7B0',gold:'#F5C26B',blue:'#7DB7F0'};
+const fm=function(v,d){return fmt(v,d).replace(',','{,}')};
+const tc=function(col,t){return '\\textcolor{'+col+'}{'+t+'}'};
+function K(t,d){try{return katex.renderToString(t,{throwOnError:false,output:'html',strict:false,displayMode:!!d})}catch(e){return t}}
+function sumL(n,m){const dx=2/n,to=m==null?n:m;let s=0;for(let i=0;i<to;i++)s+=f(i*dx);return s*dx}
+/* ---------- kamera ---------- */
+const BASE={cx:1.1,cy:2.3,sx:268,sy:110,scx:430,scy:345},TIT={cx:1.1,cy:1.6,sx:380,sy:120,scx:640,scy:330},DUEL={cx:1.1,cy:2.3,sx:236,sy:100,scx:318,scy:350};
+const Z1={cx:1.2,cy:1.44,sx:268*26,sy:110*26,scx:430,scy:372},Z2={cx:1.2,cy:1.44,sx:268*60,sy:110*60,scx:430,scy:372};
+const KF=[[0,TIT],[6.4,TIT],[9,BASE],[70,BASE],[72.2,Z1],[78.5,Z1],[81,Z2],[83.5,Z2],[86,BASE],[96,BASE],[98.5,DUEL],[111,DUEL],[113.5,BASE],[118,BASE]];
+function cam(T){let i=0;while(i<KF.length-2&&T>KF[i+1][0])i++;const a=KF[i],b=KF[i+1],u=eio(sg(T,a[0],b[0])),A=a[1],B=b[1];
+  const lg=function(p,q){return Math.exp(lerp(Math.log(p),Math.log(q),u))};
+  const r={cx:lerp(A.cx,B.cx,u),cy:lerp(A.cy,B.cy,u),sx:lg(A.sx,B.sx),sy:lg(A.sy,B.sy),scx:lerp(A.scx,B.scx,u),scy:lerp(A.scy,B.scy,u)};
+  const dr=T<72||T>83.5?1:0;r.scx+=Math.sin(T*.37)*5*dr;r.scy+=Math.cos(T*.29)*4*dr;r.sx*=1+Math.sin(T*.21)*.004*dr;return r}
+/* ---------- overlay HTML ---------- */
+const OV={host:null,els:{},used:{}};
+function ov(id,tex,x,y,o){o=o||{};const a=o.a==null?1:o.a;if(a<=.003)return;let e=OV.els[id];
+  if(!e){e=document.createElement('div');e.className='fs-o';OV.host.appendChild(e);OV.els[id]=e}
+  const key=(o.h?'h':'t')+tex;if(e._k!==key){e.innerHTML=o.h?tex:K(tex,!!o.d);e._k=key}
+  e.style.left=x+'px';e.style.top=y+'px';e.style.opacity=a;e.style.fontSize=(o.fs||26)+'px';e.style.color=o.col||C.cream;
+  e.style.transform='translate('+(o.anc==='l'?'0':'-50%')+',-50%) translateY('+(o.dy||0)+'px) scale('+(o.s==null?1:o.s)+')';e.style.display='block';
+  e.style.textAlign=o.anc==='l'?'left':'center';e.style.filter=o.blur?'blur('+o.blur+'px)':'none';e.style.fontWeight=o.w||'';e.style.fontFamily=o.ff||'';e.style.width=o.wd?o.wd+'px':'';
+  OV.used[id]=1}
+function ovBegin(){OV.used={}}
+function ovEnd(){for(const k in OV.els)if(!OV.used[k])OV.els[k].style.display='none'}
+const wi=function(T,t0,d){const u=sg(T,t0,t0+(d||.7));return {a:u,dy:(1-eo(u))*16,blur:(1-u)*5}};
+function put(id,T,t0,tex,x,y,o){const w=wi(T,t0,o&&o.d0);const q=Object.assign({},o||{});q.a=w.a*(o&&o.a!=null?o.a:1);q.dy=w.dy;q.blur=w.blur;ov(id,tex,x,y,q)}
+/* ---------- gambar ---------- */
+let V=BASE;const X=function(x){return V.scx+(x-V.cx)*V.sx},Y=function(y){return V.scy-(y-V.cy)*V.sy};
+function bg(c,T){const g=c.createRadialGradient(W*.3,H*.2,50,W*.5,H*.5,W*.8);g.addColorStop(0,'#4a1019');g.addColorStop(.55,'#260910');g.addColorStop(1,'#11040a');c.fillStyle=g;c.fillRect(0,0,W,H);
+  for(let i=0;i<46;i++){const x=((i*137.5)%W+T*(5+(i%5)*3))%W,y=(i*61.8)%H+Math.sin(T*.4+i)*14,a=.06+.16*(.5+.5*Math.sin(T*.8+i*1.7)),r=.8+(i%3)*.7;c.fillStyle='rgba(255,226,220,'+a+')';c.beginPath();c.arc(x,y,r,0,6.2832);c.fill()}}
+function axes(c,al){if(al<=0)return;c.save();c.globalAlpha=al;c.lineWidth=1;c.strokeStyle='rgba(255,240,235,.07)';
+  for(let x=0;x<=2.001;x+=.5){c.beginPath();c.moveTo(X(x),Y(4.7));c.lineTo(X(x),Y(0));c.stroke()}for(let y=1;y<=4;y++){c.beginPath();c.moveTo(X(-.15),Y(y));c.lineTo(X(2.35),Y(y));c.stroke()}
+  c.strokeStyle='rgba(251,239,234,.8)';c.lineWidth=1.8;c.beginPath();c.moveTo(X(-.15),Y(0));c.lineTo(X(2.42),Y(0));c.stroke();c.beginPath();c.moveTo(X(0),Y(0)+5);c.lineTo(X(0),Y(4.75));c.stroke();
+  c.fillStyle='rgba(251,239,234,.6)';c.font='13px Inter,sans-serif';c.textAlign='center';for(let x=0;x<=2.001;x+=.5)c.fillText(x===0?'0':fmt(x,1),X(x),Y(0)+22);c.textAlign='right';for(let y=1;y<=4;y++)c.fillText(String(y),X(0)-10,Y(y)+4);c.restore()}
+function curve(c,x1,al,w){const to=Math.min(x1,2.15);if(to<=0)return;c.save();c.globalAlpha=al==null?1:al;c.lineCap='round';c.lineJoin='round';
+  c.shadowColor='rgba(255,170,130,.75)';c.shadowBlur=18;c.strokeStyle='#FFE9C7';c.lineWidth=w||3.6;c.beginPath();const M=260,x0=Math.max(0,V.cx-(V.scx/V.sx)-.2),xe=Math.min(to,V.cx+((W-V.scx)/V.sx)+.2);
+  let st=false;for(let i=0;i<=M;i++){const x=x0+(to-x0)*i/M;if(x>xe+.5)break;const px=X(x),py=Y(f(x));if(!st){c.moveTo(px,py);st=true}else c.lineTo(px,py)}c.stroke();c.restore()}
+function area(c,x1,al){const to=Math.min(x1,2);if(to<=0)return;c.beginPath();c.moveTo(X(0),Y(0));const M=140;for(let i=0;i<=M;i++){const x=to*i/M;c.lineTo(X(x),Y(f(x)))}c.lineTo(X(to),Y(0));c.closePath();
+  const g=c.createLinearGradient(0,Y(4),0,Y(0));g.addColorStop(0,'rgba(243,120,140,'+.5*al+')');g.addColorStop(1,'rgba(160,50,70,'+.2*al+')');c.fillStyle=g;c.fill()}
+function gap(c,al,pulse){if(al<=0)return;c.beginPath();c.moveTo(X(0),Y(0));const M=140;for(let i=0;i<=M;i++){const x=2*i/M;c.lineTo(X(x),Y(f(x)))}c.lineTo(X(2),Y(0));c.closePath();c.fillStyle='rgba(125,183,240,'+(al*(.2+(pulse||0)))+')';c.fill()}
+function bar(c,x0,x1,h,al,hl){if(h<=0||al<=0)return;const l=X(x0),r=X(x1),t=Y(h),b=Y(0);const g=c.createLinearGradient(0,t,0,b);g.addColorStop(0,hl?'rgba(255,128,150,'+.95*al+')':'rgba(234,98,122,'+.82*al+')');g.addColorStop(1,hl?'rgba(190,60,84,'+.8*al+')':'rgba(140,38,56,'+.55*al+')');
+  c.fillStyle=g;c.fillRect(l,t,r-l,b-t);c.strokeStyle='rgba(255,208,214,'+(hl?1:.8)*al+')';c.lineWidth=hl?3:1.6;c.strokeRect(l,t,r-l,b-t)}
+function dot(c,x,y,r,col,al){c.save();c.globalAlpha=al==null?1:al;c.shadowColor=col;c.shadowBlur=12;c.fillStyle=col;c.beginPath();c.arc(x,y,r,0,6.2832);c.fill();c.restore()}
+function stairs(c,n,al,hl){/* tangga untuk n besar, hanya bagian yang terlihat */const dx=2/n;const xl=Math.max(0,V.cx-V.scx/V.sx-.05),xr=Math.min(2,V.cx+(W-V.scx)/V.sx+.05);const i0=Math.max(0,Math.floor(xl/dx)),i1=Math.min(n-1,Math.ceil(xr/dx));
+  if(i1<i0)return;c.beginPath();c.moveTo(X(i0*dx),Y(0));for(let i=i0;i<=i1;i++){const h=f(i*dx);c.lineTo(X(i*dx),Y(h));c.lineTo(X((i+1)*dx),Y(h))}c.lineTo(X((i1+1)*dx),Y(0));c.closePath();
+  const g=c.createLinearGradient(0,Y(4),0,Y(0));g.addColorStop(0,'rgba(236,100,124,'+.75*al+')');g.addColorStop(1,'rgba(140,38,56,'+.5*al+')');c.fillStyle=g;c.fill();c.strokeStyle='rgba(255,208,214,'+.9*al+')';c.lineWidth=n>300?1:1.4;c.stroke()}
+/* ---------- narasi ---------- */
+const SUBS=[
+ [.8,5.8,'Satu pertanyaan sederhana: berapa luas daerah di bawah sebuah kurva?'],
+ [7.2,11.6,'Misalkan kurvanya [[y=x^{2}]], dan kita ingin luas dari [[x=0]] sampai [[x=2]].'],
+ [11.8,16.4,'Persegi panjang dan segitiga punya rumus. Tapi kurva yang melengkung? Tidak ada rumus langsung.'],
+ [17.2,21,'Idenya: pecah daerahnya jadi beberapa potongan yang sama lebar.'],
+ [21.2,25.2,'Tiap potongan kita anggap persegi panjang, dengan tinggi diambil dari ujung kirinya.'],
+ [25.6,28.8,'Perhatikan celah biru. Itu bagian luas yang belum ikut terhitung.'],
+ [29.6,34,'Kita beri nama: lebar tiap batang disebut [[\\Delta x]], tingginya [[f(x_i^{*})]].'],
+ [34.4,39,'Luas satu batang tinggal dikali: tinggi kali lebar.'],
+ [39.4,43.6,'Hitung satu per satu: nol, nol koma satu dua lima, nol koma lima, dan satu koma satu dua lima.'],
+ [44.4,49,'Jumlahkan semuanya. Itulah jumlah Riemann [[S_4]], nilainya satu koma tujuh lima.'],
+ [49.4,55.6,'Luas sebenarnya sekitar dua koma enam enam tujuh. Masih ada selisih, yaitu celah biru tadi.'],
+ [56.4,61,'Sekarang belah tiap batang jadi dua. Batangnya makin banyak, celahnya makin tipis.'],
+ [61.4,69.4,'Delapan, enam belas, tiga puluh dua, dan seterusnya. Jumlahnya makin dekat ke luas sebenarnya.'],
+ [70.4,75,'Kita perbesar kurvanya. Dari dekat, batangnya tampak seperti anak tangga.'],
+ [75.4,80.6,'Saat [[n]] membesar, anak tangganya mengecil sampai hampir tidak terlihat.'],
+ [81.2,85.6,'Kalau [[n]] menuju tak hingga, [[\\Delta x]] menuju nol. Jumlahnya menjadi integral.'],
+ [86.4,90.6,'Menjumlah tak hingga batang itu berat. Untungnya ada jalan pintas.'],
+ [90.8,95.6,'Luas yang terkumpul sampai titik [[x]] sama dengan [[F(x)-F(a)]], dengan [[F]] antiturunan dari [[f]].'],
+ [96.4,101,'Sekarang kita adu. Kiri: jumlah Riemann dengan [[n]] yang terus membesar.'],
+ [101.4,106,'Kanan: hitungan pasti dengan antiturunan. Hasilnya sudah ketemu dari awal.'],
+ [106.4,111,'Jumlah Riemann terus mendekat, lalu bertemu di nilai yang sama: [[\\dfrac{8}{3}]].'],
+ [112,117.4,'Itu dia integral Riemann. Sekarang giliran kamu mencoba sendiri.']];
+/* ---------- render ---------- */
+function render(c,T){
+  V=cam(T);ovBegin();bg(c,T);
+  const tt0=sg(T,.4,3.6);axes(c,sg(T,.2,1.4)*(1-sg(T,111.8,112.8)));area(c,2*sg(T,3.2,5.4),sg(T,3.2,5.4)*(1-sg(T,17,18.2))*.9);
+  const SUBTXT=SUBS.filter(function(s){return T>=s[0]&&T<s[1]})[0];
+  /* ===== A pembuka 0-9 ===== */
+  if(T<10){
+    const tt=sg(T,.4,3.6);
+    if(tt<1&&tt>0){const x=2.15*eio(tt);dot(c,X(x),Y(f(x)),7,'#FFE9C7',1)}
+    const fade=1-sg(T,6.2,7.6);
+    put('t1',T,1.4,'Integral Riemann',640,215,{h:true,fs:76,a:fade,ff:'Fraunces,KaTeX_Main,Georgia,serif',w:'600',s:1+sg(T,1.4,7)*.04});
+    put('t2',T,3,'Dari batang-batang tipis sampai rumus pasti',640,290,{h:true,fs:24,a:fade*.85,col:C.rose});
+  }
+  /* ===== B masalah 7-17 ===== */
+  if(T>=7&&T<18){
+    const a=sg(T,7,8.5)*(1-sg(T,17,18));
+    put('b0',T,7.4,tc(C.gold,'y=x^{2}')+'\\;,\\; '+tc(C.rose,'0\\le x\\le 2'),880,150,{fs:30,anc:'l',a:1-sg(T,17,18)});
+    const pu=.5+.5*Math.sin(T*3);put('q',T,9.4,tc(C.cream,'\\text{luas}=\\,?'),X(1.35),Y(.85),{fs:34,a:.8+.2*pu});
+    /* bentuk-bentuk contoh */
+    const sh=[[10.2,'rect'],[12,'tri']];
+    sh.forEach(function(s,i){const u=sg(T,s[0],s[0]+.8),k=eob(u),x=900,y=240+i*130,fa=1-sg(T,17,18);if(u<=0)return;c.save();c.globalAlpha=u*fa;c.translate(x+60,y);c.scale(k,k);c.fillStyle='rgba(243,167,176,.28)';c.strokeStyle='#F3A7B0';c.lineWidth=2.4;
+      if(s[1]==='rect'){c.fillRect(-60,-34,120,68);c.strokeRect(-60,-34,120,68)}else{c.beginPath();c.moveTo(-60,34);c.lineTo(60,34);c.lineTo(-10,-38);c.closePath();c.fill();c.stroke()}c.restore()});
+    put('r1',T,10.9,'\\text{lebar}\\times\\text{tinggi}',1100,240,{fs:24,anc:'l',a:1-sg(T,17,18),col:C.cream});
+    put('r2',T,12.7,'\\tfrac12\\times\\text{alas}\\times\\text{tinggi}',1100,370,{fs:24,anc:'l',a:1-sg(T,17,18)});
+    /* kurva: ? */
+    const u3=sg(T,14.4,15.4);if(u3>0){const fa=1-sg(T,17,18);c.save();c.globalAlpha=u3*fa;c.translate(960,500);c.scale(eob(u3),eob(u3));c.strokeStyle='#FFE9C7';c.lineWidth=3;c.beginPath();c.moveTo(-70,40);c.quadraticCurveTo(0,40,70,-40);c.stroke();c.restore();put('r3',T,15,tc(C.gold,'\\text{rumusnya?}'),1090,500,{fs:26,anc:'l',a:fa})}
+    put('b9',T,15.6,'<b>Tidak ada rumus langsung</b>',880,590,{h:true,fs:24,anc:'l',col:C.gold,a:1-sg(T,17,18)});
+  }
+  /* ===== C potong 17-29 ===== */
+  if(T>=17&&T<70){
+    const keepArea=T<44?1:0;
+    const gapAl=sg(T,17.2,18.2)*(T<56?1:1-sg(T,56,57));
+    if(T<56){gap(c,gapAl,T>=50&&T<55?.16*(.5+.5*Math.sin((T-50)*5)):0)}
+    /* garis potong */
+    for(let i=1;i<=3;i++){const u=sg(T,17.6+i*.7,18.4+i*.7),fa=1-sg(T,21+i*.4,22+i*.4);if(u<=0||fa<=0)continue;c.save();c.globalAlpha=fa;c.setLineDash([7,6]);c.strokeStyle=C.blue;c.lineWidth=2.4;c.shadowColor=C.blue;c.shadowBlur=10;const x=X(i*.5);c.beginPath();c.moveTo(x,Y(4.6));c.lineTo(x,lerp(Y(4.6),Y(0),eo(u)));c.stroke();c.restore()}
+    /* batang n=4 */
+    if(T<56.2){const h=T<30?-1:Math.min(3,Math.floor((T-30)/2.2));const hlOn=T>=30&&T<38.6;
+      for(let i=0;i<4;i++){const u=sg(T,21+i*.45,21.9+i*.45),k=eob(u);const dim=hlOn&&i!==h?.38:1;bar(c,i*.5,i*.5+.5,f(i*.5)*k,u>0?dim*(1-sg(T,56,56.2)):0,hlOn&&i===h);
+        if(u>.85)dot(c,X(i*.5),Y(f(i*.5)),5,'#FFE9C7',dim);if(u>0&&u<.9){c.save();c.globalAlpha=(1-u)*.8;c.strokeStyle='#FFD0D6';c.lineWidth=2;c.beginPath();c.arc(X(i*.5),Y(f(i*.5)),6+u*26,0,6.2832);c.stroke();c.restore()}}
+      /* kurung lebar dan tinggi */
+      if(hlOn){const x0=h*.5,v=f(x0),bx=X(x0),bw=X(x0+.5)-bx,by=Y(0);c.save();c.lineWidth=2.6;c.strokeStyle=C.rose;c.shadowColor=C.rose;c.shadowBlur=8;c.beginPath();c.moveTo(bx,by+14);c.lineTo(bx+bw,by+14);c.moveTo(bx,by+8);c.lineTo(bx,by+20);c.moveTo(bx+bw,by+8);c.lineTo(bx+bw,by+20);c.stroke();
+        c.strokeStyle=C.gold;c.shadowColor=C.gold;if(v>0){c.beginPath();c.moveTo(bx-14,by);c.lineTo(bx-14,Y(v));c.moveTo(bx-20,by);c.lineTo(bx-8,by);c.moveTo(bx-20,Y(v));c.lineTo(bx-8,Y(v));c.stroke()}c.restore();
+        ov('bl1',tc(C.rose,'\\Delta x'),bx+bw/2,by+42,{fs:26});ov('bl2',tc(C.gold,'f(x_i^{*})'),bx-62,v>0?(Y(v)+by)/2:by-20,{fs:24,a:v>0?1:0});}
+    }
+    put('c0',T,17.6,'<b>Potong jadi 4 bagian</b>',880,150,{h:true,fs:28,anc:'l',a:1-sg(T,23,24)});
+    put('c1',T,21.4,'Tiap bagian jadi <b>persegi panjang</b>',880,210,{h:true,fs:22,anc:'l',a:1-sg(T,29,30)});
+    put('c2',T,23.2,'Tinggi diambil di <b>ujung kiri</b>',880,258,{h:true,fs:22,anc:'l',a:1-sg(T,29,30)});
+    put('c3',T,25.6,'<b style="color:'+C.blue+'">Celah biru</b> = belum terhitung',880,306,{h:true,fs:22,anc:'l',a:1-sg(T,29,30)});
+    put('n4',T,18.4,tc(C.cream,'n=4'),X(.2)+10,Y(4.2),{fs:30,a:(1-sg(T,56,57))});
+    /* D penamaan 29-44 */
+    if(T>=29.6&&T<44.4){
+      put('d0',T,29.8,tc(C.rose,'\\Delta x')+'=\\dfrac{b-a}{n}=\\dfrac{2-0}{4}='+tc(C.rose,'0{,}5'),880,160,{fs:30,anc:'l',a:1-sg(T,43.6,44.4)});
+      put('d1',T,32.2,'\\text{titik contoh: }x_i^{*}\\;(\\text{ujung kiri})',880,240,{fs:24,anc:'l',a:1-sg(T,43.6,44.4)});
+      put('d2',T,34.6,'\\text{tinggi: }'+tc(C.gold,'f(x_i^{*})'),880,300,{fs:26,anc:'l',a:1-sg(T,43.6,44.4)});
+      put('d3',T,36.6,'\\text{luas satu batang}=\\,'+tc(C.gold,'f(x_i^{*})')+'\\,'+tc(C.rose,'\\Delta x'),880,368,{fs:28,anc:'l',a:1-sg(T,43.6,44.4)});
+    }
+    /* label luas di atas batang + terbang ke jumlah (39-56) */
+    if(T>=39&&T<57){const AR=[0,.125,.5,1.125],slot=[[895,230],[990,230],[1092,230],[1196,230]];
+      for(let i=0;i<4;i++){const u=sg(T,39.4+i*.8,40.2+i*.8),fly=eio(sg(T,44.6+i*.55,46.2+i*.55));const sx=X(i*.5+.25),sy=Y(f(i*.5))-28;const px=lerp(sx,slot[i][0],fly),py=lerp(sy,slot[i][1]+0,fly)-Math.sin(fly*Math.PI)*70;
+        ov('ar'+i,tc(C.gold,fm(AR[i],3)),px,py,{fs:lerp(24,30,fly),a:u*(1-sg(T,55.6,56.4)),s:eob(u)})}}
+    if(T>=44.2&&T<57){const o=1-sg(T,55.6,56.4);put('e0',T,44.4,'<b>Jumlahkan semuanya</b>',880,150,{h:true,fs:28,anc:'l',a:o});
+      for(let i=0;i<3;i++)put('pl'+i,T,45+i*.55,'+',(slotX(i)+slotX(i+1))/2+0,230,{fs:30,a:o*.9});
+      put('e1',T,47.8,'S_4=\\,'+tc(C.gold,'\\sum_{i=1}^{4} f(x_i^{*})\\,\\Delta x'),880,310,{fs:30,anc:'l',a:o});
+      const pop=sg(T,48.8,49.8);put('e2',T,48.8,tc(C.gold,'S_4=1{,}75'),1050,400,{fs:52,a:o,s:eob(pop)});
+      put('e3',T,51.6,'\\text{luas sebenarnya}\\approx '+tc(C.rose,'2{,}667'),880,500,{fs:28,anc:'l',a:o});
+      put('e4',T,53.6,tc(C.blue,'\\text{selisih}\\approx 0{,}917'),880,560,{fs:28,anc:'l',a:o})}
+  }
+  /* ===== F perbanyak 56-70 ===== */
+  if(T>=56&&T<70.4){
+    const N=[4,8,16,32,64,128,256,512],tF=T-56.6,SD=1.75,k=Math.max(0,Math.min(6,Math.floor(tF/SD))),u=sg(tF-k*SD,0,.95),e=eio(u);
+    const kk=tF<0?0:k,n=N[kk+1],np=N[kk],dx=2/n;
+    const fa=sg(T,56,57)*(1-sg(T,69.4,70.4));
+    if(T>=57)gap(c,Math.min(1,sg(T,56,57)),0);
+    if(n<=64||(n<=128&&false)){for(let j=0;j<n;j++){const par=Math.floor(j/2),xp=par*(2/np),x0=j*dx;const h=lerp(f(xp),f(x0),e);bar(c,x0,x0+dx,h,fa*sg(T,56,57),false)}}
+    else stairs(c,n,fa);
+    const S0=sumL(np),S1=sumL(n),S=lerp(S0,S1,e),Es=VEX-S;
+    put('f0',T,56.6,'<b>Belah jadi dua, terus-menerus</b>',880,150,{h:true,fs:26,anc:'l',a:1-sg(T,69.2,70)});
+    put('f1',T,56.8,tc(C.cream,'n=')+tc(C.blue,String(e<.5?np:n)),880,235,{fs:44,anc:'l',a:1-sg(T,69.2,70)});
+    put('f2',T,57,'S_n='+tc(C.gold,fm(S,4)),880,320,{fs:44,anc:'l',a:1-sg(T,69.2,70)});
+    put('f3',T,57.4,'V-S_n='+tc(C.rose,fm(Es,4)),880,395,{fs:30,anc:'l',a:1-sg(T,69.2,70)});
+    /* batang selisih */
+    c.save();c.globalAlpha=fa*sg(T,57.4,58.4);const bw=340,bx=880,by=440;c.fillStyle='rgba(255,255,255,.1)';c.fillRect(bx,by,bw,14);const frac=Es/(VEX-sumL(4));const g=c.createLinearGradient(bx,0,bx+bw,0);g.addColorStop(0,'#F3A7B0');g.addColorStop(1,'#C4455E');c.fillStyle=g;c.fillRect(bx,by,Math.max(2,bw*frac),14);c.fillStyle='rgba(251,239,234,.6)';c.font='13px Inter,sans-serif';c.textAlign='left';c.fillText('selisih terhadap luas sebenarnya',bx,by+36);c.restore();
+    /* riwayat n */
+    for(let i=0;i<=kk;i++){const done=i<kk||u>=.99;const rx=880,ry=520+i*0;}
+  }
+  /* ===== G zoom 70-86 ===== */
+  if(T>=69.6&&T<86.4){
+    const fa=sg(T,69.6,70.6)*(1-sg(T,85.4,86.4));
+    const nz=T<72.2?64:Math.round(Math.exp(lerp(Math.log(8),Math.log(40000),eio(sg(T,73.2,82.5)))));
+    const n=T<73.2?(T<72.2?64:Math.round(lerp(64,8,eio(sg(T,72.2,73.2))))):nz;
+    c.save();c.beginPath();c.rect(0,0,830,720);c.clip();gap(c,fa*(sg(T,69.6,70.6)),0);stairs(c,Math.max(2,n),fa);c.restore();c.save();c.globalAlpha=fa*sg(T,71,72);c.strokeStyle='rgba(251,239,234,.25)';c.lineWidth=1.5;c.beginPath();c.moveTo(830,40);c.lineTo(830,640);c.stroke();c.restore();
+    put('g0',T,70.6,'<b>Perbesar kurvanya</b>',880,150,{h:true,fs:26,anc:'l',a:1-sg(T,81,82)});
+    ov('gn',tc(C.cream,'n=')+tc(C.blue,fint(n).replace(/\./g,'{.}')),1010,250,{fs:46,a:fa*(T>=72?1:0)*(1-sg(T,84,85)),anc:'c'});
+    ov('gd',tc(C.rose,'\\Delta x')+'='+tc(C.cream,'\\tfrac{2}{n}\\to 0'),1010,330,{fs:34,a:fa*sg(T,76,77)*(1-sg(T,84,85)),anc:'c'});
+    /* rumus Sigma ke Integral */
+    const m=sg(T,82.4,84.2);
+    put('s1',T,81.4,'S_n=\\sum_{i=1}^{n} f(x_i^{*})\\,\\Delta x',860,420,{fs:30,anc:'l',a:(1-m)});
+    put('s2',T,83,'\\int_{a}^{b} f(x)\\,dx='+tc(C.gold,'\\lim_{n\\to\\infty}')+'\\sum_{i=1}^{n} f(x_i^{*})\\,\\Delta x',852,420,{fs:25,anc:'l',a:m});
+  }
+  /* ===== legenda integral 84-96 ===== */
+  if(T>=84.6&&T<89){const o=1-sg(T,87.8,88.8);
+    put('i0',T,84.8,'\\displaystyle '+tc(C.gold,'\\int')+'_{a}^{b} f(x)\\,dx',880,170,{fs:44,anc:'l',a:o});
+    put('i1',T,85.5,tc(C.gold,'\\int')+'\\ \\text{S yang memanjang (\\textit{summa})}',880,240,{fs:22,anc:'l',a:o});
+    put('i2',T,86.2,'a,\\,b\\ \\text{batas kiri dan kanan}',880,290,{fs:22,anc:'l',a:o});
+    put('i3',T,86.9,'f(x)\\ \\text{tinggi kurva}',880,340,{fs:22,anc:'l',a:o});
+    put('i4',T,87.6,'dx\\ \\text{adalah }\\Delta x\\ \\text{yang super tipis}',880,390,{fs:22,anc:'l',a:o});
+  }
+  /* ===== H antiturunan 86-96 (sorot) ===== */
+  if(T>=88.2&&T<97){
+    const fa=sg(T,88.2,89.2)*(1-sg(T,96,97)),x=2*eio(sg(T,89.8,94.8));
+    {c.save();c.globalAlpha=fa;area(c,x,1);c.restore()}
+    c.save();c.globalAlpha=fa;c.strokeStyle=C.blue;c.lineWidth=4;c.shadowColor=C.blue;c.shadowBlur=16;c.beginPath();for(let i=0;i<=100;i++){const xx=x*i/100,yy=xx*xx*xx/3;if(i===0)c.moveTo(X(xx),Y(yy));else c.lineTo(X(xx),Y(yy))}c.stroke();c.restore();
+    if(T>=88.4){const A=x*x*x/3;c.save();c.globalAlpha=fa;c.setLineDash([5,5]);c.strokeStyle='rgba(125,183,240,.8)';c.lineWidth=1.6;c.beginPath();c.moveTo(X(x),Y(f(x)));c.lineTo(X(x),Y(0));c.moveTo(X(x),Y(A));c.lineTo(X(0),Y(A));c.stroke();c.restore();dot(c,X(x),Y(f(x)),6,'#FFE9C7',fa);dot(c,X(x),Y(A),7,C.blue,fa);
+      ov('Al',tc(C.blue,'A(x)'),X(Math.max(x,.35))+34,Y(A)+(x>1.6?-18:18),{fs:28,a:fa*sg(T,89.2,90)})}
+    put('h0',T,88.6,'\\text{luas terkumpul}\\ '+tc(C.blue,'A(x)'),880,170,{fs:28,anc:'l',a:1-sg(T,95.6,96.6)});
+    put('h1',T,90.8,tc(C.blue,'A(x)')+'=F(x)-F(a)',880,240,{fs:32,anc:'l',a:1-sg(T,95.6,96.6)});
+    put('h2',T,92.6,'F(x)=\\dfrac{x^{3}}{3}\\quad\\text{sebab}\\quad F\'(x)=x^{2}',880,330,{fs:28,anc:'l',a:1-sg(T,95.6,96.6)});
+    put('h3',T,94.2,'\\displaystyle\\int_{0}^{2} x^{2}\\,dx=F(2)-F(0)=\\dfrac{8}{3}',880,430,{fs:30,anc:'l',a:1-sg(T,95.6,96.6)});
+  }
+  /* ===== I adu 96-112 ===== */
+  if(T>=96.4&&T<113){
+    const fa=sg(T,96.4,97.6)*(1-sg(T,112,113)),n=Math.round(Math.pow(2,2+12*eio(sg(T,98.6,108.4))));
+    gap(c,fa,0);if(n<=64){for(let i=0;i<n;i++)bar(c,i*(2/n),(i+1)*(2/n),f(i*(2/n)),fa,false)}else stairs(c,n,fa);
+    const S=sumL(n),px=640,py=130;
+    /* kartu kaca */
+    function card(x,y,w,h,al){c.save();c.globalAlpha=al;c.fillStyle='rgba(255,240,235,.08)';c.strokeStyle='rgba(255,240,235,.22)';c.lineWidth=1.5;rr(c,x,y,w,h,22);c.fill();c.stroke();c.restore()}
+    function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+    card(640,120,590,200,fa*sg(T,97,98));card(640,340,590,262,fa*sg(T,100.6,101.8));
+    ov('d0','Jumlah Riemann',668,150,{h:true,fs:16,anc:'l',col:C.rose,a:fa*sg(T,97.2,98),w:'600'});
+    ov('d1',tc(C.gold,fm(S,6)),668,214,{fs:56,anc:'l',a:fa*sg(T,97.4,98.4)});
+    ov('d2',tc(C.cream,'n=')+tc(C.blue,fint(n).replace(/\./g,'{.}')),668,290,{fs:26,anc:'l',a:fa*sg(T,97.6,98.6)});
+    c.save();c.globalAlpha=fa*sg(T,97.4,98.4);c.fillStyle='rgba(255,255,255,.12)';c.fillRect(980,262,220,12);c.fillStyle=C.gold;c.fillRect(980,262,220*S/VEX,12);c.restore();
+    ov('d3','Integral (antiturunan)',668,364,{h:true,fs:16,anc:'l',col:C.rose,a:fa*sg(T,101,101.8),w:'600'});
+    ov('d4',tc(C.gold,'2{,}666667'),668,420,{fs:52,anc:'l',a:fa*sg(T,101.4,102.4)});
+    ov('d5',tc(C.cream,'F(x)=')+'\\dfrac{x^{3}}{3}',668,490,{fs:24,anc:'l',a:fa*sg(T,102.6,103.4)});
+    ov('d6','F(2)-F(0)=\\dfrac{8}{3}',668,545,{fs:24,anc:'l',a:fa*sg(T,104.2,105)});
+    c.save();c.globalAlpha=fa*sg(T,101.4,102.4);c.fillStyle='rgba(255,255,255,.12)';c.fillRect(980,444,220,12);c.fillStyle=C.gold;c.fillRect(980,444,220,12);c.restore();
+    const hit=sg(T,108.4,110);
+    if(hit>0){ov('ok',tc(C.gold,'\\text{keduanya}\\;\\to\\;\\dfrac{8}{3}'),X(0.95),Y(4.3),{fs:40,a:hit*fa,s:eob(hit),col:C.gold});
+      const bu=sg(T,108.4,111.4);for(let i=0;i<40;i++){const ang=i*2.399,sp=60+((i*37)%90),r=sp*eo(bu),al=(1-bu)*fa;if(al<=0)continue;dot(c,X(0.95)+Math.cos(ang)*r*1.6,Y(4.3)+Math.sin(ang)*r,2.2+(i%3),i%2?C.gold:C.rose,al)}}
+  }
+  /* ===== penutup 112-118 ===== */
+  if(T>=111.4){
+    const fa=sg(T,111.4,112.6);gap(c,0,0);axes(c,fa*0);
+    if(T>=112){stairs(c,400,fa*.9)}
+    const L=['Luas dihampiri dengan <b>batang tipis</b>','Dijumlahkan jadi <b>jumlah Riemann</b>','Saat <i>n</i> menuju tak hingga jadilah <b>integral</b>','Dihitung cepat dengan <b>antiturunan</b>'];
+    L.forEach(function(t,i){put('z'+i,T,112.2+i*1.1,t,700,190+i*66,{h:true,fs:26,anc:'l',a:fa})});
+    put('z9',T,116.4,'<b style="color:'+C.gold+'">Selamat mencoba!</b>',700,500,{h:true,fs:36,anc:'l',a:fa})
+  }
+  const zc=T>70.8&&T<85.8;if(zc){c.save();c.beginPath();c.rect(0,0,830,720);c.clip()}
+  curve(c,2.2*eio(tt0),1,(T>71&&T<84.5)?2.6:3.6);if(zc)c.restore();
+  /* ===== subtitle ===== */
+  const sub=document.getElementById('fs-sub');if(sub){const key=SUBTXT?SUBTXT[2]:'';if(sub._k!==key){sub._k=key;sub.innerHTML=key.replace(/\[\[(.+?)\]\]/g,function(m,x){return K(x)})}
+    const al=SUBTXT?Math.min(sg(T,SUBTXT[0],SUBTXT[0]+.4),1-sg(T,SUBTXT[1]-.4,SUBTXT[1])):0;sub.style.opacity=al}
+  ovEnd();
+}
+function slotX(i){return [895,990,1092,1196][i]}
+const Film={W:W,H:H,TOTAL:TOTAL,SUBS:SUBS,
+  init:function(stage){OV.host=stage.querySelector('#fs-ov');this.cv=stage.querySelector('#fs-cv');this.c=this.cv.getContext('2d')},
+  draw:function(T){const c=this.c;c.setTransform(this.cv.width/W,0,0,this.cv.height/H,0,0);render(c,Math.max(0,Math.min(TOTAL,T)))}};
+window.Film=Film;
+})();
+/* ===== Video penjelasan: <video> mp4, cadangan: mesin render langsung ===== */
+const FM={open:false,live:false,play:false,T:0,last:0,raf:0,inited:false};
+const FMI={pl:'<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10-6.5a1 1 0 0 0 0-1.8l-10-6.5A1 1 0 0 0 8 5.5z"/></svg>',pa:'<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>'};
+function fmT(t){t=Math.max(0,Math.round(t));return Math.floor(t/60)+':'+String(t%60).padStart(2,'0')}
+function fmScale(){const h=el('fm-live'),s=el('fs-stage');if(!h||!s)return;s.style.transform='scale('+(h.clientWidth/1280)+')'}
+function fmLiveDraw(){Film.draw(FM.T);el('fm-bar').value=FM.T/Film.TOTAL*1000;el('fm-time').textContent=fmT(FM.T)+' / '+fmT(Film.TOTAL);el('fm-end').hidden=!(FM.T>=Film.TOTAL-.02)}
+function fmLoop(now){FM.raf=0;if(!FM.open||!FM.live||!FM.play)return;FM.T=Math.min(Film.TOTAL,FM.T+(now-FM.last)/1000);FM.last=now;fmLiveDraw();
+  if(FM.T>=Film.TOTAL){FM.play=false;el('fm-pp').innerHTML=FMI.pl;return}FM.raf=requestAnimationFrame(fmLoop)}
+function fmLivePlay(on){FM.play=on;el('fm-pp').innerHTML=on?FMI.pa:FMI.pl;if(on){if(FM.T>=Film.TOTAL-.02)FM.T=0;FM.last=performance.now();if(!FM.raf)FM.raf=requestAnimationFrame(fmLoop)}}
+function fmGoLive(){if(FM.live)return;FM.live=true;const v=el('fm-video');try{v.pause()}catch(e){}v.style.display='none';el('fm-live').hidden=false;if(window.speechSynthesis)el('fm-snd').hidden=false;el('fm-ctl').hidden=false;
+  if(!FM.inited){Film.init(el('fs-stage'));FM.inited=true}
+  fmScale();FM.T=0;fmLiveDraw();fmLivePlay(true)}
+function fmOpen(){FM.open=true;el('film').hidden=false;document.body.classList.add('film-on');el('fm-end').hidden=true;
+  const v=el('fm-video');if(!FM.live){if(!v.getAttribute('src')){v.addEventListener('error',fmGoLive);v.setAttribute('src','riemann-visual.mp4')}
+    try{v.currentTime=0}catch(e){}const p=v.play();if(p&&p.catch)p.catch(function(){})}
+  else{FM.T=0;fmLiveDraw();fmLivePlay(true)}
+  el('fm-close').focus()}
+function fmClose(){if(SPK.on)spkSet(false);FM.open=false;el('film').hidden=true;document.body.classList.remove('film-on');const v=el('fm-video');try{v.pause()}catch(e){}FM.play=false;if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen()}
+function fmReplay(){el('fm-end').hidden=true;if(FM.live){FM.T=0;fmLiveDraw();fmLivePlay(true)}else{const v=el('fm-video');v.currentTime=0;v.play()}}
+function fmInit(){
+  const v=el('fm-video');
+  el('fm-open').addEventListener('click',fmOpen);el('fm-close').addEventListener('click',fmClose);
+  v.addEventListener('ended',function(){el('fm-end').hidden=false});v.addEventListener('play',function(){el('fm-end').hidden=true});
+  v.addEventListener('seeking',function(){el('fm-end').hidden=true});
+  el('fm-pp').addEventListener('click',function(){fmLivePlay(!FM.play)});
+  el('fm-bar').addEventListener('input',function(){FM.T=this.value/1000*Film.TOTAL;fmLiveDraw()});
+  el('fm-replay2').addEventListener('click',fmReplay);
+  el('fm-explore').addEventListener('click',function(){fmClose();rxOpen()});
+  document.addEventListener('keydown',function(e){if(!FM.open)return;if(e.key==='Escape')fmClose();else if(FM.live&&e.key===' '&&e.target.tagName!=='BUTTON'){e.preventDefault();fmLivePlay(!FM.play)}});
+  window.addEventListener('resize',function(){if(FM.open&&FM.live)fmScale()});
+  spkInit();window.__FM=FM;window.__fmGoLive=fmGoLive}
+/* ===== Suara narasi (Web Speech API, id-ID) ===== */
+const SPK={on:false,idx:-2,timer:0,voice:null};
+const SPM={'y=x^{2}':'y sama dengan x kuadrat','x=0':'x sama dengan nol','x=2':'x sama dengan dua','\\Delta x':'delta x','f(x_i^{*})':'f dari x i bintang','S_4':'S empat','n':'n','x':'x','F':'F','f':'f','F(x)-F(a)':'F x dikurang F a','\\dfrac{8}{3}':'delapan per tiga'};
+function spkText(s){return s.replace(/\[\[(.+?)\]\]/g,function(m,x){return SPM[x]||x})}
+function spkPick(){if(!window.speechSynthesis)return null;const vs=speechSynthesis.getVoices();return vs.filter(function(v){return /^id([-_]|$)/i.test(v.lang)})[0]||null}
+function spkNow(){return FM.live?{t:FM.T,pl:FM.play}:{t:el('fm-video').currentTime,pl:!el('fm-video').paused&&!el('fm-video').ended}}
+function spkTick(){if(!SPK.on||!FM.open)return;const n=spkNow(),S=Film.SUBS;let i=-1;for(let k=0;k<S.length;k++)if(n.t>=S[k][0]&&n.t<S[k][1]){i=k;break}
+  if(i!==SPK.idx){speechSynthesis.cancel();SPK.idx=i;if(i>=0&&n.pl&&n.t-S[i][0]<2.5){const txt=spkText(S[i][2]),win=S[i][1]-S[i][0],u=new SpeechSynthesisUtterance(txt);u.lang='id-ID';if(SPK.voice)u.voice=SPK.voice;u.rate=Math.max(.9,Math.min(1.35,txt.length/(win*13.5)));speechSynthesis.speak(u)}}
+  else if(n.pl&&speechSynthesis.paused)speechSynthesis.resume();else if(!n.pl&&speechSynthesis.speaking&&!speechSynthesis.paused)speechSynthesis.pause()}
+function spkSet(on){SPK.on=on;const b=el('fm-snd');b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);
+  if(on){SPK.voice=spkPick();SPK.idx=-2;el('fm-sndnote').hidden=!!SPK.voice;if(!SPK.timer)SPK.timer=setInterval(spkTick,150)}
+  else{if(window.speechSynthesis)speechSynthesis.cancel();clearInterval(SPK.timer);SPK.timer=0;el('fm-sndnote').hidden=true}}
+function spkInit(){const b=el('fm-snd');if(!window.speechSynthesis)return;
+  b.addEventListener('click',function(){spkSet(!SPK.on)});
+  if(speechSynthesis.addEventListener)speechSynthesis.addEventListener('voiceschanged',function(){if(SPK.on){SPK.voice=spkPick();el('fm-sndnote').hidden=!!SPK.voice}})}
 /* ================= UI ================= */
 const MFR={};
 const HUE={f:'#7A1F2B',a:'#2F5D7C',b:'#2F5D7C',c:'#5B7F3A',d:'#5B7F3A',n:'#8a7f82'};
@@ -1258,20 +1608,20 @@ function mkRow(host,key,id,tex,ph){
   r.innerHTML='<span class="dot" style="--c:'+HUE[key]+'"></span><div class="arc"><span class="al">'+K(tex)+'</span><div class="mfhost" id="'+id+'"></div></div>';
   host.appendChild(r);const h=r.querySelector('.mfhost'),S=id.slice(-1)==='1'?S1:S2;
   const mf=new MathField(h,{aria:tex,onChange:function(m){S[key]=m.text();if(S===S1){stop1(true);upd1()}else{stop2(true);upd2()}pushH()}});
-  mf.placeholder=ph||'';mf.onFocus=showKb;mf.onEnter=hideKb;MFR[id]=mf;mf.render();return mf}
+  mf.alEl=r.querySelector('.al');mf.placeholder=ph||'';mf.onFocus=showKb;mf.onEnter=hideKb;MFR[id]=mf;mf.render();return mf}
 function setFields(S,vals){Object.keys(vals).forEach(function(k){const mf=MFR[k+(S===S1?'1':'2')];S[k]=vals[k];mf.load(vals[k])})}
 function syncAll(){['f','a','b'].forEach(function(k){S1[k]=MFR[k+'1'].text()});['f','a','b','c','d'].forEach(function(k){S2[k]=MFR[k+'2'].text()})}
 function curView(){return el('view1').hidden?2:1}
 function updCur(){if(curView()===1)upd1();else upd2()}
 /* ---- riwayat ---- */
 const H={st:[],i:-1,lock:false,t:0};
-function snap(){const o={};Object.keys(MFR).forEach(function(k){o[k]=MFR[k].json()});o.n1=S1.n;o.n2=S2.n;return JSON.stringify(o)}
+function snap(){const o={};o.ord=S2.order;Object.keys(MFR).forEach(function(k){o[k]=MFR[k].json()});o.n1=S1.n;o.n2=S2.n;return JSON.stringify(o)}
 function syncUR(){[].forEach.call(document.querySelectorAll('.undo'),function(b){b.disabled=H.i<=0});[].forEach.call(document.querySelectorAll('.redo'),function(b){b.disabled=H.i>=H.st.length-1})}
 function commitH(){if(H.lock)return;const s=snap();if(H.st[H.i]===s)return;H.st=H.st.slice(0,H.i+1);H.st.push(s);H.i=H.st.length-1;if(H.st.length>100){H.st.shift();H.i--}syncUR()}
 function pushH(){clearTimeout(H.t);H.t=setTimeout(commitH,350)}
 function flushH(){clearTimeout(H.t);commitH()}
 function goH(d){flushH();const j=H.i+d;if(j<0||j>=H.st.length)return;H.i=j;H.lock=true;stop1(true);stop2(true);const o=JSON.parse(H.st[j]);
-  Object.keys(MFR).forEach(function(k){MFR[k].load(o[k])});S1.n=o.n1;S2.n=o.n2;syncAll();el('n1').value=Math.min(200,S1.n);el('n1v').textContent=fmtInt(S1.n);el('n2').value=S2.n;el('n2v').textContent=S2.n;H.lock=false;syncUR();upd1();if(curView()===2)upd2()}
+  Object.keys(MFR).forEach(function(k){MFR[k].load(o[k])});S1.n=o.n1;S2.n=o.n2;if(o.ord){S2.order=o.ord;applyOrderLabels()}syncAll();el('n1').value=Math.min(200,S1.n);el('n1v').textContent=fmtInt(S1.n);el('n2').value=S2.n;el('n2v').textContent=S2.n;H.lock=false;syncUR();upd1();if(curView()===2)upd2()}
 /* ---- papan ketik ---- */
 function showKb(){const k=el('kb');k.hidden=false;document.body.classList.add('kb-on')}
 function hideKb(){const k=el('kb');k.hidden=true;document.body.classList.remove('kb-on')}
@@ -1294,6 +1644,34 @@ function inf2(){
       el('n2').value=Math.min(n,+el('n2').max);el('n2v').textContent=n;
       S2.trace.push({n:n,s:cols2().sum});upd2(false)},
     function(){S2.inf=false;infLabel(el('inf2'),false);upd2(false)})}
+/* ---- urutan integral ---- */
+const ORD_LAB={yx:{a:['a=','bawah'],b:['b=','atas'],c:['c(x)=','y bawah'],d:['d(x)=','y atas']},xy:{a:['a(y)=','x bawah'],b:['b(y)=','x atas'],c:['c=','bawah'],d:['d=','atas']}};
+function applyOrderLabels(){const L=ORD_LAB[S2.order];['a','b','c','d'].forEach(function(k){const mf=MFR[k+'2'];mf.alEl.innerHTML=K(L[k][0]);mf.placeholder=L[k][1];mf.render()});
+  [].forEach.call(document.querySelectorAll('#ord2 button'),function(b){b.classList.toggle('active',b.dataset.o===S2.order)})}
+function presetTuples(){return [].map.call(document.querySelectorAll('#pre2 button'),function(b){const d=b.dataset;return {f:d.f,n:d.n,yx:[d.a,d.b,d.c,d.d],xy:(d.sw||[d.a,d.b,d.c,d.d].join('|')).split('|')}})}
+function fmtB(v){return String(+v.toFixed(4))}
+function setOrder(o){
+  if(o===S2.order)return;stop2(true);cancelAnim(2);cancelAnim('S');
+  const from=S2.order,cur=[S2.a,S2.b,S2.c,S2.d].map(function(s){return s.replace(/\s/g,'')});
+  const hit=presetTuples().filter(function(p){return p.f.replace(/\s/g,'')===S2.f.replace(/\s/g,'')&&p[from].map(function(s){return s.replace(/\s/g,'')}).join('|')===cur.join('|')})[0];
+  const note=el('note2');note.hidden=true;
+  let vals;
+  if(hit){const t=hit[o];vals=o==='yx'?{a:t[0],b:t[1],c:t[2],d:t[3]}:{a:t[0],b:t[1],c:t[2],d:t[3]}}
+  else{
+    /* batas bertipe konstanta di sisi luar dan dalam: kalau persegi panjang, nilainya tetap */
+    const constRow=function(s,v){try{compileExpr(s,[]);return true}catch(e){return false}};
+    const innerSrc=from==='yx'?[S2.c,S2.d]:[S2.a,S2.b];
+    const rect=innerSrc.every(function(s){return constRow(s)});
+    if(rect)vals={a:S2.a,b:S2.b,c:S2.c,d:S2.d};
+    else{const q=S2.ok;
+      if(from==='yx'&&q)vals={a:fmtB(q.cmin),b:fmtB(q.dmax),c:S2.c,d:S2.d};
+      else if(q)vals={a:S2.a,b:S2.b,c:fmtB(q.cmin),d:fmtB(q.dmax)};
+      else vals={a:S2.a,b:S2.b,c:S2.c,d:S2.d};
+      /* from yx: inner (y bounds, functions of x) -> y consts = bounding box; x consts -> x bounds as constants */
+      if(from==='yx'&&q){vals={a:S2.a,b:S2.b,c:fmtB(q.cmin),d:fmtB(q.dmax)}}
+      if(from==='xy'&&q){vals={a:fmtB(q.cmin),b:fmtB(q.dmax),c:S2.c,d:S2.d}}
+      note.textContent='Daerahnya bukan persegi panjang, jadi batas tidak bisa ditukar otomatis. Batas dalam saya ganti dengan persegi panjang yang membungkus daerah tadi. Ubah batasnya sendiri kalau perlu.';note.hidden=false}}
+  S2.order=o;setFields(S2,vals);applyOrderLabels();upd2();flushH()}
 /* ---- init ---- */
 function initApp(){
   document.body.classList.add('tex-ok');
@@ -1301,7 +1679,7 @@ function initApp(){
   [].forEach.call(document.querySelectorAll('.tx'),texify);
   mkRow(el('alg1'),'f','f1','f(x)=','ketik fungsi');mkRow(el('alg1'),'a','a1','a=','bawah');mkRow(el('alg1'),'b','b1','b=','atas');
   mkRow(el('alg2'),'f','f2','f(x,y)=','ketik fungsi');mkRow(el('alg2'),'a','a2','a=','x bawah');mkRow(el('alg2'),'b','b2','b=','x atas');mkRow(el('alg2'),'c','c2','c(x)=','y bawah');mkRow(el('alg2'),'d','d2','d(x)=','y atas');
-  setFields(S1,{f:S1.f,a:S1.a,b:S1.b});setFields(S2,{f:S2.f,a:S2.a,b:S2.b,c:S2.c,d:S2.d});
+  applyOrderLabels();setFields(S1,{f:S1.f,a:S1.a,b:S1.b});setFields(S2,{f:S2.f,a:S2.a,b:S2.b,c:S2.c,d:S2.d});
   infLabel(el('inf1'),false);infLabel(el('inf2'),false);
   [].forEach.call(document.querySelectorAll('.nlab'),function(x){x.innerHTML=K('n=')});
   buildKeyboard(el('kb'),K);
@@ -1329,13 +1707,14 @@ function initApp(){
   el('fine2').addEventListener('click',function(){stop2(true);anim(2,4800,function(k){const n=Math.max(2,Math.round(2+28*ease(k)));S2.n=n;el('n2').value=n;el('n2v').textContent=n;upd2(false)},function(){})});
   el('inf2').addEventListener('click',inf2);
   el('reset2').addEventListener('click',function(){S2.yaw=-0.75;S2.pitch=.62;S2.zoom=1;upd2(false)});
-  [].forEach.call(document.querySelectorAll('#pre2 button'),function(b){b.addEventListener('click',function(){stop2(true);cancelAnim(2);cancelAnim('S');const d=b.dataset;S2.n=+d.n||8;el('n2').value=S2.n;el('n2v').textContent=S2.n;setFields(S2,{f:d.f,a:d.a,b:d.b,c:d.c,d:d.d});upd2();flushH()})});
+  [].forEach.call(document.querySelectorAll('#pre2 button'),function(b){b.addEventListener('click',function(){stop2(true);cancelAnim(2);cancelAnim('S');const d=b.dataset;S2.n=+d.n||8;el('n2').value=S2.n;el('n2v').textContent=S2.n;el('note2').hidden=true;const sw=(d.sw||[d.a,d.b,d.c,d.d].join('|')).split('|');if(S2.order==='xy')setFields(S2,{f:d.f,a:sw[0],b:sw[1],c:sw[2],d:sw[3]});else setFields(S2,{f:d.f,a:d.a,b:d.b,c:d.c,d:d.d});upd2();flushH()})});
   const cv2=el('cv2');let drag=null;
   cv2.addEventListener('pointerdown',function(e){drag={x:e.clientX,y:e.clientY};cv2.setPointerCapture(e.pointerId);cv2.style.cursor='grabbing'});
   cv2.addEventListener('pointermove',function(e){if(!drag)return;S2.yaw+=(e.clientX-drag.x)*.01;S2.pitch=Math.max(.08,Math.min(1.45,S2.pitch+(e.clientY-drag.y)*.01));drag={x:e.clientX,y:e.clientY};if(S2.ok){draw2()}});
   const endd=function(){drag=null;cv2.style.cursor='grab'};cv2.addEventListener('pointerup',endd);cv2.addEventListener('pointercancel',endd);
   cv2.addEventListener('wheel',function(e){e.preventDefault();S2.zoom=Math.max(.5,Math.min(2.6,S2.zoom*(e.deltaY<0?1.08:.926)));if(S2.ok)draw2()},{passive:false});
   cv2.addEventListener('dblclick',function(){el('reset2').click()});
+  [].forEach.call(document.querySelectorAll('#ord2 button'),function(b){b.innerHTML=K(b.dataset.tex);b.addEventListener('click',function(){setOrder(b.dataset.o)})});
   /* mode */
   [].forEach.call(document.querySelectorAll('#modeSwitch button'),function(b){b.addEventListener('click',function(){if(b.disabled)return;const m=b.dataset.mode;
     [].forEach.call(document.querySelectorAll('#modeSwitch button'),function(x){x.classList.toggle('active',x===b)});
@@ -1359,7 +1738,7 @@ function initApp(){
   root.setAttribute('data-bg',BGC[saved]?saved:'dots');[].forEach.call(document.querySelectorAll('.gx-bgsw button'),function(x){x.classList.toggle('on',x.getAttribute('data-bg')===root.getAttribute('data-bg'))});
   window.addEventListener('resize',function(){updCur()});
   if(window.ResizeObserver){new ResizeObserver(function(){if(!el('view1').hidden){if(S1.ok){draw1();syncC1()}}else if(S2.ok){draw2();drawA()}}).observe(el('host1'))}
-  rxInit();upd1();commitH();
+  rxInit();fmInit();upd1();commitH();
   window.__NS={S1:S1,S2:S2,MFR:MFR,calc1:calc1,calc2:calc2,cols2:cols2,H:H,inf1:inf1,inf2:inf2};
 }
 (function boot(){let t=0;function go(){if(window.katex||t++>50){initApp()}else setTimeout(go,100)}
