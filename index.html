@@ -202,7 +202,7 @@ a.xcard:hover .go{background:var(--mar);border-color:var(--mar);color:#fff;trans
 .panel{padding-left:calc(var(--edge) - clamp(10px,1.6vw,24px));padding-right:calc(var(--edge) - clamp(10px,1.6vw,24px))}
 .panel .band,.panel .cards{max-width:none}
 </style>
-</head>
+<style id="nosb">html{scrollbar-width:none;-ms-overflow-style:none}html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}</style></head>
 <body id="top">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="lg" viewBox="40 50 240 200"><rect x="90" y="64" width="22" height="172" fill="var(--li)"/><path class="" fill="var(--li)" d="M60 64 H142 V71 C130 71 115 73 112 86 H90 C87 73 72 71 60 71 Z"/><path class="" fill="var(--li)" d="M60 236 H142 V229 C130 229 115 227 112 214 H90 C87 227 72 229 60 229 Z"/><polygon fill="var(--li)" points="94 64 142 64 228 236 184 236"/><path class="" fill="var(--la)" d="M178 64 H260 V71 C248 71 233 73 230 86 H208 C205 73 190 71 178 71 Z"/><rect x="208" y="64" width="22" height="172" fill="var(--la)"/></symbol></svg>
 
@@ -217,7 +217,6 @@ a.xcard:hover .go{background:var(--mar);border-color:var(--mar);color:#fff;trans
     </p>
     <p class="itag"><span class="rule"></span><span class="itag-t">Catatan dan Eksperimen Pribadi</span></p>
   </div>
-  <button class="skip" type="button">Lewati</button>
 </div>
 
 <header class="nav" id="nav">
@@ -247,7 +246,8 @@ a.xcard:hover .go{background:var(--mar);border-color:var(--mar);color:#fff;trans
           <text class="lab" x="330" y="346" text-anchor="middle">Konsentrasi Zat</text><text class="sub" x="330" y="368" text-anchor="middle">Eksperimen 01</text></a>
         <a class="node" href="integral-lipat.html" aria-label="Integral Lipat"><circle class="halo" cx="530" cy="170" r="30"/><circle class="rg" cx="530" cy="170" r="16"/><circle cx="530" cy="170" r="9" fill="#FFF8F4"/>
           <text class="lab" x="530" y="226" text-anchor="middle">Integral Lipat</text><text class="sub" x="530" y="248" text-anchor="middle">Eksperimen 03</text></a>
-        <circle cx="460" cy="450" r="5" fill="none" stroke="#F3C6CC" stroke-dasharray="3 3"/>
+        <a class="node" href="obe-matriks.html" aria-label="OBE Matriks"><circle class="halo" cx="460" cy="450" r="30"/><circle class="rg" cx="460" cy="450" r="16"/><circle cx="460" cy="450" r="9" fill="#FFF8F4"/>
+          <text class="lab" x="460" y="506" text-anchor="middle">OBE Matriks</text><text class="sub" x="460" y="528" text-anchor="middle">Eksperimen 04</text></a>
       </g>
     </svg>
   </div>
@@ -282,6 +282,10 @@ a.xcard:hover .go{background:var(--mar);border-color:var(--mar);color:#fff;trans
       <div><span class="xnum">03</span><h3>Integral Lipat</h3><p>Ketik fungsinya, lalu lihat luas dan volumenya tersusun dari potongan-potongan kecil. Sudah ada satu lipat dan dua lipat, tiga lipat menyusul.</p><div class="tags"><span class="tg">Kalkulus</span><span class="tg">Riemann</span><span class="tg">3D</span></div></div>
       <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </a>
+    <a class="xcard" href="obe-matriks.html" data-r style="--i:3">
+      <div><span class="xnum">04</span><h3>OBE Matriks</h3><p>Ketik sistem persamaan linear sampai 8 kali 8, lihat matriksnya terbentuk, lalu jalankan eliminasi Gauss atau Gauss-Jordan langkah demi langkah, termasuk kalau persamaan dan variabelnya tidak sama banyak.</p><div class="tags"><span class="tg">Aljabar linear</span><span class="tg">Gauss-Jordan</span><span class="tg">Parameter bebas</span></div></div>
+      <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
   </div>
 </section>
 
@@ -305,7 +309,7 @@ a.xcard:hover .go{background:var(--mar);border-color:var(--mar);color:#fff;trans
 <footer class="foot">
   <div class="fgrid">
     <div><h4>Isi web</h4><ul><li><a href="#top">Atas</a></li><li><a href="#tentang">Cerita</a></li><li><a href="#eksperimen">Eksperimen</a></li><li><a href="#proses">Caranya</a></li></ul></div>
-    <div><h4>Eksperimen</h4><ul><li><a href="simulasi-konsentrasi.html">Simulasi Konsentrasi Zat</a></li><li><a href="graf-explorer.html">Graf Explorer</a></li><li><a href="integral-lipat.html">Integral Lipat</a></li></ul></div>
+    <div><h4>Eksperimen</h4><ul><li><a href="simulasi-konsentrasi.html">Simulasi Konsentrasi Zat</a></li><li><a href="graf-explorer.html">Graf Explorer</a></li><li><a href="integral-lipat.html">Integral Lipat</a></li><li><a href="obe-matriks.html">OBE Matriks</a></li></ul></div>
     <div><h4>Status</h4><span class="status">Ongoing</span><p>Belum selesai dan memang begitu. Mampir lagi nanti.</p></div>
     <div class="cvcol" id="cvcol"><h4><button class="cvtog" type="button" aria-expanded="false" aria-controls="cvpanel"><span>CV</span><i aria-hidden="true"></i><em class="cvhint">pencet dulu</em></button></h4><div class="cvpanel" id="cvpanel"><div><a class="cvname" href="cv.html" aria-label="Buka CV Normand"><b style="--k:0">N</b><b style="--k:1">o</b><b style="--k:2">r</b><b style="--k:3">m</b><b style="--k:4">a</b><b style="--k:5">n</b><b style="--k:6">d</b><span class="ar" aria-hidden="true">→</span></a><p>Klik namanya buat baca cerita saya.</p></div></div></div>
   </div>
